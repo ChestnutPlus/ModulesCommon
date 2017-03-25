@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.ChestnutPlus'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0.1"
+        /**
+         *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
+         */
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile files('libs/glide-3.7.0.jar')
+    compile 'com.kymjs.rxvolley:rxvolley:1.1.4'
+}

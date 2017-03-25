@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--制定布局大小-->
+    <item>
+        <shape android:shape="rectangle">
+            <size android:width="45dp" android:height="40dp"/>
+            <corners android:radius="1dp"/>
+            <solid android:color="#00e7a9a9"/>
+        </shape>
+    </item>
+
+    <!--中间-->
+    <item android:bottom="18.5dp" android:top="18.5dp" android:left="3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/arrow_white"/>
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+
+    <!--上-->
+    <item android:bottom="27dp" android:top="10dp" android:right="19dp">
+        <rotate android:fromDegrees="-45" android:toDegrees="-45" android:pivotX="50%" android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/arrow_white"/>
+                <corners android:radius="4dp"/>
+            </shape>
+        </rotate>
+    </item>
+
+    <!--下-->
+    <item android:bottom="10dp" android:top="27dp" android:right="19dp">
+        <rotate android:fromDegrees="45" android:toDegrees="45" android:pivotX="50%" android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/arrow_white"/>
+                <corners android:radius="4dp"/>
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
