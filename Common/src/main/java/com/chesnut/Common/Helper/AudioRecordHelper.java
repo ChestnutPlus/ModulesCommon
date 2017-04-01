@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,10 +18,12 @@ import java.util.concurrent.Executors;
  *     author: Chestnut
  *     blog  : http://www.jianshu.com/u/a0206b5f4526
  *     time  : 15:07
- *     desc  :
+ *     desc  :  AudioRecordHelper
+ *              AudioRecord的封装
  *     thanks To:
  *     dependent on:
  *     update log:
+ *          1.0.0   2017年4月1日21:46:47   栗子  initial
  * </pre>
  */
 
@@ -42,10 +43,6 @@ public class AudioRecordHelper {
     private int bufferSize = AudioRecord.getMinBufferSize(audioRate,audioChannel,audioFormat);
     //记录播放状态
     private boolean isRecording = false;
-    //数字信号数组
-    private byte [] noteArray;
-    //文件输出流
-    private OutputStream os;
     //wav文件目录
     private String outFile = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Temp.wav";
     //pcm文件目录
@@ -91,8 +88,8 @@ public class AudioRecordHelper {
         try{
             pcmFile.createNewFile();
             wavFile.createNewFile();
-        }catch(IOException e){
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -101,8 +98,8 @@ public class AudioRecordHelper {
         isRecording = true;
         recorder.startRecording();
         singleThreadExecutor.execute(() -> {
-            noteArray = new byte[bufferSize];
             //建立文件输出流
+            BufferedOutputStream os = null;
             try {
                 os = new BufferedOutputStream(new FileOutputStream(new File(inFile)));
             }catch (IOException e){
@@ -112,36 +109,34 @@ public class AudioRecordHelper {
             }
             if (callBack!=null)
                 callBack.onRecordStart(outFile);
-            while(isRecording){
-                int recordSize = recorder.read(noteArray,0,bufferSize);
-                if(recordSize>0){
+            short[] buffer = new short[bufferSize];
+            while (isRecording) {
+                int r = recorder.read(buffer, 0, bufferSize);
+                if (callBack!=null) {
+                    long v = 0;
+                    // 将 buffer 内容取出，进行平方和运算
+                    for (short aBuffer : buffer) {
+                        v += aBuffer * aBuffer;
+                    }
+                    // 平方和除以数据总长度，得到音量大小。
+                    double mean = v / (double) r;
+                    double volume = 10 * Math.log10(mean);
+                    callBack.onRecordDBChange(volume);
+                }
+                if(r>0){
                     try{
-                        os.write(noteArray);
+                        os.write(shortToByteSmall(buffer));
                     }catch(IOException e){
                         if (callBack!=null)
                             callBack.onRecordFail(outFile,e.getMessage());
                         return;
                     }
                 }
-                if (callBack!=null) {
-                    //  计算分贝
-                    long v = 0;
-                    // 将 buffer 内容取出，进行平方和运算
-                    for (byte aNoteArray : noteArray) {
-                        v += aNoteArray * aNoteArray;
-                    }
-                    // 平方和除以数据总长度，得到音量大小。
-                    double mean = v / (double) recordSize;
-                    double volume = 10 * Math.log10(mean);
-                    callBack.onRecordDBChange(volume);
-                }
             }
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -203,7 +198,7 @@ public class AudioRecordHelper {
      * @param longSampleRate    longSampleRate
      * @param channels          声道
      * @param byteRate          byteRate
-     * @throws IOException
+     * @throws IOException IOException
      */
     private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen, long totalDataLen, long longSampleRate,
                                      int channels, long byteRate) throws IOException {
@@ -247,7 +242,7 @@ public class AudioRecordHelper {
         header[30] = (byte) ((byteRate >> 16) & 0xff);
         header[31] = (byte) ((byteRate >> 24) & 0xff);
         // 确定系统一次要处理多少个这样字节的数据，确定缓冲区，通道数*采样位数
-        header[32] = (byte) (1 * 16 / 8);
+        header[32] = (byte) ( (audioChannel == AudioFormat.CHANNEL_IN_MONO ? 1 : 0 ) * 16 / 8);
         header[33] = 0;
         //每个样本的数据位数
         header[34] = 16;
@@ -277,5 +272,24 @@ public class AudioRecordHelper {
         void onRecordDBChange(double dbValue);
         void onRecordFail(String file, String msg);
         void onRecordEnd(String file);
+    }
+
+    /**
+     * short 数组 转 byte[]
+     * @param buf short[]
+     * @return  byte[]
+     */
+    private static byte[] shortToByteSmall(short[] buf) {
+        byte[] bytes = new byte[buf.length * 2];
+        int i = 0;
+        for(int j = 0; i < buf.length; j += 2) {
+            short s = buf[i];
+            byte b1 = (byte)(s & 255);
+            byte b0 = (byte)(s >> 8 & 255);
+            bytes[j] = b1;
+            bytes[j + 1] = b0;
+            ++i;
+        }
+        return bytes;
     }
 }
