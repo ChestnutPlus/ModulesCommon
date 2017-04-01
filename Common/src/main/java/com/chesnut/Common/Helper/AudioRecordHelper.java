@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <pre>
@@ -26,6 +28,7 @@ import java.io.OutputStream;
 
 public class AudioRecordHelper {
 
+    private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private AudioRecord recorder;
     //录音源
     private int audioSource = MediaRecorder.AudioSource.MIC;
@@ -41,49 +44,55 @@ public class AudioRecordHelper {
     private boolean isRecording = false;
     //数字信号数组
     private byte [] noteArray;
-    //PCM文件
-    private File pcmFile;
-    //WAV文件
-    private File wavFile;
     //文件输出流
     private OutputStream os;
-    //文件根目录
-    private String basePath = Environment.getExternalStorageDirectory().getAbsolutePath();
     //wav文件目录
-    private String outFile = basePath+"/Temp.wav";
+    private String outFile = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Temp.wav";
     //pcm文件目录
-    private String inFile = basePath+"/Temp.pcm";
+    private String inFile = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Temp.pcm";
 
     /**
      * 设置参数
-     * @param audioSource
-     * @param audioRate
-     * @param audioChannel
-     * @param audioFormat
-     * @param outFile
+     * @param audioSource   录音源
+     * @param audioRate     录音Rate
+     * @param audioChannel  声道
+     * @param audioFormat   编码
      */
-    public AudioRecordHelper(int audioSource, int audioRate, int audioChannel, int audioFormat, String outFile) {
+    public AudioRecordHelper(int audioSource, int audioRate, int audioChannel, int audioFormat) {
         this.audioSource = audioSource;
         this.audioRate = audioRate;
         this.audioChannel = audioChannel;
         this.audioFormat = audioFormat;
-        this.outFile = outFile;
-        createFile();//创建文件
         recorder = new AudioRecord(audioSource,audioRate,audioChannel,audioFormat,bufferSize);
     }
 
     /**
      * 默认构造函数，初始化默认值
      */
-    private AudioRecordHelper(){
-        createFile();//创建文件
+    public AudioRecordHelper(){
         recorder = new AudioRecord(audioSource,audioRate,audioChannel,audioFormat,bufferSize);
     }
 
-    //读取录音数字数据线程
-    private class WriteThread implements Runnable{
-        public void run(){
-            writeData();
+    /**
+     * 初始化，每次录音前调用。
+     * @param outFile   录音文件路径
+     */
+    public void init(String outFile) {
+        this.outFile = outFile;
+        //创建文件
+        File pcmFile = new File(inFile);
+        File wavFile = new File(outFile);
+        if(pcmFile.exists()){
+            pcmFile.delete();
+        }
+        if(wavFile.exists()){
+            wavFile.delete();
+        }
+        try{
+            pcmFile.createNewFile();
+            wavFile.createNewFile();
+        }catch(IOException e){
+
         }
     }
 
@@ -91,67 +100,95 @@ public class AudioRecordHelper {
     public void startRecord(){
         isRecording = true;
         recorder.startRecording();
+        singleThreadExecutor.execute(() -> {
+            noteArray = new byte[bufferSize];
+            //建立文件输出流
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(new File(inFile)));
+            }catch (IOException e){
+                if (callBack!=null)
+                    callBack.onRecordFail(outFile,e.getMessage());
+                return;
+            }
+            if (callBack!=null)
+                callBack.onRecordStart(outFile);
+            while(isRecording){
+                int recordSize = recorder.read(noteArray,0,bufferSize);
+                if(recordSize>0){
+                    try{
+                        os.write(noteArray);
+                    }catch(IOException e){
+                        if (callBack!=null)
+                            callBack.onRecordFail(outFile,e.getMessage());
+                        return;
+                    }
+                }
+                if (callBack!=null) {
+                    //  计算分贝
+                    long v = 0;
+                    // 将 buffer 内容取出，进行平方和运算
+                    for (byte aNoteArray : noteArray) {
+                        v += aNoteArray * aNoteArray;
+                    }
+                    // 平方和除以数据总长度，得到音量大小。
+                    double mean = v / (double) recordSize;
+                    double volume = 10 * Math.log10(mean);
+                    callBack.onRecordDBChange(volume);
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     //停止录音
     public void stopRecord(){
         isRecording = false;
         recorder.stop();
-    }
-
-    //将数据写入文件夹,文件的写入没有做优化
-    public void writeData(){
-        noteArray = new byte[bufferSize];
-        //建立文件输出流
-        try {
-            os = new BufferedOutputStream(new FileOutputStream(pcmFile));
-        }catch (IOException e){
-
-        }
-        while(isRecording == true){
-            int recordSize = recorder.read(noteArray,0,bufferSize);
-            if(recordSize>0){
-                try{
-                    os.write(noteArray);
-                }catch(IOException e){
-
-                }
-            }
-        }
-        if (os != null) {
+        singleThreadExecutor.execute(() -> {
+            // 这里得到可播放的音频文件
+            FileInputStream in;
+            FileOutputStream out;
+            long totalAudioLen;
+            long totalDataLen;
+            long longSampleRate = audioRate;
+            int channels = 1;
+            long byteRate = 16 * audioRate * channels / 8;
+            byte[] data = new byte[bufferSize];
             try {
-                os.close();
-            }catch (IOException e){
-
+                in = new FileInputStream(inFile);
+                out = new FileOutputStream(outFile);
+                totalAudioLen = in.getChannel().size();
+                //由于不包括RIFF和WAV
+                totalDataLen = totalAudioLen + 36;
+                WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
+                while (in.read(data) != -1) {
+                    out.write(data);
+                }
+                in.close();
+                out.close();
+                if (callBack!=null)
+                    callBack.onRecordEnd(outFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                if (callBack!=null)
+                    callBack.onRecordFail(outFile,e.getMessage());
             }
-        }
+        });
     }
 
-    // 这里得到可播放的音频文件
-    public void convertWaveFile() {
-        FileInputStream in;
-        FileOutputStream out;
-        long totalAudioLen;
-        long totalDataLen;
-        long longSampleRate = audioRate;
-        int channels = 1;
-        long byteRate = 16 * audioRate * channels / 8;
-        byte[] data = new byte[bufferSize];
-        try {
-            in = new FileInputStream(inFile);
-            out = new FileOutputStream(outFile);
-            totalAudioLen = in.getChannel().size();
-            //由于不包括RIFF和WAV
-            totalDataLen = totalAudioLen + 36;
-            WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
-            while (in.read(data) != -1) {
-                out.write(data);
-            }
-            in.close();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    /**
+     * 释放资源
+     */
+    public void close() {
+        callBack = null;
+        singleThreadExecutor.shutdown();
+        recorder.release();
     }
 
     /**
@@ -161,11 +198,11 @@ public class AudioRecordHelper {
      *      其中Fact chunk是可以选择的
      *
      * @param out               输出流
-     * @param totalAudioLen
-     * @param totalDataLen
-     * @param longSampleRate
-     * @param channels
-     * @param byteRate
+     * @param totalAudioLen     totalAudioLen
+     * @param totalDataLen      totalDataLen
+     * @param longSampleRate    longSampleRate
+     * @param channels          声道
+     * @param byteRate          byteRate
      * @throws IOException
      */
     private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen, long totalDataLen, long longSampleRate,
@@ -227,30 +264,6 @@ public class AudioRecordHelper {
         out.write(header, 0, 44);
     }
 
-    /**
-     * 创建文件
-     */
-    private void createFile(){
-        pcmFile = new File(inFile);
-        wavFile = new File(outFile);
-        if(pcmFile.exists()){
-            pcmFile.delete();
-        }
-        if(wavFile.exists()){
-            wavFile.delete();
-        }
-        try{
-            pcmFile.createNewFile();
-            wavFile.createNewFile();
-        }catch(IOException e){
-
-        }
-    }
-
-    //记录数据
-    public void recordData(){
-        new Thread(new WriteThread()).start();
-    }
     /**
      * 设置监听器
      * @param callBack  监听器
