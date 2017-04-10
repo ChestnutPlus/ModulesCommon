@@ -60,6 +60,7 @@ public class AudioRecordHelper {
         this.audioRate = audioRate;
         this.audioChannel = audioChannel;
         this.audioFormat = audioFormat;
+        bufferSize = AudioRecord.getMinBufferSize(audioRate,audioChannel,audioFormat);
         recorder = new AudioRecord(audioSource,audioRate,audioChannel,audioFormat,bufferSize);
     }
 
