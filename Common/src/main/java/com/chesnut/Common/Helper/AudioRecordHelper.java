@@ -243,10 +243,10 @@ public class AudioRecordHelper {
         header[30] = (byte) ((byteRate >> 16) & 0xff);
         header[31] = (byte) ((byteRate >> 24) & 0xff);
         // 确定系统一次要处理多少个这样字节的数据，确定缓冲区，通道数*采样位数
-        header[32] = (byte) ( (audioChannel == AudioFormat.CHANNEL_IN_MONO ? 1 : 0 ) * 16 / 8);
+        header[32] = (byte) ( ((audioChannel == AudioFormat.CHANNEL_IN_MONO ? 16 : 8 ) * channels) / 8);
         header[33] = 0;
         //每个样本的数据位数
-        header[34] = 16;
+        header[34] = (byte) (audioChannel == AudioFormat.CHANNEL_IN_MONO ? 16 : 8);
         header[35] = 0;
         //Data chunk
         header[36] = 'd';//data
