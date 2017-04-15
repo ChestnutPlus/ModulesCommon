@@ -27,27 +27,15 @@ public class MusicHelper {
         mediaPlayer = new MediaPlayer();
     }
 
-    private MediaPlayer.OnPreparedListener onPreparedListener = new MediaPlayer.OnPreparedListener() {
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-            singleThreadExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    mediaPlayer.start();
-                }
-            });
-            isPlaying = true;
-        }
+    private MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
+        singleThreadExecutor.execute(() -> mediaPlayer.start());
+        isPlaying = true;
     };
 
-    private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-            isPlaying = false;
-            stop();
-        }
+    private MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
+        isPlaying = false;
+        stop();
     };
-
 
     public MusicHelper setUrl(String url) {
         try {
@@ -73,6 +61,7 @@ public class MusicHelper {
             mediaPlayer.stop();
         }
         isPlaying=false;
+        mediaPlayer.reset();
         return this;
     }
 

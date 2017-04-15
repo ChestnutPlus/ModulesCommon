@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteOrder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,6 +25,12 @@ import java.util.concurrent.Executors;
  *     dependent on:
  *     update log:
  *          1.0.0   2017年4月1日21:46:47   栗子  initial
+ *          1.0.1   2017年4月15日16:07:39  栗子
+ *              (1) 修改了默认的 audioRate = 44100，为当前的标准。
+ *                  发现，若为16000，一些机型会报错。
+ *              (2) 发现，华为的转换：PCM - WAV 出现问题，
+ *                  检查到最后，是因为，实时的分贝计算中：byte[] -> short[]
+ *                  所导致的。
  * </pre>
  */
 
@@ -33,9 +40,9 @@ public class AudioRecordHelper {
     private AudioRecord recorder;
     //录音源
     private int audioSource = MediaRecorder.AudioSource.MIC;
-    //录音的采样频率
-    private int audioRate = 16000;
-    //录音的声道，单声道
+    //录音的采样频率,设置音频采样率，44100 是目前的标准，但是某些设备仍然支持 22050，16000，11025
+    private int audioRate = 44100;
+    //录音的声道
     private int audioChannel = AudioFormat.CHANNEL_IN_MONO;
     //量化的深度
     private int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
@@ -110,23 +117,29 @@ public class AudioRecordHelper {
             }
             if (callBack!=null)
                 callBack.onRecordStart(outFile);
-            short[] buffer = new short[bufferSize];
+            byte[] buffer = new byte[bufferSize];
             while (isRecording) {
                 int r = recorder.read(buffer, 0, bufferSize);
-                if (callBack!=null) {
-                    long v = 0;
-                    // 将 buffer 内容取出，进行平方和运算
-                    for (short aBuffer : buffer) {
-                        v += aBuffer * aBuffer;
+                try {
+                    if (callBack!=null) {
+                        float v = 0;
+                        // 将 buffer 内容取出，进行平方和运算
+                        for (short aBuffer : Bytes2Shorts(buffer)) {
+                            v += aBuffer * aBuffer;
+                        }
+                        // 平方和除以数据总长度，得到音量大小。
+                        double mean = v / (double) r;
+                        double volume = 10 * Math.log10(mean);
+                        callBack.onRecordDBChange(volume);
                     }
-                    // 平方和除以数据总长度，得到音量大小。
-                    double mean = v / (double) r;
-                    double volume = 10 * Math.log10(mean);
-                    callBack.onRecordDBChange(volume);
+                } catch (Exception e) {
+                    if (callBack!=null) {
+                        callBack.onRecordDBChange(0);
+                    }
                 }
                 if(r>0){
                     try{
-                        os.write(shortToByteSmall(buffer));
+                        os.write(buffer);
                     }catch(IOException e){
                         if (callBack!=null)
                             callBack.onRecordFail(outFile,e.getMessage());
@@ -275,22 +288,53 @@ public class AudioRecordHelper {
         void onRecordEnd(String file);
     }
 
-    /**
-     * short 数组 转 byte[]
-     * @param buf short[]
-     * @return  byte[]
-     */
-    private static byte[] shortToByteSmall(short[] buf) {
-        byte[] bytes = new byte[buf.length * 2];
-        int i = 0;
-        for(int j = 0; i < buf.length; j += 2) {
-            short s = buf[i];
-            byte b1 = (byte)(s & 255);
-            byte b0 = (byte)(s >> 8 & 255);
-            bytes[j] = b1;
-            bytes[j + 1] = b0;
-            ++i;
+    public short[] Bytes2Shorts(byte[] buf) {
+        byte bLength = 2;
+        short[] s = new short[buf.length / bLength];
+        for (int iLoop = 0; iLoop < s.length; iLoop++) {
+            byte[] temp = new byte[bLength];
+            for (int jLoop = 0; jLoop < bLength; jLoop++) {
+                temp[jLoop] = buf[iLoop * bLength + jLoop];
+            }
+            s[iLoop] = getShort(temp);
         }
-        return bytes;
+        return s;
+    }
+
+    //对 Short[] 转 byte[] ， 参考： http://www.jb51.net/article/45721.htm
+    private short getShort(byte[] buf) {
+        return getShort(buf, this.testCPU());
+    }
+
+    private boolean testCPU() {
+        if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
+            // System.out.println("is big ending");
+            return true;
+        } else {
+            // System.out.println("is little ending");
+            return false;
+        }
+    }
+
+    private short getShort(byte[] buf, boolean bBigEnding) {
+        if (buf == null) {
+            throw new IllegalArgumentException("byte array is null!");
+        }
+        if (buf.length > 2) {
+            throw new IllegalArgumentException("byte array size > 2 !");
+        }
+        short r = 0;
+        if (bBigEnding) {
+            for (int i = 0; i < buf.length; i++) {
+                r <<= 8;
+                r |= (buf[i] & 0x00ff);
+            }
+        } else {
+            for (int i = buf.length - 1; i >= 0; i--) {
+                r <<= 8;
+                r |= (buf[i] & 0x00ff);
+            }
+        }
+        return r;
     }
 }
