@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.ChestnutPlus'
+group = 'com.github.ChestnutPlus'
 
 android {
     compileSdkVersion 25
@@ -11,9 +11,10 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.1"
+        versionName "1.0.2"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
+         *      1.0.2:  修改包名的拼写错误，更新部分代码。
          */
     }
     buildTypes {
@@ -32,7 +33,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.1.1'
     compile files('libs/glide-3.7.0.jar')
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.kymjs.rxvolley:rxvolley:1.1.4'
 }
