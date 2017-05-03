@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
             public void onRecordDBChange(double dbValue) {
                 LogUtils.w("onRecordDBChange",dbValue+"");
             }
-            
 
             @Override
             public void onRecordFail(String file, String msg) {

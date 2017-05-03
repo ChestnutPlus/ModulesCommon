@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.Base;
+package com.chestnut.Common.ui.RecyclerView.Base;
 
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +17,12 @@ import android.view.View;
  * </pre>
  */
 
-public class BaseItemHolder extends RecyclerView.ViewHolder{
+public class BaseHolder extends RecyclerView.ViewHolder{
 
     private SparseArray<View> views;
     private View mItemView;
 
-    public BaseItemHolder(View itemView) {
+    public BaseHolder(View itemView) {
         super(itemView);
         views = new SparseArray<>();
         mItemView = itemView;
@@ -55,7 +55,7 @@ public class BaseItemHolder extends RecyclerView.ViewHolder{
      * @return  view
      */
     @SuppressWarnings("unchecked")
-    protected <V extends View> V retrieveView(int viewId){
+    protected <V extends View> V retrieveView(@IdRes int viewId){
         View view = views.get(viewId);
         if(view == null){
             view = mItemView.findViewById(viewId);

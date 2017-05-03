@@ -22,6 +22,18 @@ public class RecorderHelper {
     private boolean isRecording = false;
     private String fileName = null;
     private CountDownTimer countDownTimer = null;
+    private CountDownTimer readyDownTimer = null;
+    private int readyTime = 900;
+
+    /**
+     * 设置准备时间
+     * @param readyTime 准备时间
+     * @return  RecorderHelper
+     */
+    public RecorderHelper setReadyTime(int readyTime) {
+        this.readyTime = readyTime;
+        return this;
+    }
 
     /**
      * 释放资源
@@ -34,10 +46,14 @@ public class RecorderHelper {
         callBack = null;
     }
 
+    public void startRecord() {
+
+    }
+
     /**
      *      录音
      */
-    public void startRecord() {
+    public void _startRecord() {
         if ( recorder!=null && !isRecording ) {
             countDownTimer = new CountDownTimer(Integer.MAX_VALUE,300) {
                 @Override
@@ -133,6 +149,7 @@ public class RecorderHelper {
     }
     private CallBack callBack = null;
     public interface CallBack {
+        void onReadying(String file);   //录音的时候，过早调用stop会触发这个接口。默认是900毫秒。
         void onRecordStart(String file);
         void onRecordDBChange(double dbValue);
         void onRecordFail(String file, String msg);

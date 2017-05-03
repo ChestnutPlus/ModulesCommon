@@ -1,19 +1,19 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.chestnut.Common.ui.RecyclerView.Base.BaseItem;
 import com.chestnut.Common.ui.Toastc;
-import com.chestnut.Common.utils.LogUtils;
-import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.Base.Item;
-import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.ButtonsAdapter;
+import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.ButtonBean;
+import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.ButtonItem;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
-import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.TestItem;
-import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.TxtItem;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,90 +23,62 @@ import rx.functions.Action1;
 
 public class ButtonsActivity extends AppCompatActivity {
 
-    private XRecyclerView xRecyclerView = null;
+    private RecyclerView recyclerView = null;
     private Toastc toast = null;
+    private MaterialRefreshLayout refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttons);
         toast = new Toastc(this, Toast.LENGTH_LONG);
-        xRecyclerView = (XRecyclerView) findViewById(R.id.xRecyclerView);
-//        ButtonsAdapter buttonsAdapter = new ButtonsAdapter(messages,buttonsTitles,this);
-//        buttonsAdapter.setOnItemListener(onItemListener);
-
-        final SimpleAdapter simpleAdapter = new SimpleAdapter();
-        TestItem testItem = new TestItem("TestItem");
-        testItem.setOnItemListener(new Item.OnItemListener() {
+        recyclerView = (RecyclerView) findViewById(R.id.LRecyclerView);
+        refresh = (MaterialRefreshLayout) findViewById(R.id.refresh);
+        refresh.setLoadMore(true);
+        refresh.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                simpleAdapter.add(new TxtItem("position:"+position));
-            }
-        });
-        simpleAdapter.add(testItem);
-        simpleAdapter.add(new TxtItem("ah"));
-
-        xRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        xRecyclerView.setAdapter(simpleAdapter);
-        xRecyclerView.setLoadingMoreEnabled(true);
-        xRecyclerView.setPullRefreshEnabled(true);
-        xRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                LogUtils.wD("onRefresh");
-                //xRecyclerView.loadMoreComplete();
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                //下拉刷新...
                 Observable.just(1)
                         .delay(1000, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<Integer>() {
                             @Override
                             public void call(Integer integer) {
-                                xRecyclerView.refreshComplete();
+                                refresh.finishRefresh();
                             }
                         });
             }
-
             @Override
-            public void onLoadMore() {
-                LogUtils.wD("onLoadMore");
-                //xRecyclerView.refreshComplete();
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                //上拉刷新...
                 Observable.just(1)
                         .delay(1000, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<Integer>() {
                             @Override
                             public void call(Integer integer) {
-                                xRecyclerView.loadMoreComplete();
+                                refresh.finishRefreshLoadMore();
                             }
                         });
             }
         });
+        SimpleAdapter simpleAdapter = new SimpleAdapter();
+        setButtons(simpleAdapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(simpleAdapter);
     }
 
-    private String[] messages = {
-            "1",
-            "2",
-            "3",
-            "4",
-    };
-
-    private String[] buttonsTitles = {
-            "1",
-            "2",
-            "3",
-            "4",
-    };
-
-    private ButtonsAdapter.OnItemListener onItemListener = new ButtonsAdapter.OnItemListener() {
-        @Override
-        public void onItemClick(View view, int position) {
-            toast.setText("position:"+position).show();
-            switch (position) {
-                case 0:
-                    break;
-                case 1:
-                    break;
+    private void setButtons(SimpleAdapter simpleAdapter) {
+        //测试1：
+        ButtonItem buttonItem = new ButtonItem(new ButtonBean("用于测试的一个按钮！","测试按钮-1"));
+        buttonItem.setOnItemListener(new BaseItem.OnItemListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                toast.setText(position+"").show();
             }
-        }
-    };
+        });
+        simpleAdapter.add(buttonItem);
+    }
 }

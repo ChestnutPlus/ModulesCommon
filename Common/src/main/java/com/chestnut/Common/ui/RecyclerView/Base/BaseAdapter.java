@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.Base;
+package com.chestnut.Common.ui.RecyclerView.Base;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,42 +19,42 @@ import java.util.List;
  * </pre>
  */
 
-public abstract class BaseAdapter<C extends Item> extends RecyclerView.Adapter<BaseItemHolder>{
+public abstract class BaseAdapter<ITEM extends BaseItem> extends RecyclerView.Adapter<BaseHolder>{
 
-    public static final String TAG = "BaseAdapter";
-    protected List<C> mData;
+    public String TAG = "BaseAdapter";
+    protected List<ITEM> mData;
 
     public BaseAdapter(){
         mData = new ArrayList<>();
     }
 
-    public void setData(List<C> data) {
+    public void setData(List<ITEM> data) {
         addAll(data);
         notifyDataSetChanged();
     }
 
-    public List<C> getData() {
+    public List<ITEM> getData() {
         return mData;
     }
 
     @Override
-    public BaseItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         for(int i=0;i<getItemCount();i++){
             if(viewType == mData.get(i).getItemType()){
                 return mData.get(i).onCreateViewHolder(parent,viewType);
             }
         }
-        throw new RuntimeException("wrong viewType");
+        throw new RuntimeException("BaseAdapter - Wrong ViewType");
     }
 
     @Override
-    public void onBindViewHolder(BaseItemHolder holder, int position) {
+    public void onBindViewHolder(BaseHolder holder, int position) {
         mData.get(position).onBindViewHolder(holder,position);
         onViewHolderBound(holder,position);
     }
 
     @Override
-    public void onViewDetachedFromWindow(BaseItemHolder holder) {
+    public void onViewDetachedFromWindow(BaseHolder holder) {
         super.onViewDetachedFromWindow(holder);
         Log.e(TAG,"onViewDetachedFromWindow invoke...");
         //释放资源
@@ -77,26 +77,26 @@ public abstract class BaseAdapter<C extends Item> extends RecyclerView.Adapter<B
     }
 
     /**
-     * add one cell
-     * @param cell
+     * add one ITEM
+     * @param item ITEM
      */
-    public void add(C cell){
-        mData.add(cell);
-        int index = mData.indexOf(cell);
+    public void add(ITEM item){
+        mData.add(item);
+        int index = mData.indexOf(item);
         notifyItemChanged(index);
     }
 
-    public void add(int index,C cell){
-        mData.add(index,cell);
+    public void add(int index,ITEM item){
+        mData.add(index,item);
         notifyItemChanged(index);
     }
 
     /**
-     * remove a cell
-     * @param cell
+     * remove a ITEM
+     * @param item ITEM
      */
-    public void remove(C cell){
-        int indexOfCell = mData.indexOf(cell);
+    public void remove(ITEM item){
+        int indexOfCell = mData.indexOf(item);
         remove(indexOfCell);
     }
 
@@ -106,9 +106,9 @@ public abstract class BaseAdapter<C extends Item> extends RecyclerView.Adapter<B
     }
 
     /**
-     *
-     * @param start
-     * @param count
+     * remove some items
+     * @param start index begin
+     * @param count the num of items
      */
     public void remove(int start,int count){
         if((start +count) > mData.size()){
@@ -122,24 +122,23 @@ public abstract class BaseAdapter<C extends Item> extends RecyclerView.Adapter<B
     }
 
     /**
-     * add a cell list
-     * @param cells
+     * add a item list
+     * @param items items
      */
-    public void addAll(List<C> cells){
-        if(cells == null || cells.size() == 0){
+    public void addAll(List<ITEM> items){
+        if(items == null || items.size() == 0){
             return;
         }
-        Log.e("zhouwei","addAll cell size:"+cells.size());
-        mData.addAll(cells);
-        notifyItemRangeChanged(mData.size()-cells.size(),mData.size());
+        mData.addAll(items);
+        notifyItemRangeChanged(mData.size()-items.size(),mData.size());
     }
 
-    public void addAll(int index,List<C> cells){
-        if(cells == null || cells.size() == 0){
+    public void addAll(int index,List<ITEM> items){
+        if(items == null || items.size() == 0){
             return;
         }
-        mData.addAll(index,cells);
-        notifyItemRangeChanged(index,index+cells.size());
+        mData.addAll(index,items);
+        notifyItemRangeChanged(index,index+items.size());
     }
 
     public void clear(){
@@ -149,8 +148,8 @@ public abstract class BaseAdapter<C extends Item> extends RecyclerView.Adapter<B
 
     /**
      * 如果子类需要在onBindViewHolder 回调的时候做的操作可以在这个方法里做
-     * @param holder
-     * @param position
+     * @param holder holder
+     * @param position position
      */
-    protected abstract void onViewHolderBound(BaseItemHolder holder, int position);
+    protected abstract void onViewHolderBound(BaseHolder holder, int position);
 }
