@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--指定布局大小-->
+    <item>
+        <shape android:shape="rectangle">
+            <size android:width="40dp" android:height="40dp"/>
+            <corners android:radius="1dp"/>
+            <solid android:color="#00878484"/>
+        </shape>
+    </item>
+
+    <!--从上到下：第1个点-->
+    <item android:bottom="28dp" android:top="9dp" android:left="16dp" android:right="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white_down_icon"/>
+            <corners android:radius="2dp"/>
+        </shape>
+    </item>
+
+    <!--从上到下：第2个点-->
+    <item android:bottom="19dp" android:top="18dp" android:left="16dp" android:right="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white_down_icon"/>
+            <corners android:radius="2dp"/>
+        </shape>
+    </item>
+
+    <!--从上到下：第3个点-->
+    <item android:bottom="10dp" android:top="27dp" android:left="16dp" android:right="16dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white_down_icon"/>
+            <corners android:radius="2dp"/>
+        </shape>
+    </item>
+
+</layer-list>

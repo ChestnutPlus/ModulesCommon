@@ -6,6 +6,7 @@
 
     <color name="arrow_white">#ffffff</color>
     <color name="white_down_icon">#ffffff</color>
+    <color name="touch_bg">#fff</color>
 
     <!--DIY Toolbar-->
     <color name="toolbar_bg">#E8F1F6</color>
