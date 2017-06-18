@@ -22,6 +22,9 @@ import static com.chestnut.Common.utils.ConstUtils.TimeUnit;
  *     thanks To:
  *     dependent on:
  *          ConstUtils
+ *     log:
+ *          2017年6月17日15:31:29：
+ *              1.  增加toMediaTime()方法。
  * </pre>
  */
 public class TimeUtils {
@@ -592,5 +595,24 @@ public class TimeUtils {
         int aa = Integer.parseInt(sf.format(a));
         int bb = Integer.parseInt(sf.format(b));
         return aa == bb;
+    }
+
+    /**
+     * 把秒的时间转为媒体显示的时间格式：1：23，等等的格式。
+     * @param second    秒
+     * @return  String结果
+     */
+    public static String toMediaTime(int second) {
+        int a;
+        int b;
+        a = second/3600;
+        second -= a * 3600;
+        b = second/60;
+        second -= b * 60;
+        if (a<=0) {
+            return String.format("%02d",b)+":"+String.format("%02d",second);
+        }
+        else
+            return a+":"+String.format("%02d",b)+":"+String.format("%02d",second);
     }
 }

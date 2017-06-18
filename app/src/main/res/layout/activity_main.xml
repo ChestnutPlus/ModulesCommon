@@ -6,28 +6,28 @@
     tools:context="com.chestnut.RouterArchitecture.ModulesCommon.MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="136dp"
-        android:text="开始播放" />
+        android:text="0" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button0"
+        android:layout_centerVertical="true"
+        android:text="1" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button"
-        android:layout_centerVertical="true"
-        android:text="结束播放" />
-
-    <Button
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/button2"
-        android:layout_below="@+id/button2"
+        android:layout_alignEnd="@+id/button1"
+        android:layout_below="@+id/button1"
         android:layout_marginTop="58dp"
-        android:text="暂停" />
+        android:text="2" />
 </RelativeLayout>
