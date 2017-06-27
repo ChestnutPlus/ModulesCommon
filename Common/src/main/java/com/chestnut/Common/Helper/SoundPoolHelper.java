@@ -5,9 +5,9 @@ import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
-import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.RawRes;
 
 import com.chestnut.Common.utils.ConvertUtils;
 
@@ -23,6 +23,7 @@ import java.util.Map;
  *     time  : 2017/6/22 17:24
  *     desc  :  封装了SoundPool
  *     thanks To:   http://flycatdeng.iteye.com/blog/2120043
+ *                  http://www.2cto.com/kf/201408/325318.html
  *     dependent on:
  *     update log:
  * </pre>
@@ -83,7 +84,7 @@ public class SoundPoolHelper {
      * @param resId     资源ID
      * @return  this
      */
-    public SoundPoolHelper load(Context context,@NonNull String ringtoneName, @IdRes int resId) {
+    public SoundPoolHelper load(Context context,@NonNull String ringtoneName, @RawRes int resId) {
         if (maxStream==0)
             return this;
         maxStream--;

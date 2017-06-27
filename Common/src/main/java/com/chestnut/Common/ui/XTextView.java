@@ -25,6 +25,7 @@ import com.chesnut.Common.R;
  *                  app:drawableHeight="30dp"
  *              1）增加：设置Drawable的宽，高
  *              2）增加：设置字体：字体文件需要放置放在：<Module_Name> / main / assets / fonts / HeiTi.ttf
+ *              `   通过：设置：app:fontPath="fonts/Test.TTF"
  *          2.  2017年6月27日00:12:09
  *              测试通过：4.4，5.1，SVG，直接使用即可。
  * </pre>
