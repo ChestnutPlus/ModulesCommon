@@ -20,6 +20,9 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
  *     thanks To:   http://www.jianshu.com/p/936efd25f75c
  *     dependent on:
  *     update log:
+ *          1.  2017年6月27日11:23:48
+ *              把两个内部类修改成：static，方便调用
+ *
  * </pre>
  */
 
@@ -30,10 +33,10 @@ public class GlideHelper {
      * 使用：
      *  Glide.with(this)
      *      .load(R.drawable.li_bao_en)
-     *      .transform(new GlideHelper().new CircleTransform(this))
+     *      .transform(new GlideHelper.CircleTransform(this))
      *      .into(circleView);
      */
-    public class CircleTransform extends BitmapTransformation {
+    public static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);
         }
@@ -44,11 +47,9 @@ public class GlideHelper {
 
         private Bitmap circleCrop(BitmapPool pool, Bitmap source) {
             if (source == null) return null;
-
             int size = Math.min(source.getWidth(), source.getHeight());
             int x = (source.getWidth() - size) / 2;
             int y = (source.getHeight() - size) / 2;
-
             // TODO this could be acquired from the pool too
             Bitmap squared = Bitmap.createBitmap(source, x, y, size, size);
 
@@ -56,7 +57,6 @@ public class GlideHelper {
             if (result == null) {
                 result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             }
-
             Canvas canvas = new Canvas(result);
             Paint paint = new Paint();
             paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
@@ -65,7 +65,6 @@ public class GlideHelper {
             canvas.drawCircle(r, r, r, paint);
             return result;
         }
-
         @Override public String getId() {
             return getClass().getName();
         }
@@ -76,11 +75,11 @@ public class GlideHelper {
      * 使用：
      *  Glide.with(this)
      *      .load(R.drawable.li_bao_en)
-     *      .transform(new GlideHelper().new RoundTransform(this,10))
+     *      .transform(new GlideHelper.RoundTransform(this,10))
      *      .into(roundView);
      *  默认的是，4dip.
      */
-    public class RoundTransform extends BitmapTransformation {
+    public static class RoundTransform extends BitmapTransformation {
 
         private float radius = 0f;
 
