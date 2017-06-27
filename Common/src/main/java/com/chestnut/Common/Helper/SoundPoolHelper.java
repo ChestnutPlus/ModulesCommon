@@ -24,6 +24,7 @@ import java.util.Map;
  *     desc  :  封装了SoundPool
  *     thanks To:   http://flycatdeng.iteye.com/blog/2120043
  *                  http://www.2cto.com/kf/201408/325318.html
+ *                  https://developer.android.com/reference/android/media/SoundPool.html
  *     dependent on:
  *     update log:
  * </pre>
