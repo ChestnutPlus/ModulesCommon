@@ -150,6 +150,10 @@ public class SoundPoolHelper {
      * @return  uri
      */
     private Uri getSystemDefaultRingtoneUri(Context context) {
-        return RingtoneManager.getActualDefaultRingtoneUri(context, NOW_RINGTONE_TYPE);
+        try {
+            return RingtoneManager.getActualDefaultRingtoneUri(context, NOW_RINGTONE_TYPE);
+        } catch (Exception e) {
+            return Uri.parse("null");
+        }
     }
 }
