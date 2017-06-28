@@ -9,6 +9,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
 
+import com.chesnut.Common.R;
 import com.chestnut.Common.utils.ConvertUtils;
 
 import java.lang.annotation.Retention;
@@ -27,6 +28,9 @@ import java.util.Map;
  *                  https://developer.android.com/reference/android/media/SoundPool.html
  *     dependent on:
  *     update log:
+ *              1.  2017年6月28日10:39:46
+ *                  1）修复了当play指定的RingtoneName为空的时候，触发的一个bug
+ *                  2）增加了一个默认的铃声，当找不到系统的默认铃声时候，会默认加载一个我们提供的一个默认铃声
  * </pre>
  */
 public class SoundPoolHelper {
@@ -99,7 +103,11 @@ public class SoundPoolHelper {
      * @return  this
      */
     public SoundPoolHelper loadDefault(Context context) {
-        load(context,"default",ConvertUtils.uri2Path(context,getSystemDefaultRingtoneUri(context)));
+        Uri uri = getSystemDefaultRingtoneUri(context);
+        if (uri==null)
+            load(context,"default", R.raw.reminder);
+        else
+            load(context,"default",ConvertUtils.uri2Path(context,uri));
         return this;
     }
 
@@ -128,7 +136,7 @@ public class SoundPoolHelper {
      *  6) rate 指定播放的比率，数值可从 0.5 到 2 ， 1 为正常比率。
      */
     public void play(@NonNull String ringtoneName, boolean isLoop) {
-        if (ringtoneName.contains(ringtoneName)) {
+        if (ringtoneIds.containsKey(ringtoneName)) {
             soundPool.play(ringtoneIds.get(ringtoneName),1,1,1,isLoop?-1:0,1);
         }
     }
@@ -154,7 +162,7 @@ public class SoundPoolHelper {
         try {
             return RingtoneManager.getActualDefaultRingtoneUri(context, NOW_RINGTONE_TYPE);
         } catch (Exception e) {
-            return Uri.parse("null");
+            return null;
         }
     }
 }
