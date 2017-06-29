@@ -10,14 +10,15 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
+        versionCode 3
         versionName "1.0.3"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
          *      1.0.2:  修改包名的拼写错误，更新部分代码。
          *      1.0.3:
          *          1.  2017年6月22日12:01:58 增加XTextView，扩展TextView。
-         *
+         *          2.  2017年6月28日12:09:27  完成SoundPoolHelper
+         *          3.  2017年6月29日14:54:32  完成MediaPlayerHelper
          *
          */
     }

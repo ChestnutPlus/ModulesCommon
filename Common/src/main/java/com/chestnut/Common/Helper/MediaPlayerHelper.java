@@ -18,6 +18,7 @@ import rx.Observable;
  *     blog  : http://www.jianshu.com/u/a0206b5f4526
  *     time  : 2017/4/25 15:48
  *     desc  :  重新封装：MediaPlayer
+ *              主要是面向：播放Music
  *     thanks To:
  *     dependent on:
  *     update log:
@@ -37,28 +38,37 @@ public class MediaPlayerHelper {
     private String url = null;
     private boolean isStop = true;
     private boolean isPause = true;
-    private MediaPlayer.OnErrorListener onErrorListener;
-    private MediaPlayer.OnCompletionListener onCompletionListener;
-    private MediaPlayer.OnPreparedListener onPreparedListener;
+    private int TYPE = 0;   //内部定义：0：本地path/网络，1：raw
+    private Context context;
 
     /*方法*/
-    public MediaPlayerHelper() {
-        mediaPlayer = new MediaPlayer();
-        onPreparedListener = mp -> {
-            if (callBack!=null)
+    public MediaPlayerHelper init(Context context) {
+        this.context = context.getApplicationContext();
+        switch (TYPE) {
+            case 0:
+                mediaPlayer = new MediaPlayer();
+                break;
+            case 1:
+                mediaPlayer = MediaPlayer.create(context, Integer.parseInt(url));
+                break;
+            case 2:
+                break;
+        }
+        MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
+            if (callBack != null)
                 callBack.onStart();
             isStop = false;
             isPause = false;
             singleThreadExecutor.execute(() -> mediaPlayer.start());
         };
-        onCompletionListener = mp -> {
-            if (callBack!=null)
+        MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
+            if (callBack != null)
                 callBack.onCompleted();
             isStop = true;
             isPause = true;
             mediaPlayer.reset();
         };
-        onErrorListener = (mediaPlayer1, i, i1) -> {
+        MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
             if (callBack != null)
                 callBack.onError();
             isPause = true;
@@ -66,22 +76,25 @@ public class MediaPlayerHelper {
             url = null;
             return false;
         };
-    }
-
-    public MediaPlayerHelper setUrl(String url) {
-        this.url = url;
-        mediaPlayer.setOnCompletionListener(onCompletionListener);
-        mediaPlayer.setOnPreparedListener(onPreparedListener);
         mediaPlayer.setOnErrorListener(onErrorListener);
+        mediaPlayer.setOnPreparedListener(onPreparedListener);
+        mediaPlayer.setOnCompletionListener(onCompletionListener);
         return this;
     }
 
-    public MediaPlayerHelper setUrl(Context context, @RawRes int urlId) {
-        url = "null";
-        mediaPlayer = MediaPlayer.create(context, urlId);
-        mediaPlayer.setOnCompletionListener(onCompletionListener);
-        mediaPlayer.setOnPreparedListener(onPreparedListener);
-        mediaPlayer.setOnErrorListener(onErrorListener);
+    public MediaPlayerHelper setUrl(String url) {
+        if (mediaPlayer!=null && url!=null)
+            stop();
+        TYPE = 0;
+        this.url = url;
+        return this;
+    }
+
+    public MediaPlayerHelper setUrl(@RawRes int urlId) {
+        if (mediaPlayer!=null && url!=null)
+            stop();
+        TYPE = 1;
+        url = String.valueOf(urlId);
         return this;
     }
 
@@ -94,22 +107,29 @@ public class MediaPlayerHelper {
         if (url==null || mediaPlayer==null)
             return this;
         this.callBack = callBack;
-        if (url.equalsIgnoreCase("null")) {
-            if (isStop) {
-                try {
-                    mediaPlayer.setDataSource(url);
-                    mediaPlayer.prepareAsync();
-                } catch (Exception e) {
-                    ExceptionCatchUtils.getInstance().catchException(e, TAG, false);
+        if (isStop) {
+            try {
+                switch (TYPE) {
+                    case 0:
+                        mediaPlayer.setDataSource(url);
+                        mediaPlayer.prepareAsync();
+                        break;
+                    case 1:
+                        init(context);
+                        break;
+                    case 2:
+                        break;
                 }
-            } else {
-                if (isPause) {
-                    singleThreadExecutor.execute(() -> mediaPlayer.start());
-                    if (this.callBack != null)
-                        this.callBack.onReStart();
-                } else
-                    pause();
+            } catch (Exception e) {
+                ExceptionCatchUtils.getInstance().catchException(e, TAG, false);
             }
+        } else {
+            if (isPause) {
+                singleThreadExecutor.execute(() -> mediaPlayer.start());
+                if (this.callBack != null)
+                    this.callBack.onReStart();
+            } else
+                pause();
         }
         return this;
     }
@@ -175,6 +195,16 @@ public class MediaPlayerHelper {
                 callBack.onPause();
             isPause = true;
         }
+        return this;
+    }
+
+    public MediaPlayerHelper seekTo(int seconds) {
+        if (url==null || mediaPlayer==null)
+            return this;
+        int to = seconds * 1000;
+        to = to<=0 ? 0 : to;
+        to = to>=mediaPlayer.getDuration() ? mediaPlayer.getDuration() : to;
+        mediaPlayer.seekTo(to);
         return this;
     }
 

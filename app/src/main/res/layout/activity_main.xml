@@ -12,99 +12,98 @@
         android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_1"
+            android:text="1"
             android:id="@+id/btn_1"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_2"
+            android:text="2"
             android:id="@+id/btn_2"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_3"
+            android:text="3"
             android:id="@+id/btn_3"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_height="40dp" />
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn4"
+            android:text="4"
             android:id="@+id/btn_4"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_5"
+            android:text="5"
             android:id="@+id/btn_5"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_6"
+            android:text="6"
             android:id="@+id/btn_6"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -112,49 +111,32 @@
         android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_7"
+            android:text="7"
             android:id="@+id/btn_7"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_8"
+            android:text="8"
             android:id="@+id/btn_8"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
-        <TextView
-            android:maxLines="1"
-            android:maxLength="8"
-            android:clickable="true"
-            android:focusable="true"
-            android:textSize="12sp"
-            android:textColor="@android:color/black"
-            android:layout_margin="5dp"
-            android:background="@drawable/touch_bg"
-            android:gravity="center"
-            android:text="btn_9"
-            android:id="@+id/btn_9"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -162,49 +144,65 @@
         android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_10"
+            android:text="9"
+            android:id="@+id/btn_9"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp" />
+        <TextView
+            android:maxLines="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:textSize="10sp"
+            android:textColor="@android:color/black"
+            android:layout_margin="3dp"
+            android:background="@drawable/touch_bg"
+            android:gravity="center"
+            android:text="10"
             android:id="@+id/btn_10"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_11"
+            android:text="11"
             android:id="@+id/btn_11"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
         <TextView
             android:maxLines="1"
-            android:maxLength="8"
             android:clickable="true"
             android:focusable="true"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/black"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:background="@drawable/touch_bg"
             android:gravity="center"
-            android:text="btn_12"
+            android:text="12"
             android:id="@+id/btn_12"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="50dp" />
+            android:layout_height="40dp" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -214,50 +212,89 @@
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/touch_bg"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:id="@+id/img_1"
             android:scaleType="fitCenter"
             android:src="@drawable/li_bao_en"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="100dp" />
+            android:layout_height="80dp" />
         <ImageView
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/touch_bg"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:id="@+id/img_2"
             android:scaleType="fitCenter"
             android:src="@drawable/li_bao_en"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="100dp" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_height="80dp" />
         <ImageView
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/touch_bg"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:id="@+id/img_3"
             android:scaleType="fitCenter"
             android:src="@drawable/li_bao_en"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="100dp" />
+            android:layout_height="80dp" />
         <ImageView
             android:clickable="true"
             android:focusable="true"
             android:background="@drawable/touch_bg"
-            android:layout_margin="5dp"
+            android:layout_margin="3dp"
             android:id="@+id/img_4"
             android:scaleType="fitCenter"
             android:src="@drawable/li_bao_en"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="100dp" />
+            android:layout_height="80dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <SeekBar
+            android:progress="0"
+            android:max="100"
+            android:id="@+id/seekBar_1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <SeekBar
+            android:progress="0"
+            android:max="100"
+            android:id="@+id/seekBar_2"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txt_log"
+            android:gravity="left|center_vertical"
+            android:maxLines="6"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="10sp"
+            android:text=""
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </LinearLayout>
