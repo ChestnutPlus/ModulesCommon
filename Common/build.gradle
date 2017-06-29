@@ -49,4 +49,5 @@ dependencies {
     compile 'com.kymjs.rxvolley:rxvolley:1.1.4'
     //  图片加载
     compile files('libs/glide-3.7.0.jar')
+    compile files('libs/gson-2.2.4.jar')
 }

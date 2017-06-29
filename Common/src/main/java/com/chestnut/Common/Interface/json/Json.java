@@ -1,5 +1,7 @@
 package com.chestnut.Common.Interface.json;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -7,6 +9,6 @@ import java.util.List;
  */
 
 public interface Json {
-    <Bean> Bean getBean(String json, Class<Bean> beanClass);
-    <Bean> List<Bean> getListBean(String json, Class<Bean> beanClass);
+    <Bean> Bean getBean(@NonNull String json,@NonNull Class<Bean> beanClass);
+    <Bean> List<Bean> getListBean(@NonNull String json,@NonNull Class<Bean> beanClass);
 }
