@@ -19,9 +19,12 @@ import rx.Observable;
  * </pre>
  */
 public class XHttpUtils implements Http<HttpCallBack,Map<String,?>,String>{
+
+
     @Override
     public Observable<String> RxGet(String url, Map<String, ?> stringMap) {
-        return null;
+        return Observable.create(subscriber -> {
+        });
     }
 
     @Override

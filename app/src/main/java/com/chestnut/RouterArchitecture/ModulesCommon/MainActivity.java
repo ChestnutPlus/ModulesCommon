@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"初始化",
-            "2_"+"得到时长",
-            "3_"+"play",
-            "4_"+"pause",
+            "1_"+"",
+            "2_"+"",
+            "3_"+"",
+            "4_"+"",
             "5_"+"",
             "6_"+"",
             "7_"+"",
