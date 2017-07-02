@@ -7,6 +7,7 @@ import android.support.annotation.RawRes;
 import com.chestnut.Common.Helper.bean.RxMediaPlayerBean;
 import com.chestnut.Common.utils.ExceptionCatchUtils;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -55,11 +56,11 @@ public class MediaPlayerHelper {
                 break;
         }
         MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
-            if (callBack != null)
-                callBack.onStart();
             isStop = false;
             isPause = false;
             singleThreadExecutor.execute(() -> mediaPlayer.start());
+            if (callBack != null)
+                callBack.onStart();
         };
         MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
             if (callBack != null)
@@ -228,5 +229,45 @@ public class MediaPlayerHelper {
         void onStop();      //播放为完成时，强制结束
         void onPause();     //未播放完成时，暂停回调
         void onError();     //出错时候回调
+    }
+
+    /**
+     * 获得音频文件的时长
+     * @return  时长，秒
+     */
+    public static Observable<Integer> getDuration(String mp3Path) {
+        return Observable.create(subscriber -> {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(mp3Path);
+                mediaPlayer.setOnPreparedListener(mediaPlayer1 -> {
+                    subscriber.onNext(mediaPlayer1.getDuration()/1000);
+                    mediaPlayer1.release();
+                });
+                mediaPlayer.setOnErrorListener((mediaPlayer12, i, i1) -> {
+                    subscriber.onNext(0);
+                    mediaPlayer12.release();
+                   return false;
+                });
+                mediaPlayer.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+                subscriber.onNext(0);
+            }
+        });
+    }
+
+    /**
+     * 获得音频文件的时长
+     * @return  时长，秒
+     */
+    public static Observable<Integer> getDuration(Context context,@RawRes int rawRes) {
+        return Observable.create(subscriber -> {
+            MediaPlayer mediaPlayer = MediaPlayer.create(context,rawRes);
+            mediaPlayer.setOnPreparedListener(mediaPlayer1 -> {
+                subscriber.onNext(mediaPlayer1.getDuration()/1000);
+                mediaPlayer1.release();
+            });
+        });
     }
 }

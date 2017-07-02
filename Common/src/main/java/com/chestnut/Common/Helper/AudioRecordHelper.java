@@ -14,6 +14,9 @@ import java.nio.ByteOrder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import rx.Observable;
+import rx.Subscriber;
+
 /**
  * <pre>
  *     author: Chestnut
@@ -155,6 +158,43 @@ public class AudioRecordHelper {
         });
     }
 
+    /**
+     * 约定：-1：开始
+     *      -2：失败
+     *      -3：结束
+     *      其他：dbChange
+     * @return  rx
+     */
+    public Observable<Integer> rxRecord() {
+        return Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                setCallBack(new CallBack() {
+                    @Override
+                    public void onRecordStart(String file) {
+                        subscriber.onNext(-1);
+                    }
+
+                    @Override
+                    public void onRecordDBChange(double dbValue) {
+                        subscriber.onNext((int)dbValue);
+                    }
+
+                    @Override
+                    public void onRecordFail(String file, String msg) {
+                        subscriber.onNext(-2);
+                    }
+
+                    @Override
+                    public void onRecordEnd(String file) {
+                        subscriber.onNext(-3);
+                    }
+                });
+                startRecord();
+            }
+        });
+    }
+
     //停止录音
     public void stopRecord(){
         isRecording = false;
@@ -288,7 +328,7 @@ public class AudioRecordHelper {
         void onRecordEnd(String file);
     }
 
-    public short[] Bytes2Shorts(byte[] buf) {
+    private short[] Bytes2Shorts(byte[] buf) {
         byte bLength = 2;
         short[] s = new short[buf.length / bLength];
         for (int iLoop = 0; iLoop < s.length; iLoop++) {
