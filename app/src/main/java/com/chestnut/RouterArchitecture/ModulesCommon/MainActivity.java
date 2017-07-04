@@ -1,5 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +47,16 @@ public class MainActivity extends AppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"",
-            "2_"+"",
-            "3_"+"",
-            "4_"+"",
-            "5_"+"",
-            "6_"+"",
+            "1_"+"RecorderHelper-start",
+            "2_"+"RecorderHelper-stop",
+            "3_"+"Audio-start",
+            "4_"+"Audio-stop",
+            "5_"+"play-Record",
+            "6_"+"play-audio",
             "7_"+"",
             "8_"+"",
             "9_"+"",
-            "10_"+"",
+            "10_"+"授予权限",
             "11_"+"",
             "12_"+"",
     };
@@ -130,11 +132,6 @@ public class MainActivity extends AppCompatActivity {
         txtLog.setText(result.toString());
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
@@ -159,6 +156,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_9:
                 break;
             case R.id.btn_10:
+                RxPermissions rxPermissions = new RxPermissions(this);
+                rxPermissions.request(Manifest.permission.RECORD_AUDIO)
+                        .subscribe(aBoolean -> toast.setText(aBoolean?"授予权限成功！":"error").show());
                 break;
         }
     };

@@ -47,13 +47,13 @@ public class RecorderHelper {
     }
 
     public void startRecord() {
-
+        _startRecord();
     }
 
     /**
      *      录音
      */
-    public void _startRecord() {
+    private void _startRecord() {
         if ( recorder!=null && !isRecording ) {
             countDownTimer = new CountDownTimer(Integer.MAX_VALUE,300) {
                 @Override
@@ -81,6 +81,10 @@ public class RecorderHelper {
                     if (callBack!=null) {
                         callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());
                     }
+                    recorder.reset();
+                    recorder = null;
+                    if (countDownTimer!=null)
+                        countDownTimer.cancel();
                 }
             }).start();
         }
@@ -136,6 +140,10 @@ public class RecorderHelper {
             if (callBack!=null) {
                 callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());
             }
+            recorder.reset();
+            recorder = null;
+            if (countDownTimer!=null)
+                countDownTimer.cancel();
         }
         return this;
     }
