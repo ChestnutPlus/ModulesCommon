@@ -47,16 +47,16 @@ public class MainActivity extends AppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"RecorderHelper-start",
-            "2_"+"RecorderHelper-stop",
-            "3_"+"Audio-start",
-            "4_"+"Audio-stop",
-            "5_"+"play-Record",
-            "6_"+"play-audio",
+            "1_"+"",
+            "2_"+"",
+            "3_"+"",
+            "4_"+"",
+            "5_"+"",
+            "6_"+"",
             "7_"+"",
             "8_"+"",
             "9_"+"",
-            "10_"+"授予权限",
+            "10_"+"",
             "11_"+"",
             "12_"+"",
     };
@@ -159,6 +159,10 @@ public class MainActivity extends AppCompatActivity {
                 RxPermissions rxPermissions = new RxPermissions(this);
                 rxPermissions.request(Manifest.permission.RECORD_AUDIO)
                         .subscribe(aBoolean -> toast.setText(aBoolean?"授予权限成功！":"error").show());
+                break;
+            case R.id.btn_11:
+                break;
+            case R.id.btn_12:
                 break;
         }
     };
