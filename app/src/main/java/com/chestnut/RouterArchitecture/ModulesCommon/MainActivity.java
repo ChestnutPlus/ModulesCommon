@@ -1,8 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
-import android.Manifest;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -11,13 +9,13 @@ import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RxAppCompatActivity {
 
     private String TAG = "MainActivity";
     private boolean OpenLog = true;
@@ -155,10 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn_9:
                 break;
-            case R.id.btn_10:
-                RxPermissions rxPermissions = new RxPermissions(this);
-                rxPermissions.request(Manifest.permission.RECORD_AUDIO)
-                        .subscribe(aBoolean -> toast.setText(aBoolean?"授予权限成功！":"error").show());
+           case R.id.btn_10:
                 break;
             case R.id.btn_11:
                 break;

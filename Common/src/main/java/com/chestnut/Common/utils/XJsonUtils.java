@@ -21,17 +21,17 @@ import java.util.List;
  * </pre>
  */
 
-public class JsonUtils implements Json{
+public class XJsonUtils implements Json{
 
     /*单例*/
-    private static volatile JsonUtils defaultInstance;
-    public static JsonUtils getInstance() {
-        JsonUtils jsonUtils = defaultInstance;
+    private static volatile XJsonUtils defaultInstance;
+    public static XJsonUtils getInstance() {
+        XJsonUtils jsonUtils = defaultInstance;
         if (defaultInstance == null) {
-            synchronized (JsonUtils.class) {
+            synchronized (XJsonUtils.class) {
                 jsonUtils = defaultInstance;
                 if (defaultInstance == null) {
-                    jsonUtils = new JsonUtils();
+                    jsonUtils = new XJsonUtils();
                     defaultInstance = jsonUtils;
                 }
             }

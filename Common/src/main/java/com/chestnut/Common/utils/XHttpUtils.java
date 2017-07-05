@@ -1,12 +1,5 @@
 package com.chestnut.Common.utils;
 
-import com.chestnut.Common.Interface.web.Http;
-import com.chestnut.Common.Interface.web.HttpCallBack;
-
-import java.util.Map;
-
-import rx.Observable;
-
 /**
  * <pre>
  *     author: Chestnut
@@ -18,37 +11,6 @@ import rx.Observable;
  *     update log:
  * </pre>
  */
-public class XHttpUtils implements Http<HttpCallBack,Map<String,?>,String>{
+public class XHttpUtils {
 
-
-    @Override
-    public Observable<String> RxGet(String url, Map<String, ?> stringMap) {
-        return Observable.create(subscriber -> {
-        });
-    }
-
-    @Override
-    public Observable<String> RxPost(String url, Map<String, ?> stringMap) {
-        return null;
-    }
-
-    @Override
-    public Observable<String> RxPostFile(String url, Map<String, ?> map, String fileName, String fileType, byte[] fileBytes) {
-        return null;
-    }
-
-    @Override
-    public void Get(String url, Map<String, ?> stringMap, HttpCallBack httpCallBack) {
-
-    }
-
-    @Override
-    public void Post(String url, Map<String, ?> stringMap, HttpCallBack httpCallBack) {
-
-    }
-
-    @Override
-    public void PostFile(String url, Map<String, ?> map, String fileName, byte[] fileBytes, String fileType, HttpCallBack httpCallBack) {
-
-    }
 }
