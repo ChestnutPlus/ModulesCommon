@@ -1,6 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
+import com.chestnut.Common.utils.ImageUtils;
 import com.chestnut.Common.utils.LogUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -56,7 +58,7 @@ public class MainActivity extends RxAppCompatActivity {
             "9_"+"",
             "10_"+"",
             "11_"+"",
-            "12_"+"",
+            "12_"+"测试截取缩略图",
     };
 
     @Override
@@ -153,11 +155,15 @@ public class MainActivity extends RxAppCompatActivity {
                 break;
             case R.id.btn_9:
                 break;
-           case R.id.btn_10:
+            case R.id.btn_10:
                 break;
             case R.id.btn_11:
                 break;
             case R.id.btn_12:
+                String s = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/1.mp4";
+                LogUtils.i(OpenLog,TAG,System.currentTimeMillis()+"_1");
+                img1.setImageBitmap(ImageUtils.getBitmapFromUrl(s,10));
+                LogUtils.i(OpenLog,TAG,System.currentTimeMillis()+"_2");
                 break;
         }
     };
