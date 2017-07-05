@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;

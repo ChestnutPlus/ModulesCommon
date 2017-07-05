@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.0.5"
+        versionCode 5
+        versionName "1.0.6"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
          *      1.0.2:  修改包名的拼写错误，更新部分代码。
@@ -22,10 +22,13 @@ android {
          *      1.0.4
          *          1.  2017年7月5日10:34:14   更新一些库
          *      1.0.5
-         *          1.  2017年7月5日10:36:03   更新为1.0.5
+         *          4.  2017年7月5日10:36:03   更新为1.0.5
          *              1）网络请求使用：RxVolley，暂时不封装
          *              2）图片加载使用：Glide，暂时不封装
          *              3）Json，使用GSon，并封装了XJsonUtils
+         *
+         *     1.0.6
+         *          5.  回滚代码，使用回RxJava1.X
          *
          */
     }
@@ -61,5 +64,6 @@ dependencies {
     //  RxPermission
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
     //  RxLife
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
+    compile 'com.trello:rxlifecycle:0.8.0'
+    compile 'com.trello:rxlifecycle-components:0.8.0'
 }
