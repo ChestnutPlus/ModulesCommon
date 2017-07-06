@@ -45,7 +45,7 @@ public class XJsonUtils implements Json{
         try {
             return gson.fromJson(json,beanClass);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"XJsonUtils");
             return null;
         }
     }
@@ -55,7 +55,7 @@ public class XJsonUtils implements Json{
         try {
             return gson.fromJson(json, new TypeToken<List<Bean>>(){}.getType());
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"XJsonUtils");
             return null;
         }
     }

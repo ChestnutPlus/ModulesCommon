@@ -170,7 +170,7 @@ public class ImageUtils {
             is = new BufferedInputStream(new FileInputStream(file));
             return BitmapFactory.decodeStream(is);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
             return null;
         } finally {
             FileUtils.closeIO(is);
@@ -197,7 +197,7 @@ public class ImageUtils {
             options.inJustDecodeBounds = false;
             return BitmapFactory.decodeStream(is, null, options);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
             return null;
         } finally {
             FileUtils.closeIO(is);
@@ -369,13 +369,13 @@ public class ImageUtils {
                 retriever.setDataSource(url);
             }
             bitmap = retriever.getFrameAtTime(timeS*1000*1000);
-        } catch (RuntimeException ex) {
-            // Assume this is a corrupt video file.
+        } catch (RuntimeException e) {
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
         } finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
-                // Ignore failures while cleaning up.
+            } catch (RuntimeException e) {
+                ExceptionCatchUtils.catchE(e,"ImageUtils");
             }
         }
         return bitmap;
@@ -589,7 +589,7 @@ public class ImageUtils {
                     break;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
         }
         return degree;
     }
@@ -746,6 +746,8 @@ public class ImageUtils {
             blurScript.setRadius(radius);
             blurScript.forEach(output);
             output.copyTo(src);
+        } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
         } finally {
             if (rs != null) {
                 rs.destroy();
@@ -1250,7 +1252,7 @@ public class ImageUtils {
             ret = src.compress(format, 100, os);
             if (recycle && !src.isRecycled()) src.recycle();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
         } finally {
             FileUtils.closeIO(os);
         }
@@ -1303,7 +1305,7 @@ public class ImageUtils {
             is = new FileInputStream(file);
             return getImageType(is);
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
             return null;
         } finally {
             FileUtils.closeIO(is);
@@ -1322,7 +1324,7 @@ public class ImageUtils {
             byte[] bytes = new byte[8];
             return is.read(bytes, 0, 8) != -1 ? getImageType(bytes) : null;
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ImageUtils");
             return null;
         }
     }

@@ -61,7 +61,7 @@ public class BarUtils {
                 window.setStatusBarColor(activity.getResources().getColor(colorResId));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"BarUtils");
         }
     }
 
@@ -160,7 +160,7 @@ public class BarUtils {
             Method expand = statusBarManager.getMethod(methodName);
             expand.invoke(service);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"BarUtils");
         }
     }
 }

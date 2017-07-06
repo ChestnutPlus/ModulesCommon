@@ -127,6 +127,7 @@ public class ClipboardUtils {
                 list.add(item.getUri());
                 return list;
             }catch (Exception n) {
+                ExceptionCatchUtils.catchE(n,"ClipboardUtils");
                 list.clear();
                 try {
                     item.getIntent().getAction();
@@ -134,12 +135,14 @@ public class ClipboardUtils {
                     list.add(item.getIntent());
                     return list;
                 }catch (Exception n1) {
+                    ExceptionCatchUtils.catchE(n1,"ClipboardUtils");
                     list.clear();
                     try {
                         list.add(Type.Text);
                         list.add(item.getText());
                         return list;
                     }catch (Exception n2) {
+                        ExceptionCatchUtils.catchE(n2,"ClipboardUtils");
                         list.clear();
                         list.add(Type.Null);
                         list.add(Type.Null);

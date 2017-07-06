@@ -58,7 +58,7 @@ public class HttpUtils {
             }
 
         } catch (IOException e) {
-            //e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
             return "err: " + e.getMessage().toString();
         }
         return "-1";
@@ -114,13 +114,13 @@ public class HttpUtils {
                 return "{\"success\":0}";
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
             return "{\"success\":0}";
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
             return "{\"success\":0}";
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
             return "{\"success\":0}";
         }
     }
@@ -142,7 +142,7 @@ public class HttpUtils {
             }
             stringBuffer.deleteCharAt(stringBuffer.length() - 1);    //删除最后的一个"&"
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
         }
         return stringBuffer;
     }
@@ -162,7 +162,7 @@ public class HttpUtils {
                 byteArrayOutputStream.write(data, 0, len);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"HttpUtils");
         }
         resultData = new String(byteArrayOutputStream.toByteArray());
         return resultData;

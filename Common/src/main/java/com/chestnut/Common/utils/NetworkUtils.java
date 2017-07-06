@@ -281,7 +281,7 @@ public class NetworkUtils {
             ReturnStr1 = InetAddress.getByName(domain);
             IPAddress = ReturnStr1.getHostAddress();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"NetworkUtils");
             return  IPAddress;
         }
         return IPAddress;

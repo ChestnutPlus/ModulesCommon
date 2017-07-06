@@ -122,7 +122,7 @@ public class MediaPlayerHelper {
                         break;
                 }
             } catch (Exception e) {
-                ExceptionCatchUtils.getInstance().catchException(e, TAG, false);
+                ExceptionCatchUtils.catchE(e,"MediaPlayerHelper");
             }
         } else {
             if (isPause) {
@@ -251,7 +251,7 @@ public class MediaPlayerHelper {
                 });
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"MediaPlayerHelper");
                 subscriber.onNext(0);
             }
         });

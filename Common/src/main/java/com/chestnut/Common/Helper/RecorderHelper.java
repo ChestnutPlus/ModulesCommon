@@ -4,6 +4,8 @@ import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.chestnut.Common.utils.ExceptionCatchUtils;
+
 /**
  * <pre>
  *     author: Chestnut
@@ -76,7 +78,7 @@ public class RecorderHelper {
                         callBack.onRecordStart(fileName);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    ExceptionCatchUtils.catchE(e,"RecorderHelper");
                     Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
                     if (callBack!=null) {
                         callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());
@@ -136,6 +138,7 @@ public class RecorderHelper {
                 recorder.setOutputFile(fileName);
             }
         } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"RecorderHelper");
             Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
             if (callBack!=null) {
                 callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());

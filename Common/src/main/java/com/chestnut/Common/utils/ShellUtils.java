@@ -140,7 +140,7 @@ public class ShellUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"ShellUtils");
         } finally {
             try {
                 if (os != null) {
@@ -153,7 +153,7 @@ public class ShellUtils {
                     errorResult.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"ShellUtils");
             }
 
             if (process != null) {

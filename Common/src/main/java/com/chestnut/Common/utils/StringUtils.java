@@ -263,7 +263,7 @@ public class StringUtils {
                 throw new IllegalArgumentException("Illegal resource string");
             }
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"StringUtils");
         }
         return ascii;
     }

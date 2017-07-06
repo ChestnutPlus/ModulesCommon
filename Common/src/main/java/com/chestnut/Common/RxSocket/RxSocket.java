@@ -1,5 +1,6 @@
 package com.chestnut.Common.RxSocket;
 
+import com.chestnut.Common.utils.ExceptionCatchUtils;
 import com.chestnut.Common.utils.LogUtils;
 
 import java.net.InetSocketAddress;
@@ -97,18 +98,21 @@ public class RxSocket {
                             try {
                                 selector.close();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selector.close");
                             }
                         if (selectionKey!=null)
                             try {
                                 selectionKey.cancel();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
                             }
                         if (socketChannel!=null)
                             try {
                                 socketChannel.close();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"socketChannel.close");
                             }
 
@@ -157,24 +161,28 @@ public class RxSocket {
                             try {
                                 selector.close();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selector.close");
                             }
                         if (selectionKey!=null)
                             try {
                                 selectionKey.cancel();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
                             }
                         if (socketChannel!=null)
                             try {
                                 socketChannel.close();
                             } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"socketChannel.close");
                             }
                         subscriber.onNext(true);
                         subscriber.onCompleted();
                     }
                 } catch (Exception e) {
+                    ExceptionCatchUtils.catchE(e,"RxSocket");
                     subscriber.onNext(false);
                     subscriber.onCompleted();
                 }
@@ -227,6 +235,7 @@ public class RxSocket {
                                         subscriber.onCompleted();
                                     }
                                 } catch (Exception e) {
+                                    ExceptionCatchUtils.catchE(e,"RxSocket");
                                     LogUtils.i(OpenLog,TAG,"write."+e.getMessage());
                                     subscriber.onNext(false);
                                     subscriber.onCompleted();
@@ -268,6 +277,7 @@ public class RxSocket {
                         socketStatus = SocketStatus.CONNECTING;
                         connectStatus.onNext(SocketStatus.CONNECTING);
                     } catch (Exception e) {
+                        ExceptionCatchUtils.catchE(e,"RxSocket");
                         isReadThreadAlive = false;
                         socketStatus = SocketStatus.DIS_CONNECT;
                         connectStatus.onNext(SocketStatus.DIS_CONNECT);
@@ -294,6 +304,7 @@ public class RxSocket {
                                         if (socketReconnectCallback!=null)
                                             socketReconnectCallback.onSuccess();
                                     } catch (Exception e) {
+                                        ExceptionCatchUtils.catchE(e,"RxSocket");
                                         isReadThreadAlive = false;
                                         socketStatus = SocketStatus.DIS_CONNECT;
                                         connectStatus.onNext(SocketStatus.DIS_CONNECT);
@@ -318,6 +329,7 @@ public class RxSocket {
                         }
                         it.remove();
                     } catch (Exception e) {
+                        ExceptionCatchUtils.catchE(e,"RxSocket");
                         isReadThreadAlive = false;
                         socketStatus = SocketStatus.DIS_CONNECT;
                         connectStatus.onNext(SocketStatus.DIS_CONNECT);

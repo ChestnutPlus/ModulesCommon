@@ -88,7 +88,7 @@ public class DeviceUtils {
             lnr = new LineNumberReader(isr);
             macAddress = lnr.readLine().replace(":", "");
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"DeviceUtils");
         } finally {
             FileUtils.closeIO(lnr, isr);
         }

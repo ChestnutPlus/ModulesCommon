@@ -5,6 +5,8 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
+import com.chestnut.Common.utils.ExceptionCatchUtils;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,7 +102,7 @@ public class AudioRecordHelper {
             pcmFile.createNewFile();
             wavFile.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
         }
     }
 
@@ -114,6 +116,7 @@ public class AudioRecordHelper {
             try {
                 os = new BufferedOutputStream(new FileOutputStream(new File(inFile)));
             }catch (IOException e){
+                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
                 if (callBack!=null)
                     callBack.onRecordFail(outFile,e.getMessage());
                 return;
@@ -136,6 +139,7 @@ public class AudioRecordHelper {
                         callBack.onRecordDBChange(volume);
                     }
                 } catch (Exception e) {
+                    ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
                     if (callBack!=null) {
                         callBack.onRecordDBChange(0);
                     }
@@ -144,6 +148,7 @@ public class AudioRecordHelper {
                     try{
                         os.write(buffer);
                     }catch(IOException e){
+                        ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
                         if (callBack!=null)
                             callBack.onRecordFail(outFile,e.getMessage());
                         return;
@@ -153,7 +158,7 @@ public class AudioRecordHelper {
             try {
                 os.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
             }
         });
     }
@@ -224,7 +229,7 @@ public class AudioRecordHelper {
                 if (callBack!=null)
                     callBack.onRecordEnd(outFile);
             } catch (IOException e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
                 if (callBack!=null)
                     callBack.onRecordFail(outFile,e.getMessage());
             }

@@ -80,7 +80,7 @@ public class TimerUtils {
                 isSetStar = false;
                 timer.cancel();
             }catch (Exception e) {
-
+                ExceptionCatchUtils.catchE(e,"TimerUtils");
             }
     }
 
@@ -93,7 +93,7 @@ public class TimerUtils {
             try {
                 timer.cancel();
             }catch (Exception e) {
-
+                ExceptionCatchUtils.catchE(e,"TimerUtils");
             }
     }
 
@@ -105,7 +105,7 @@ public class TimerUtils {
         try {
             Thread.sleep(timeMS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"TimerUtils");
         }
     }
 }

@@ -347,7 +347,7 @@ public class PhoneUtils {
             // 2.8将数据刷新到文件中
             xmlSerializer.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"PhoneUtils");
         }
     }
 }

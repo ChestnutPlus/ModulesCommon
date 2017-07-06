@@ -162,7 +162,7 @@ public class CameraUtils {
         try {
             bm = MediaStore.Images.Media.getBitmap(cr, originalUri);
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"CameraUtils");
         }
         return bm;
     }
@@ -193,14 +193,14 @@ public class CameraUtils {
                 cursor.moveToFirst();
                 path = cursor.getString(column_index);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"CameraUtils");
             }finally {
                 try {
                     if (!cursor.isClosed()) {
                         cursor.close();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    ExceptionCatchUtils.catchE(e,"CameraUtils");
                 }
             }
         }

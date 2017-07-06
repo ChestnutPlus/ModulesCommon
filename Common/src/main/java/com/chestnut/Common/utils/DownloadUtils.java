@@ -164,6 +164,8 @@ public class DownloadUtils {
                 bytesAndStatus[1] = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
                 bytesAndStatus[2] = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
             }
+        } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"DownloadUtils");
         } finally {
             if (c != null) {
                 c.close();

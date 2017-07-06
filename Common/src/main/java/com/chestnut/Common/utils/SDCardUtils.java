@@ -87,7 +87,7 @@ public class SDCardUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"SDCardUtils");
         } finally {
             FileUtils.closeIO(bufferedReader);
         }

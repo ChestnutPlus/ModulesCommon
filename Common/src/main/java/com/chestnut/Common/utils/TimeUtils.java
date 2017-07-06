@@ -261,7 +261,7 @@ public class TimeUtils {
         try {
             return format.parse(time).getTime();
         } catch (ParseException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"TimeUtils");
         }
         return -1;
     }

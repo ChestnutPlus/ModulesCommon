@@ -85,7 +85,7 @@ public class LightUtils {
                     resolver, Settings.System.SCREEN_BRIGHTNESS);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"LightUtils");
         }
         return (int) (nowBrightnessValue*1.0/2.25);
     }

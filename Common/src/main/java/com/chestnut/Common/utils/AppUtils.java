@@ -197,7 +197,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -226,7 +226,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadIcon(pm);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -255,7 +255,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.sourceDir;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -284,7 +284,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -313,7 +313,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? -1 : pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return -1;
         }
     }
@@ -342,7 +342,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.signatures;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -371,7 +371,7 @@ public class AppUtils {
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
             return ai != null && (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
         }
         return false;
     }
@@ -519,7 +519,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return getBean(pm, pi);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -658,10 +658,10 @@ public class AppUtils {
             byte[] digest = md.digest();
             return isUpper ? ConvertUtils.bytes2HexString(digest) : StringUtils.changeTOLowerCase(ConvertUtils.bytes2HexString(digest));
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return "null";
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"AppUtils");
             return "null";
         }
     }

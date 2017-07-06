@@ -6,9 +6,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.chesnut.Common.R;
+import com.chestnut.Common.R;
+import com.chestnut.Common.utils.ExceptionCatchUtils;
 
 /**
  * <pre>
@@ -64,7 +64,7 @@ public class XTextView extends AppCompatTextView {
                 setTypeface(typeFace);
             }
         } catch (Exception e) {
-            Log.e("XTextView:error:","fontPath:"+fontPath);
+            ExceptionCatchUtils.catchE(e,"XTextView");
         }
         //回收ta
         typedArray.recycle();

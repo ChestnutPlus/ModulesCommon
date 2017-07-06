@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".CommonApplication"
         android:icon="@drawable/li_bao_en"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

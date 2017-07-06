@@ -9,8 +9,9 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
 
-import com.chesnut.Common.R;
+import com.chestnut.Common.R;
 import com.chestnut.Common.utils.ConvertUtils;
+import com.chestnut.Common.utils.ExceptionCatchUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -162,6 +163,7 @@ public class SoundPoolHelper {
         try {
             return RingtoneManager.getActualDefaultRingtoneUri(context, NOW_RINGTONE_TYPE);
         } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"SoundPoolHelper");
             return null;
         }
     }

@@ -169,7 +169,7 @@ public class FileUtils {
         try {
             return file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return false;
         }
     }
@@ -199,7 +199,7 @@ public class FileUtils {
         try {
             return file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return false;
         }
     }
@@ -283,7 +283,7 @@ public class FileUtils {
             return writeFileFromIS(destFile, new FileInputStream(srcFile), false)
                     && !(isMove && !deleteFile(srcFile));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return false;
         }
     }
@@ -493,7 +493,7 @@ public class FileUtils {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionCatchUtils.catchE(e,"FileUtils");
             }
         }
     }
@@ -769,7 +769,7 @@ public class FileUtils {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return false;
         } finally {
             closeIO(is, os);
@@ -805,7 +805,7 @@ public class FileUtils {
             fileWriter.write(content);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return false;
         } finally {
             closeIO(fileWriter);
@@ -877,7 +877,7 @@ public class FileUtils {
             }
             return list;
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return null;
         } finally {
             closeIO(reader);
@@ -919,7 +919,7 @@ public class FileUtils {
             // 要去除最后的换行符
             return sb.delete(sb.length() - 2, sb.length()).toString();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return null;
         } finally {
             closeIO(reader);
@@ -947,7 +947,7 @@ public class FileUtils {
         try {
             return ConvertUtils.inputStream2Bytes(new FileInputStream(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
             return null;
         }
     }
@@ -975,7 +975,7 @@ public class FileUtils {
             is = new BufferedInputStream(new FileInputStream(file));
             p = (is.read() << 8) + is.read();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
         } finally {
             closeIO(is);
         }
@@ -1020,7 +1020,7 @@ public class FileUtils {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
         } finally {
             closeIO(is);
         }
@@ -1133,7 +1133,7 @@ public class FileUtils {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"FileUtils");
         }
     }
 

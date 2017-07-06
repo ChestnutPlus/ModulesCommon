@@ -164,7 +164,7 @@ public class EncryptUtils {
             md.update(buffer);
             return md.digest();
         } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"EncryptUtils");
         } finally {
             FileUtils.closeIO(fis);
         }
@@ -334,7 +334,7 @@ public class EncryptUtils {
             md.update(data);
             return md.digest();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"EncryptUtils");
         }
         return new byte[0];
     }
@@ -364,8 +364,8 @@ public class EncryptUtils {
             SecureRandom random = new SecureRandom();
             cipher.init(isEncrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, random);
             return cipher.doFinal(data);
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"EncryptUtils");
         }
         return null;
     }

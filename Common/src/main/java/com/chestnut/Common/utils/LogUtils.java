@@ -44,28 +44,17 @@ public class LogUtils {
     }
 
     public static class Config {
-        static Boolean LOG_SWITCH = true;    // 日志文件总开关
-        static Boolean LOG_TO_FILE = false;  // 日志写入文件开关
-        static String LOG_TAG = "TAG";       // 默认的tag
-        static char LOG_TYPE = 'v';          // 输入日志类型，v代表输出所有信息,w则只输出警告...
-        final static SimpleDateFormat LOG_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // 日志的输出格式
-        final static SimpleDateFormat FILE_SUFFIX = new SimpleDateFormat("yyyy-MM-dd");          // 日志文件格式
-        static String LOG_FILE_PATH;         // 日志文件保存路径
-        static String LOG_FILE_NAME;         // 日志文件保存名称
-
-        public static void setLogSwitch(Boolean logSwitch) {
-            LOG_SWITCH = logSwitch;
-        }
-        public static void setLogFileSwitch(Boolean logFileSwitch) {
-            LOG_TO_FILE = logFileSwitch;
-        }
-        public static void setLogFilePath(String logFilePath){ LOG_FILE_PATH = logFilePath; }
-        public static void setLogTag(String logTag) {
-            LOG_TAG = logTag;
-        }
+        public static Boolean LOG_SWITCH = true;    //日志文件总开关
+        public static Boolean LOG_TO_FILE = false;  //日志写入文件开关
+        public static String LOG_TAG = "TAG";       //默认的tag
+        public static char LOG_TYPE = 'v';          //输入日志类型，v代表输出所有信息,w则只输出警告...
+        public final static SimpleDateFormat LOG_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //日志的输出格式
+        public final static SimpleDateFormat FILE_SUFFIX = new SimpleDateFormat("yyyy-MM-dd");          //日志文件格式
+        public static String LOG_FILE_PATH;         //日志文件保存路径
+        public static String LOG_FILE_NAME;         //日志文件保存名称
     }
 
-    public static void init(Context context) { // 在Application中初始化
+    public static void init(Context context) {      //在Application中初始化
         if (context.getExternalCacheDir()!=null) {
             LOG_FILE_PATH = context.getExternalCacheDir().getAbsolutePath();
         }
@@ -114,6 +103,10 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         log2File(thread,stackTraceElement,'W',tag, msg);
+    }
+
+    public static void xW(boolean isOpen, String msg) {
+
     }
 
     /***************************
@@ -374,7 +367,7 @@ public class LogUtils {
             bufWriter.close();
             filerWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionCatchUtils.catchE(e,"LogUtils");
         }
     }
 
