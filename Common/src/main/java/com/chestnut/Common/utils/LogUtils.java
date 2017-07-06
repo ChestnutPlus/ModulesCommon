@@ -2,6 +2,7 @@ package com.chestnut.Common.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -105,8 +106,20 @@ public class LogUtils {
         log2File(thread,stackTraceElement,'W',tag, msg);
     }
 
-    public static void xW(boolean isOpen, String msg) {
+    public static void W(boolean isOpen, String msg) {
+        if (isOpen) {
+            Thread thread = Thread.currentThread();
+            StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+            String s = stackTraceElement.getClassName();
+            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'w');
+        }
+    }
 
+    public static void W(String msg) {
+        Thread thread = Thread.currentThread();
+        StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+        String s = stackTraceElement.getClassName();
+        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'w');
     }
 
     /***************************
@@ -153,6 +166,22 @@ public class LogUtils {
         log2File(thread,stackTraceElement,'E',tag, msg);
     }
 
+    public static void E(boolean isOpen, String msg) {
+        if (isOpen) {
+            Thread thread = Thread.currentThread();
+            StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+            String s = stackTraceElement.getClassName();
+            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'e');
+        }
+    }
+
+    public static void E(String msg) {
+        Thread thread = Thread.currentThread();
+        StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+        String s = stackTraceElement.getClassName();
+        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'e');
+    }
+
     /***************************
      * Debug
      ********************************/
@@ -189,6 +218,22 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         log2File(thread,stackTraceElement,'D',tag, msg);
+    }
+
+    public static void D(boolean isOpen, String msg) {
+        if (isOpen) {
+            Thread thread = Thread.currentThread();
+            StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+            String s = stackTraceElement.getClassName();
+            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'd');
+        }
+    }
+
+    public static void D(String msg) {
+        Thread thread = Thread.currentThread();
+        StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+        String s = stackTraceElement.getClassName();
+        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'd');
     }
 
     /****************************
@@ -229,6 +274,22 @@ public class LogUtils {
         log2File(thread,stackTraceElement,'I',tag, msg);
     }
 
+    public static void I(boolean isOpen, String msg) {
+        if (isOpen) {
+            Thread thread = Thread.currentThread();
+            StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+            String s = stackTraceElement.getClassName();
+            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'i');
+        }
+    }
+
+    public static void I(String msg) {
+        Thread thread = Thread.currentThread();
+        StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+        String s = stackTraceElement.getClassName();
+        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'i');
+    }
+
     /**************************
      * Verbose
      ********************************/
@@ -265,6 +326,22 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         log2File(thread,stackTraceElement,'V',tag, msg);
+    }
+
+    public static void V(boolean isOpen, String msg) {
+        if (isOpen) {
+            Thread thread = Thread.currentThread();
+            StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+            String s = stackTraceElement.getClassName();
+            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'v');
+        }
+    }
+
+    public static void V(String msg) {
+        Thread thread = Thread.currentThread();
+        StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
+        String s = stackTraceElement.getClassName();
+        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'v');
     }
 
     /**

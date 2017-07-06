@@ -1,8 +1,8 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView;
 
-import com.chestnut.Common.ui.RecyclerView.Base.BaseAdapter;
-import com.chestnut.Common.ui.RecyclerView.Base.BaseHolder;
-import com.chestnut.Common.ui.RecyclerView.Base.BaseItem;
+import com.chestnut.Common.ui.recyclerView.XAdapter;
+import com.chestnut.Common.ui.recyclerView.XHolder;
+import com.chestnut.Common.ui.recyclerView.XItem;
 
 /**
  * <pre>
@@ -16,19 +16,17 @@ import com.chestnut.Common.ui.RecyclerView.Base.BaseItem;
  * </pre>
  */
 
-public class SimpleAdapter extends BaseAdapter<BaseItem> {
+public class SimpleAdapter extends XAdapter<XItem> {
 
     //在这里统一Item的类型
-    public static final int TYPE_BUTTON = -1;
+    public static final int TYPE_ITEM_1= -1;
+    public static final int TYPE_ITEM_2= -2;
 
     /**
      * 如果子类需要在onBindViewHolder 回调的时候做的操作可以在这个方法里做
-     *
-     * @param holder
-     * @param position
      */
     @Override
-    protected void onViewHolderBound(BaseHolder holder, int position) {
+    protected void onViewHolderBound(XHolder holder, int position) {
 
     }
 }

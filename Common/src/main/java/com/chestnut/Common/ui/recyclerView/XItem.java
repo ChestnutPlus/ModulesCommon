@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui.RecyclerView.Base;
+package com.chestnut.Common.ui.recyclerView;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +15,11 @@ import android.view.ViewGroup;
  * </pre>
  */
 
-public abstract class BaseItem<DATA> {
+public abstract class XItem<DATA> {
 
     public DATA data;   //数据实体，数据Bean
 
-    public BaseItem(DATA data) {
+    public XItem(DATA data) {
         this.data = data;
     }
 
@@ -29,14 +29,14 @@ public abstract class BaseItem<DATA> {
      * @param viewType  type
      * @return  holder
      */
-    public abstract BaseHolder onCreateViewHolder(ViewGroup parent, int viewType);
+    public abstract XHolder onCreateViewHolder(ViewGroup parent, int viewType);
 
     /**
      * 2.数据绑定
      * @param holder    视图拥有者
      * @param position  位置
      */
-    public abstract void onBindViewHolder(BaseHolder holder, int position);
+    public abstract void onBindViewHolder(XHolder holder, int position);
 
     /**
      * 4.获取ViewType

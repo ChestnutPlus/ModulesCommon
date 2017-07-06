@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui.RecyclerView.Base;
+package com.chestnut.Common.ui.recyclerView;
 
 import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +17,12 @@ import android.view.View;
  * </pre>
  */
 
-public class BaseHolder extends RecyclerView.ViewHolder{
+public class XHolder extends RecyclerView.ViewHolder{
 
     private SparseArray<View> views;
     private View mItemView;
 
-    public BaseHolder(View itemView) {
+    public XHolder(View itemView) {
         super(itemView);
         views = new SparseArray<>();
         mItemView = itemView;

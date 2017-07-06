@@ -1,5 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,7 +57,7 @@ public class MainActivity extends RxAppCompatActivity {
             "9_"+"",
             "10_"+"",
             "11_"+"",
-            "12_"+"",
+            "12_"+"XItem测试",
     };
 
     @Override
@@ -128,7 +129,6 @@ public class MainActivity extends RxAppCompatActivity {
             result.append(s).append("\n");
         }
         txtLog.setText(result.toString());
-        //LogUtils.xW("测试测试");
     }
 
     private View.OnClickListener onClickListener = view -> {
@@ -159,6 +159,7 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_11:
                 break;
             case R.id.btn_12:
+                startActivity(new Intent(this,TimeLineActivity.class));
                 break;
         }
     };

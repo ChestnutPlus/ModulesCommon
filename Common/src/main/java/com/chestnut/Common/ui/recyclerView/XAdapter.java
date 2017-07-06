@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui.RecyclerView.Base;
+package com.chestnut.Common.ui.recyclerView;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,12 +19,12 @@ import java.util.List;
  * </pre>
  */
 
-public abstract class BaseAdapter<ITEM extends BaseItem> extends RecyclerView.Adapter<BaseHolder>{
+public abstract class XAdapter<ITEM extends XItem> extends RecyclerView.Adapter<XHolder>{
 
     public String TAG = "BaseAdapter";
     protected List<ITEM> mData;
 
-    public BaseAdapter(){
+    public XAdapter(){
         mData = new ArrayList<>();
     }
 
@@ -38,7 +38,7 @@ public abstract class BaseAdapter<ITEM extends BaseItem> extends RecyclerView.Ad
     }
 
     @Override
-    public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public XHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         for(int i=0;i<getItemCount();i++){
             if(viewType == mData.get(i).getItemType()){
                 return mData.get(i).onCreateViewHolder(parent,viewType);
@@ -48,13 +48,13 @@ public abstract class BaseAdapter<ITEM extends BaseItem> extends RecyclerView.Ad
     }
 
     @Override
-    public void onBindViewHolder(BaseHolder holder, int position) {
+    public void onBindViewHolder(XHolder holder, int position) {
         mData.get(position).onBindViewHolder(holder,position);
         onViewHolderBound(holder,position);
     }
 
     @Override
-    public void onViewDetachedFromWindow(BaseHolder holder) {
+    public void onViewDetachedFromWindow(XHolder holder) {
         super.onViewDetachedFromWindow(holder);
         Log.e(TAG,"onViewDetachedFromWindow invoke...");
         //释放资源
@@ -151,5 +151,5 @@ public abstract class BaseAdapter<ITEM extends BaseItem> extends RecyclerView.Ad
      * @param holder holder
      * @param position position
      */
-    protected abstract void onViewHolderBound(BaseHolder holder, int position);
+    protected abstract void onViewHolderBound(XHolder holder, int position);
 }

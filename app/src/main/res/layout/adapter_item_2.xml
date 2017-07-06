@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_margin="10dp"
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@drawable/li_bao_en" />
+    <TextView
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@drawable/touch_bg"
+        android:gravity="center"
+        android:id="@+id/textView"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="今天的娱乐新闻只有一条：宋仲基和宋慧乔要结婚了！" />
+</LinearLayout>
