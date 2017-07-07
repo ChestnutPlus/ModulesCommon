@@ -2,7 +2,6 @@ package com.chestnut.Common.utils;
 
 import android.content.Context;
 import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -111,7 +110,7 @@ public class LogUtils {
             Thread thread = Thread.currentThread();
             StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
             String s = stackTraceElement.getClassName();
-            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'w');
+            log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'w');
         }
     }
 
@@ -119,7 +118,7 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         String s = stackTraceElement.getClassName();
-        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'w');
+        log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'w');
     }
 
     /***************************
@@ -171,7 +170,7 @@ public class LogUtils {
             Thread thread = Thread.currentThread();
             StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
             String s = stackTraceElement.getClassName();
-            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'e');
+            log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'e');
         }
     }
 
@@ -179,7 +178,7 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         String s = stackTraceElement.getClassName();
-        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'e');
+        log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'e');
     }
 
     /***************************
@@ -225,7 +224,7 @@ public class LogUtils {
             Thread thread = Thread.currentThread();
             StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
             String s = stackTraceElement.getClassName();
-            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'd');
+            log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'd');
         }
     }
 
@@ -233,7 +232,7 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         String s = stackTraceElement.getClassName();
-        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'd');
+        log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'd');
     }
 
     /****************************
@@ -279,7 +278,7 @@ public class LogUtils {
             Thread thread = Thread.currentThread();
             StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
             String s = stackTraceElement.getClassName();
-            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'i');
+            log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'i');
         }
     }
 
@@ -287,7 +286,7 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         String s = stackTraceElement.getClassName();
-        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'i');
+        log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'i');
     }
 
     /**************************
@@ -333,7 +332,7 @@ public class LogUtils {
             Thread thread = Thread.currentThread();
             StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
             String s = stackTraceElement.getClassName();
-            log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'v');
+            log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'v');
         }
     }
 
@@ -341,7 +340,7 @@ public class LogUtils {
         Thread thread = Thread.currentThread();
         StackTraceElement stackTraceElement = getCurrentStack(thread.getStackTrace(), LogUtils.class);
         String s = stackTraceElement.getClassName();
-        log(s.substring(s.lastIndexOf(".") + 1) + "-" + stackTraceElement.getMethodName(), msg, null, 'v');
+        log("["+s.substring(s.lastIndexOf(".") + 1) + "][" + stackTraceElement.getMethodName()+"]", msg, null, 'v');
     }
 
     /**

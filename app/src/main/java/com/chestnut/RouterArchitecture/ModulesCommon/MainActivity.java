@@ -56,7 +56,7 @@ public class MainActivity extends RxAppCompatActivity {
             "8_"+"",
             "9_"+"",
             "10_"+"",
-            "11_"+"",
+            "11_"+"测试Log",
             "12_"+"XItem测试",
     };
 
@@ -157,6 +157,11 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
+                LogUtils.I("哈哈");
+                LogUtils.W("哈哈");
+                LogUtils.D("哈哈");
+                LogUtils.E("哈哈");
+                LogUtils.V("哈哈");
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));

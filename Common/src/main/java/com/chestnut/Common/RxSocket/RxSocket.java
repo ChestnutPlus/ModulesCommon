@@ -1,6 +1,5 @@
 package com.chestnut.Common.RxSocket;
 
-import com.chestnut.Common.utils.ExceptionCatchUtils;
 import com.chestnut.Common.utils.LogUtils;
 
 import java.net.InetSocketAddress;
@@ -19,18 +18,31 @@ import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
- * Created by Chestnut on 2016/12/18.
- * desc: 基于NIO Socket 的 RxSocket
+ * <pre>
+ *     author: 栗子酱
+ *     blog  : http://www.jianshu.com/u/a0206b5f4526
+ *     time  : 2017年1月30日17:00:21
+ *     desc  :  RxSocket
+ *     thanks To:
+ *     dependent on:
+ *     update log:
+ *          1.  2016年12月20日16:35:31     修复Socket被远程关闭后，不断接收关闭消息的bug     by 栗子酱
+ *          2.  2017年1月28日22:38:32      修复：Write中，返回值为 0 的时候，是正常的，只是写了 长度 为0的包。     by  栗子酱
+ *          3.  2017年1月29日13:52:35      增加：disConnect()
+ * </pre>
  */
+
 public class RxSocket {
 
-    //本类的常量
-    private static final String TAG = "RxSocket";
-    private static final boolean OpenLog = true;
-    private static final long WRITE_TIME_OUT = 3000;
-    private static final long CONNECT_TIME_OUT = 3000;
+    /*  常量
+    * */
+    private String TAG = "RxSocket";
+    private boolean OpenLog = false;
+    private long WRITE_TIME_OUT = 3000;
+    private long CONNECT_TIME_OUT = 3000;
 
-    //单例
+    /*  单例
+    * */
     private Subject<Object,byte[]> readSubject;
     private Subject<Object,SocketStatus> connectStatus;
     private static volatile RxSocket defaultInstance;
@@ -52,7 +64,8 @@ public class RxSocket {
         return rxSocket;
     }
 
-    //变量
+    /*  变量
+    * */
     private SocketStatus socketStatus = SocketStatus.DIS_CONNECT;
     private Selector selector = null;
     private SocketChannel socketChannel = null;
@@ -61,8 +74,8 @@ public class RxSocket {
     private boolean isReadThreadAlive = true;
     private SocketReconnectCallback socketReconnectCallback = null;
 
-    //方法
-
+    /*  方法
+    * */
     /**
      * 监听Socket的状态
      * @return Rx SocketStatus 状态
@@ -83,6 +96,8 @@ public class RxSocket {
                     @Override
                     public void call(Subscriber<? super Boolean> subscriber) {
 
+                        LogUtils.i(OpenLog,TAG,"connectRx:"+"status:"+socketStatus.name());
+
                         //正在连接
                         if (socketStatus == SocketStatus.CONNECTING) {
                             subscriber.onNext(false);
@@ -98,21 +113,18 @@ public class RxSocket {
                             try {
                                 selector.close();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selector.close");
                             }
                         if (selectionKey!=null)
                             try {
                                 selectionKey.cancel();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
                             }
                         if (socketChannel!=null)
                             try {
                                 socketChannel.close();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"socketChannel.close");
                             }
 
@@ -123,6 +135,8 @@ public class RxSocket {
                         socketReconnectCallback = new SocketReconnectCallback() {
                             @Override
                             public void onSuccess() {
+                                LogUtils.i(OpenLog,TAG,"connectRx:"+"CONNECTED");
+                                socketStatus = SocketStatus.CONNECTED;
                                 subscriber.onNext(true);
                                 subscriber.onCompleted();
                             }
@@ -137,11 +151,16 @@ public class RxSocket {
                     }
                 })
                 .subscribeOn(Schedulers.newThread())
+                .map(aBoolean -> {
+                    socketReconnectCallback = null;
+                    return aBoolean;
+                })
                 .timeout(CONNECT_TIME_OUT, TimeUnit.MILLISECONDS, Observable.just(false));
     }
 
     /**
      * 断开当前的Socket
+     *  还能再继续连接
      * @return Rx true or false
      */
     public Observable<Boolean> disConnect() {
@@ -161,28 +180,24 @@ public class RxSocket {
                             try {
                                 selector.close();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selector.close");
                             }
                         if (selectionKey!=null)
                             try {
                                 selectionKey.cancel();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
                             }
                         if (socketChannel!=null)
                             try {
                                 socketChannel.close();
                             } catch (Exception e) {
-                                ExceptionCatchUtils.catchE(e,"RxSocket");
                                 LogUtils.i(OpenLog,TAG,"socketChannel.close");
                             }
                         subscriber.onNext(true);
                         subscriber.onCompleted();
                     }
                 } catch (Exception e) {
-                    ExceptionCatchUtils.catchE(e,"RxSocket");
                     subscriber.onNext(false);
                     subscriber.onCompleted();
                 }
@@ -195,15 +210,7 @@ public class RxSocket {
      * @return  Rx error 或者 有数据
      */
     public Observable<byte[]> read() {
-        if (socketStatus != SocketStatus.CONNECTED)
-            return Observable.create(new Observable.OnSubscribe<byte[]>() {
-                @Override
-                public void call(Subscriber<? super byte[]> subscriber) {
-                    subscriber.onError(new Throwable("Socket Dis Connect"));
-                }
-            });
-        else
-            return readSubject;
+        return readSubject;
     }
 
     /**
@@ -217,6 +224,7 @@ public class RxSocket {
                     @Override
                     public void call(Subscriber<? super Boolean> subscriber) {
                         if (socketStatus != SocketStatus.CONNECTED) {
+                            LogUtils.i(OpenLog, TAG, "write." + "SocketStatus.DISCONNECTED");
                             subscriber.onNext(false);
                             subscriber.onCompleted();
                         }
@@ -224,18 +232,17 @@ public class RxSocket {
                             if (socketChannel!=null && socketChannel.isConnected()) {
                                 try {
                                     int result = socketChannel.write(buffer);
-                                    if (result==0) {
-                                        LogUtils.i(OpenLog,TAG,"write."+"服务器断开链接");
-                                    }
-                                    else if (result<0) {
-                                        LogUtils.e(OpenLog, TAG, "write." + "发送出错");
+                                    if (result<0) {
+                                        LogUtils.i(OpenLog, TAG, "write." + "发送出错");
+                                        subscriber.onNext(false);
+                                        subscriber.onCompleted();
                                     }
                                     else {
+                                        LogUtils.i(OpenLog, TAG, "write." + "success!");
                                         subscriber.onNext(true);
                                         subscriber.onCompleted();
                                     }
                                 } catch (Exception e) {
-                                    ExceptionCatchUtils.catchE(e,"RxSocket");
                                     LogUtils.i(OpenLog,TAG,"write."+e.getMessage());
                                     subscriber.onNext(false);
                                     subscriber.onCompleted();
@@ -253,7 +260,16 @@ public class RxSocket {
                 .timeout(WRITE_TIME_OUT, TimeUnit.MILLISECONDS, Observable.just(false));
     }
 
-    //类
+    /**
+     * 获取Socket的链接状态
+     * @return  状态
+     */
+    public SocketStatus getSocketStatus() {
+        return socketStatus;
+    }
+
+    /*  类 && 枚举 && 接口
+        * */
     private class ReadThread extends Thread {
         private String ip;
         private int port;
@@ -277,7 +293,6 @@ public class RxSocket {
                         socketStatus = SocketStatus.CONNECTING;
                         connectStatus.onNext(SocketStatus.CONNECTING);
                     } catch (Exception e) {
-                        ExceptionCatchUtils.catchE(e,"RxSocket");
                         isReadThreadAlive = false;
                         socketStatus = SocketStatus.DIS_CONNECT;
                         connectStatus.onNext(SocketStatus.DIS_CONNECT);
@@ -304,7 +319,6 @@ public class RxSocket {
                                         if (socketReconnectCallback!=null)
                                             socketReconnectCallback.onSuccess();
                                     } catch (Exception e) {
-                                        ExceptionCatchUtils.catchE(e,"RxSocket");
                                         isReadThreadAlive = false;
                                         socketStatus = SocketStatus.DIS_CONNECT;
                                         connectStatus.onNext(SocketStatus.DIS_CONNECT);
@@ -318,7 +332,13 @@ public class RxSocket {
                                 int length = socketChannel.read(buf);
                                 if (length <= 0) {
                                     LogUtils.e(OpenLog, TAG, "服务器主动断开链接！");
+                                    isReadThreadAlive = false;
+                                    socketStatus = SocketStatus.DIS_CONNECT;
+                                    connectStatus.onNext(SocketStatus.DIS_CONNECT);
+                                    if (socketReconnectCallback!=null)
+                                        socketReconnectCallback.onFail("SocketConnectFail3");
                                 } else {
+                                    LogUtils.i(OpenLog, TAG, "readSubject:msg！"+ "length:" + length);
                                     byte[] bytes = new byte[length];
                                     for (int i = 0; i < length; i++) {
                                         bytes[i] = buf.get(i);
@@ -329,20 +349,18 @@ public class RxSocket {
                         }
                         it.remove();
                     } catch (Exception e) {
-                        ExceptionCatchUtils.catchE(e,"RxSocket");
                         isReadThreadAlive = false;
                         socketStatus = SocketStatus.DIS_CONNECT;
                         connectStatus.onNext(SocketStatus.DIS_CONNECT);
                         LogUtils.e(OpenLog, TAG, "ReadThread:read:" + e.getMessage());
                         if (socketReconnectCallback!=null)
-                            socketReconnectCallback.onFail("SocketConnectFail3");
+                            socketReconnectCallback.onFail("SocketConnectFail4");
                     }
                 }
             }
         }
     }
 
-    //枚举 && 接口
     public enum SocketStatus {
         DIS_CONNECT,
         CONNECTING,
@@ -353,5 +371,4 @@ public class RxSocket {
         void onSuccess();
         void onFail(String msg);
     }
-
 }
