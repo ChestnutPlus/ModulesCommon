@@ -44,11 +44,12 @@ public class UtilsManager {
                     else {
                         CACHE_PATH = context.getCacheDir().getAbsolutePath();
                     }
+                    LogUtils.i(true,"cache_path:"+CACHE_PATH);
                     //初始化LogUtils
                     LogUtils.init(context.getApplicationContext());
                     //初始化SPUtils
                     SPUtils.getInstance().init(context, SP_NAME);
-                });
+                },throwable -> LogUtils.e(true,"init-error:"+throwable.getMessage()));
     }
 
     public static void init(Context context) {
@@ -56,7 +57,7 @@ public class UtilsManager {
     }
 
     public static String getCachePath() {
-        LogUtils.i(true,TAG,"cache_path:"+CACHE_PATH);
+        LogUtils.i(true,"cache_path:"+CACHE_PATH);
         return CACHE_PATH;
     }
 }

@@ -157,11 +157,11 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
-                LogUtils.I("哈哈");
-                LogUtils.W("哈哈");
-                LogUtils.D("哈哈");
-                LogUtils.E("哈哈");
-                LogUtils.V("哈哈");
+                LogUtils.i(true,null);
+                LogUtils.w(true,null);
+                LogUtils.d(true,null);
+                LogUtils.e(true,null);
+                LogUtils.v(true,null);
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));
