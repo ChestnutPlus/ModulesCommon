@@ -56,8 +56,8 @@ public class MainActivity extends RxAppCompatActivity {
             "8_"+"",
             "9_"+"",
             "10_"+"",
-            "11_"+"测试Log",
-            "12_"+"XItem测试",
+            "11_"+"",
+            "12_"+"",
     };
 
     @Override
@@ -157,11 +157,6 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
-                LogUtils.i(true,null);
-                LogUtils.w(true,null);
-                LogUtils.d(true,null);
-                LogUtils.e(true,null);
-                LogUtils.v(true,null);
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));

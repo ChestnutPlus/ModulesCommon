@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 6
+        versionCode 7
         versionName "1.0.6"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
@@ -33,7 +33,11 @@ android {
          *              + UtilsManger : 统一对工具类进行管理和初始化
          *              + MediaInfoUtils ： 对媒体文件进行详细信息提取
          *              ~ 更新部分的Utils
-         *
+         *          7.  2017年7月11日16:18:53
+         *              - XEditView
+         *              ~ XTextView 修复字体带来的OOM
+         *              ~ 增加NetWorkUtils，监听网络的变化
+         *              ~ 增加ScreenUtils，屏幕按键的监听
          */
     }
     buildTypes {
