@@ -10,7 +10,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:srcCompat="@drawable/li_bao_en" />
-    <TextView
+    <com.chestnut.Common.ui.XTextView
+        app:fontPath="fonts/Test.TTF"
         android:focusable="true"
         android:clickable="true"
         android:background="@drawable/touch_bg"

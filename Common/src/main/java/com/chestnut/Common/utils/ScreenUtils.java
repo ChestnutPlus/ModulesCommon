@@ -11,9 +11,14 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.PowerManager;
+import android.support.annotation.IntDef;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.View;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import static com.chestnut.Common.utils.ConvertUtils.px2dp;
 
@@ -297,4 +302,149 @@ public class ScreenUtils {
             void onHomePress();
         }
     }
+
+    //新增监听的方法跟接口，简化上面的调用
+    public interface Callback {
+        void onScreenOn();
+        void onScreenOff();
+        void onUserUnlockThePhone();
+        void onHomeKeyShortPress();
+        void onHomeKeyLongPress();
+    }
+
+    public static void setListenerScreenLock(Context context, Callback callback) {
+        if (callback!=null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_USER_PRESENT);
+            filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+            final String SYSTEM_DIALOG_REASON_KEY = "reason";
+            final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
+            final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    switch (intent.getAction()) {
+                        // 开屏
+                        case Intent.ACTION_SCREEN_ON:
+                            callback.onScreenOn();
+                            break;
+                        // 锁屏
+                        case Intent.ACTION_SCREEN_OFF:
+                            callback.onScreenOff();
+                            break;
+                        // 解锁
+                        case Intent.ACTION_USER_PRESENT:
+                            callback.onUserUnlockThePhone();
+                            break;
+                        //  Home键
+                        case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
+                            String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+                            if (reason != null) {
+                                if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
+                                    // 短按home键
+                                    callback.onHomeKeyShortPress();
+                                } else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
+                                    // 长按home键
+                                    callback.onHomeKeyLongPress();
+                                }
+                            }
+                            break;
+                    }
+                }
+            };
+            context.getApplicationContext().registerReceiver(broadcastReceiver,filter);
+        }
+    }
+
+    private static BroadcastReceiver broadcastReceiver = null;
+
+    public static void removeListenerScreenLock(Context context) {
+        if (broadcastReceiver!=null)
+            context.getApplicationContext().unregisterReceiver(broadcastReceiver);
+    }
+
+    //新增监听实体按键的方法
+    //  Thanks To: http://www.tuicool.com/articles/aI36Fz
+    public static final int KEYCODE_POWER     = -1;
+    public static final int KEYCODE_MENU      = -2;
+    public static final int KEYCODE_BACK       = -3;
+    public static final int KEYCODE_HOME       = -4;
+    public static final int KEYCODE_CAMERA   = -5;
+    public static final int KEYCODE_SEARCH   = -6;
+    public static final int KEYCODE_VOLUME_UP   = -7;
+    public static final int KEYCODE_VOLUME_DOWN    = -8;
+    public static final int KEYCODE_VOLUME_MUTE     = -9;
+    @IntDef({KEYCODE_POWER,KEYCODE_MENU,KEYCODE_BACK,KEYCODE_HOME,
+            KEYCODE_CAMERA,KEYCODE_SEARCH,KEYCODE_VOLUME_UP,
+            KEYCODE_VOLUME_DOWN,KEYCODE_VOLUME_MUTE
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface KEY_NAME {}
+
+    public interface KeyCallback {
+        void onPowerDown(int keyCode);
+        void onMenuDown(int keyCode);
+        void onBackDown(int keyCode);
+        void onHomeDown(int keyCode);
+        void onCameraDown(int keyCode);
+        void onSearchDown(int keyCode);
+        void onVoiceUpDown(int keyCode);
+        void onVoiceDownDown(int keyCode);
+        void onVoiceMuteDown(int keyCode);
+    }
+
+    /**
+     * 监听Key的点击，需要在Activity中，
+     *  在 onKeyDown 中调用
+     *
+     *   public boolean onKeyDown(int keyCode, KeyEvent event) {
+     *       ScreenUtils.setKeyDownListener(xx,xx,xxx);
+     *       return super.onKeyDown(keyCode, event);
+     *   }
+     *
+     * @param keyCode   key
+     * @param keyCallback   callback
+     */
+    public static void setKeyDownListener(int keyCode, KeyCallback keyCallback) {
+        if (keyCallback!=null) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_POWER:
+                    keyCallback.onPowerDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_MENU:
+                    keyCallback.onMenuDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_BACK:
+                    keyCallback.onBackDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_HOME:
+                    keyCallback.onHomeDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_CAMERA:
+                    keyCallback.onCameraDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_SEARCH:
+                    keyCallback.onSearchDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    keyCallback.onVoiceUpDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    keyCallback.onVoiceDownDown(keyCode);
+                    break;
+                case KeyEvent.KEYCODE_VOLUME_MUTE:
+                    keyCallback.onVoiceMuteDown(keyCode);
+                    break;
+            }
+        }
+    }
 }
+
+
+
+
+

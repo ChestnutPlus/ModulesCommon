@@ -1,11 +1,16 @@
 package com.chestnut.Common.utils;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.IntDef;
 import android.telephony.TelephonyManager;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -31,6 +36,9 @@ public class NetworkUtils {
     public static final int NETWORK_2G      = 2;    // "2G" networks
     public static final int NETWORK_UNKNOWN = 5;    // unknown network
     public static final int NETWORK_NO      = -1;   // no network
+    @IntDef({NETWORK_WIFI,NETWORK_4G,NETWORK_3G,NETWORK_2G,NETWORK_UNKNOWN,NETWORK_NO})
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface NETWORK_TYPE {}
 
     private static final int NETWORK_TYPE_GSM = 16;
     private static final int NETWORK_TYPE_TD_SCDMA = 17;
@@ -182,7 +190,7 @@ public class NetworkUtils {
      * </ul>
      */
     public static int getNetWorkType(Context context) {
-        int netType = NETWORK_NO;
+        @NETWORK_TYPE int netType = NETWORK_NO;
         NetworkInfo info = getActiveNetworkInfo(context);
         if (info != null && info.isAvailable()) {
 
@@ -286,4 +294,76 @@ public class NetworkUtils {
         }
         return IPAddress;
     }
+
+    /**
+     * 网络变化的监听
+     */
+    public interface Callback {
+        void netWorkChange(int type, String name);
+        void changeToWifi();
+        void changeTo4G();
+        void changeTo3G();
+        void changeTo2G();
+        void changeToNoNetWork();
+        void changeToUnKnow();
+    }
+
+    public static void setListenerNetWorkChange(Context context, Callback callback) {
+        if (callback!=null) {
+            IntentFilter mFilter = new IntentFilter();
+            mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    int type = getNetWorkType(context);
+                    switch (type) {
+                        case NETWORK_WIFI:
+                            callback.netWorkChange(type, "NETWORK_WIFI");
+                            callback.changeToWifi();
+                            break;
+                        case NETWORK_4G:
+                            callback.netWorkChange(type, "NETWORK_4G");
+                            callback.changeTo4G();
+                            break;
+                        case NETWORK_3G:
+                            callback.netWorkChange(type, "NETWORK_3G");
+                            callback.changeTo3G();
+                            break;
+                        case NETWORK_2G:
+                            callback.netWorkChange(type, "NETWORK_2G");
+                            callback.changeTo2G();
+                            break;
+                        case NETWORK_NO:
+                            callback.netWorkChange(type, "NETWORK_NO");
+                            callback.changeToNoNetWork();
+                            break;
+                        default:
+                            callback.netWorkChange(type, "NETWORK_UNKNOWN");
+                            callback.changeToUnKnow();
+                            break;
+                    }
+                }
+            };
+            context.getApplicationContext().registerReceiver(broadcastReceiver,mFilter);
+        }
+    }
+
+    public static void removeListenerNetWorkChange(Context context) {
+        if (broadcastReceiver!=null)
+            context.getApplicationContext().unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+    }
+
+    private static BroadcastReceiver broadcastReceiver = null;
 }
+
+
+
+
+
+
+
+
+
+
+

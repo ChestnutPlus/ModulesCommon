@@ -39,7 +39,6 @@
 
 # Utils
 -keep class com.chestnut.Common.ui.XTextView{ *; }
--keep class com.chestnut.Common.ui.XEditText{ *; }
 -keep class com.chestnut.Common.utils.LogUtils{ *; }
 -keep class com.chestnut.Common.utils.CrashUtils{ *; }
 -keep class com.chestnut.Common.utils.XJsonUtils{ *; }
