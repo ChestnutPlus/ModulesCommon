@@ -1,5 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
+import com.chestnut.Common.utils.CameraUtils;
 import com.chestnut.Common.utils.LogUtils;
+import com.chestnut.Common.utils.XPermissionUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
@@ -153,14 +156,24 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_8:
                 break;
             case R.id.btn_9:
+                XPermissionUtils.rxAsk(this, Manifest.permission.CAMERA)
+                        .subscribe(aBoolean -> {});
                 break;
             case R.id.btn_10:
+                String savePath = this.getCacheDir()+"/cutHeadPhotoTemp.jpg";
+                this.startActivityForResult(CameraUtils.getOpenCameraIntent(savePath),124);
                 break;
             case R.id.btn_11:
+                CameraUtils.getHeadCropPhotoFromCamera(this,this.getCacheDir()+"/cutHeadPhotoTemp.jpg");
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));
                 break;
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LogUtils.i(true,"requestCode:"+requestCode+",resultCode:"+resultCode);
+    }
 }
