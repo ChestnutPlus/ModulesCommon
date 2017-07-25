@@ -33,6 +33,7 @@ public class Item1 extends XItem<ItemBean1>{
 
     @Override
     public void onBindViewHolder(XHolder holder, int position) {
+        holder.getViewById(R.id.textView).setTag(position);
         holder.getViewById(R.id.textView).setOnClickListener(view -> {
             if (onItemListener!=null)
                 onItemListener.onItemClick(view, (Integer) view.getTag());

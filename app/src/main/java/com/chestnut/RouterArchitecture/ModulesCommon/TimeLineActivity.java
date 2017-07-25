@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.chestnut.Common.utils.LogUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.item.Item1;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.item.Item2;
@@ -20,12 +21,13 @@ public class TimeLineActivity extends AppCompatActivity {
         SimpleAdapter simpleAdapter = new SimpleAdapter();
         recyclerView.setAdapter(simpleAdapter);
 
-        Item1 item1 = new Item1(null);
-        item1.setOnItemListener((view, position) -> {
-
-        });
-
-        simpleAdapter.add(item1);
+        for (int i = 0; i < 10; i++) {
+            Item1 item1 = new Item1(null);
+            item1.setOnItemListener((view, position) -> {
+                LogUtils.e(true,"position:"+position);
+            });
+            simpleAdapter.add(item1);
+        }
         simpleAdapter.add(new Item1(null));
         simpleAdapter.add(new Item2(null));
         simpleAdapter.add(new Item2(null));
