@@ -4,14 +4,15 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.support.annotation.RawRes;
 
-import com.chestnut.Common.Helper.bean.RxMediaPlayerBean;
 import com.chestnut.Common.utils.ExceptionCatchUtils;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Subscription;
 
 /**
  * <pre>
@@ -23,6 +24,7 @@ import rx.Observable;
  *     thanks To:
  *     dependent on:
  *     update log:
+ *          1.  2017年7月26日09:27:47：增加监听回调，mediaPlayer
  * </pre>
  */
 
@@ -41,6 +43,7 @@ public class MediaPlayerHelper {
     private boolean isPause = true;
     private int TYPE = 0;   //内部定义：0：本地path/网络，1：raw
     private Context context;
+    private Subscription subscription;  //用于刷新播放进度
 
     /*方法*/
     public MediaPlayerHelper init(Context context) {
@@ -58,20 +61,25 @@ public class MediaPlayerHelper {
         MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
             isStop = false;
             isPause = false;
-            singleThreadExecutor.execute(() -> mediaPlayer.start());
+            singleThreadExecutor.execute(() -> {
+                mediaPlayer.start();
+                startTimer();
+            });
             if (callBack != null)
-                callBack.onStart();
+                callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000);
         };
         MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
+            stopTimer();
             if (callBack != null)
-                callBack.onCompleted();
+                callBack.onCompleted(mediaPlayer);
             isStop = true;
             isPause = true;
             mediaPlayer.reset();
         };
         MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
+            stopTimer();
             if (callBack != null)
-                callBack.onError();
+                callBack.onError(mediaPlayer);
             isPause = true;
             isPause = true;
             url = null;
@@ -126,13 +134,34 @@ public class MediaPlayerHelper {
             }
         } else {
             if (isPause) {
-                singleThreadExecutor.execute(() -> mediaPlayer.start());
+                singleThreadExecutor.execute(() -> {
+                    mediaPlayer.start();
+                    startTimer();
+                });
                 if (this.callBack != null)
-                    this.callBack.onReStart();
+                    this.callBack.onReStart(mediaPlayer);
             } else
                 pause();
         }
         return this;
+    }
+
+    /**
+     * 开启定时器任务，去刷新
+     * 播放的进度
+     */
+    private void startTimer() {
+        subscription = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribe(aLong -> {
+                    if (callBack!=null)
+                        callBack.onProgressChange(mediaPlayer,mediaPlayer.getCurrentPosition()/1000);
+                });
+    }
+
+    private void stopTimer() {
+        if (subscription!=null && !subscription.isUnsubscribed())
+            subscription.unsubscribe();
+        subscription = null;
     }
 
     public MediaPlayerHelper play() {
@@ -140,60 +169,26 @@ public class MediaPlayerHelper {
         return this;
     }
 
-    public Observable<RxMediaPlayerBean> rxPlay() {
-        return Observable.create(subscriber -> {
-            play(new CallBack() {
-                @Override
-                public void onStart() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_START));
-                }
-
-                @Override
-                public void onReStart() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_RESTART));
-                }
-
-                @Override
-                public void onCompleted() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_COMPLETED));
-                }
-
-                @Override
-                public void onStop() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_STOP));
-                }
-
-                @Override
-                public void onPause() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_PAUSE));
-                }
-
-                @Override
-                public void onError() {
-                    subscriber.onNext(new RxMediaPlayerBean(RxMediaPlayerBean.ON_ERROR));
-                }
-            });
-        });
-    }
-
     public MediaPlayerHelper stop() {
+        stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
         mediaPlayer.stop();
         if (callBack!=null)
-            callBack.onStop();
+            callBack.onStop(mediaPlayer);
         isStop = true;
         mediaPlayer.reset();
         return this;
     }
 
     public MediaPlayerHelper pause() {
+        stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             if (callBack!=null)
-                callBack.onPause();
+                callBack.onPause(mediaPlayer);
             isPause = true;
         }
         return this;
@@ -213,6 +208,7 @@ public class MediaPlayerHelper {
         if (mediaPlayer==null)
             return;
         stop();
+        stopTimer();
         singleThreadExecutor.shutdown();
         singleThreadExecutor = null;
         mediaPlayer.release();
@@ -223,12 +219,13 @@ public class MediaPlayerHelper {
 
     /*接口，类*/
     public interface CallBack {
-        void onStart();     //开始播放的时候回调
-        void onReStart();    //暂停后，开始播放
-        void onCompleted();  //播放完成时候回调
-        void onStop();      //播放为完成时，强制结束
-        void onPause();     //未播放完成时，暂停回调
-        void onError();     //出错时候回调
+        void onStart(MediaPlayer mediaPlayer, int allSecond);     //开始播放的时候回调
+        void onReStart(MediaPlayer mediaPlayer);    //暂停后，开始播放
+        void onCompleted(MediaPlayer mediaPlayer);  //播放完成时候回调
+        void onStop(MediaPlayer mediaPlayer);      //播放为完成时，强制结束
+        void onPause(MediaPlayer mediaPlayer);     //未播放完成时，暂停回调
+        void onError(MediaPlayer mediaPlayer);     //出错时候回调
+        void onProgressChange(MediaPlayer mediaPlayer, int nowSecond);  //回调当前的进度
     }
 
     /**

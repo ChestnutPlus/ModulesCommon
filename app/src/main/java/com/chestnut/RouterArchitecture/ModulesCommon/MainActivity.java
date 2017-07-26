@@ -1,7 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
-import android.Manifest;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,10 +9,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chestnut.Common.Helper.MediaPlayerHelper;
 import com.chestnut.Common.ui.Toastc;
-import com.chestnut.Common.utils.CameraUtils;
 import com.chestnut.Common.utils.LogUtils;
-import com.chestnut.Common.utils.XPermissionUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
@@ -134,18 +133,59 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
+    MediaPlayerHelper mediaPlayerHelper;
+
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
+                mediaPlayerHelper = new MediaPlayerHelper().init(this).setUrl(R.raw.xiayao);
                 break;
             case R.id.btn_2:
+                mediaPlayerHelper.play(new MediaPlayerHelper.CallBack() {
+                    @Override
+                    public void onStart(MediaPlayer mediaPlayer, int nowSecond) {
+                        LogUtils.i(true,"onStart:"+nowSecond);
+                    }
+
+                    @Override
+                    public void onReStart(MediaPlayer mediaPlayer) {
+                        LogUtils.i(true,"onReStart");
+                    }
+
+                    @Override
+                    public void onCompleted(MediaPlayer mediaPlayer) {
+                        LogUtils.i(true,"onCompleted");
+                    }
+
+                    @Override
+                    public void onStop(MediaPlayer mediaPlayer) {
+                        LogUtils.i(true,"onStop");
+                    }
+
+                    @Override
+                    public void onPause(MediaPlayer mediaPlayer) {
+                        LogUtils.i(true,"onPause");
+                    }
+
+                    @Override
+                    public void onError(MediaPlayer mediaPlayer) {
+                        LogUtils.i(true,"onError");
+                    }
+
+                    @Override
+                    public void onProgressChange(MediaPlayer mediaPlayer, int nowSecond) {
+                        LogUtils.i(true,"onProgressChange:"+nowSecond);
+                    }
+                });
                 break;
             case R.id.btn_3:
+                mediaPlayerHelper.pause();
                 break;
             case R.id.btn_4:
+                mediaPlayerHelper.stop();
                 break;
             case R.id.btn_5:
                 break;
@@ -156,15 +196,10 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_8:
                 break;
             case R.id.btn_9:
-                XPermissionUtils.rxAsk(this, Manifest.permission.CAMERA)
-                        .subscribe(aBoolean -> {});
                 break;
             case R.id.btn_10:
-                String savePath = this.getCacheDir()+"/cutHeadPhotoTemp.jpg";
-                this.startActivityForResult(CameraUtils.getOpenCameraIntent(savePath),124);
                 break;
             case R.id.btn_11:
-                CameraUtils.getHeadCropPhotoFromCamera(this,this.getCacheDir()+"/cutHeadPhotoTemp.jpg");
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));
