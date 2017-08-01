@@ -85,4 +85,16 @@ public class NotificationUtils {
                 .setPriority(Notification.PRIORITY_HIGH);
         manager.notify(msgId,builder.build());
     }
+
+    /**
+     * 清除通知
+     * @param context   上下文
+     * @param msgId id
+     */
+    public static void cleanById(Context context, int msgId) {
+        try {
+            NotificationManager  mNotificationManager = (NotificationManager) context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(msgId);
+        } catch (Exception ignored) {}
+    }
 }

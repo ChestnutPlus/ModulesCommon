@@ -53,6 +53,7 @@ public class XJsonUtils implements Json{
     @Override
     public <Bean> List<Bean> getListBean(@NonNull String json, @NonNull Class<Bean> beanClass) {
         try {
+            //List<BannerBean> bannerBeanList = new Gson().fromJson(s,new TypeToken<List<BannerBean>>(){}.getType());
             return gson.fromJson(json, new TypeToken<List<Bean>>(){}.getType());
         } catch (Exception e) {
             ExceptionCatchUtils.catchE(e,"XJsonUtils");

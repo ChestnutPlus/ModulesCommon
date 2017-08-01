@@ -3,9 +3,9 @@ package com.chestnut.Common.Helper;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.Environment;
 
 import com.chestnut.Common.utils.ExceptionCatchUtils;
+import com.chestnut.Common.utils.UtilsManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,9 +15,10 @@ import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Subscriber;
+import rx.Subscription;
 
 /**
  * <pre>
@@ -56,9 +57,44 @@ public class AudioRecordHelper {
     //记录播放状态
     private boolean isRecording = false;
     //wav文件目录
-    private String outFile = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Temp.wav";
+    private String outFile = UtilsManager.getCachePath()+"/AudioRecordHelper-Temp.wav";
     //pcm文件目录
-    private String inFile = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Temp.pcm";
+    private String inFile = UtilsManager.getCachePath()+"/AudioRecordHelper-Temp.pcm";
+
+    //定义准备时间的概念，如果，太快调用stop方法，会触发回调：onRecordTooShort
+    private boolean isReady = false;
+    private int READY_TIME_SECOND = 1;
+    private Subscription readyTimeSubscription;
+
+    //定义最大的录音时长，并在剩余N秒的时候，回调接口：onRecordTooLong
+    private int THE_MAX_RECORD_TIME_SECOND = 60;    //最大录音时长
+    private int THE_LEFT_TIME_NOTIFY_SECOND = 5;    //剩余多少秒的时候，回调函数
+    private Subscription recordTimeSubscription;
+
+    /**
+     * 设置准备时间
+     * @param timeSecond    准备时间，秒
+     * @return this
+     */
+    public AudioRecordHelper setReadyTime(int timeSecond) {
+        this.READY_TIME_SECOND = timeSecond;
+        return this;
+    }
+
+    /**
+     * 设置最大的录音时间和
+     *  通知的倒计时时间
+     * @param theMaxTimeSecond  theMaxTimeSecond
+     * @param theNotifyLeftTime theNotifyLeftTime
+     * @return  this
+     */
+    public AudioRecordHelper setMaxTimeAndNotifyLeftTime(int theMaxTimeSecond, int theNotifyLeftTime) {
+        if (theMaxTimeSecond>=theNotifyLeftTime) {
+            this.THE_MAX_RECORD_TIME_SECOND = theMaxTimeSecond;
+            this.THE_LEFT_TIME_NOTIFY_SECOND = theNotifyLeftTime;
+        }
+        return this;
+    }
 
     /**
      * 设置参数
@@ -83,11 +119,16 @@ public class AudioRecordHelper {
         recorder = new AudioRecord(audioSource,audioRate,audioChannel,audioFormat,bufferSize);
     }
 
+    public AudioRecordHelper init() {
+        init(outFile);
+        return this;
+    }
+
     /**
      * 初始化，每次录音前调用。
      * @param outFile   录音文件路径
      */
-    public void init(String outFile) {
+    public AudioRecordHelper init(String outFile) {
         this.outFile = outFile;
         //创建文件
         File pcmFile = new File(inFile);
@@ -104,12 +145,35 @@ public class AudioRecordHelper {
         } catch (IOException e) {
             ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
         }
+        return this;
     }
 
     //开始录音
-    public void startRecord(){
+    public void startRecord() {
+        isReady = false;
+        readyTimeSubscription = Observable.just(1)
+                .delay(READY_TIME_SECOND, TimeUnit.SECONDS)
+                .subscribe(integer -> {
+                    isReady = true;
+                    _startRecord();
+                });
+    }
+
+    private void _startRecord(){
         isRecording = true;
         recorder.startRecording();
+        recordTimeSubscription = Observable.interval(1,TimeUnit.SECONDS)
+                .subscribe(aLong -> {
+                    long a = THE_MAX_RECORD_TIME_SECOND - aLong;
+                    if (a == 0) {
+                        recordTimeSubscription.unsubscribe();
+                        stopRecord();
+                    }
+                    else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
+                        if (callBack!=null)
+                            callBack.onRecordTooLong(outFile,THE_MAX_RECORD_TIME_SECOND,(int)a);
+                    }
+                });
         singleThreadExecutor.execute(() -> {
             //建立文件输出流
             BufferedOutputStream os = null;
@@ -163,47 +227,26 @@ public class AudioRecordHelper {
         });
     }
 
-    /**
-     * 约定：-1：开始
-     *      -2：失败
-     *      -3：结束
-     *      其他：dbChange
-     * @return  rx
-     */
-    public Observable<Integer> rxRecord() {
-        return Observable.create(new Observable.OnSubscribe<Integer>() {
-            @Override
-            public void call(Subscriber<? super Integer> subscriber) {
-                setCallBack(new CallBack() {
-                    @Override
-                    public void onRecordStart(String file) {
-                        subscriber.onNext(-1);
-                    }
-
-                    @Override
-                    public void onRecordDBChange(double dbValue) {
-                        subscriber.onNext((int)dbValue);
-                    }
-
-                    @Override
-                    public void onRecordFail(String file, String msg) {
-                        subscriber.onNext(-2);
-                    }
-
-                    @Override
-                    public void onRecordEnd(String file) {
-                        subscriber.onNext(-3);
-                    }
-                });
-                startRecord();
-            }
-        });
-    }
-
     //停止录音
     public void stopRecord(){
+        if (!isReady) {
+            if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
+                readyTimeSubscription.unsubscribe();
+            }
+            readyTimeSubscription = null;
+            if (callBack!=null)
+                callBack.onRecordTooShort(outFile,READY_TIME_SECOND);
+            isRecording = false;
+            return;
+        }
         isRecording = false;
         recorder.stop();
+
+        if (recordTimeSubscription!=null && !recordTimeSubscription.isUnsubscribed()) {
+            recordTimeSubscription.unsubscribe();
+        }
+        recordTimeSubscription = null;
+
         singleThreadExecutor.execute(() -> {
             // 这里得到可播放的音频文件
             FileInputStream in;
@@ -228,18 +271,36 @@ public class AudioRecordHelper {
                 out.close();
                 if (callBack!=null)
                     callBack.onRecordEnd(outFile);
+                if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
+                    readyTimeSubscription.unsubscribe();
+                }
             } catch (IOException e) {
                 ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
                 if (callBack!=null)
                     callBack.onRecordFail(outFile,e.getMessage());
+                if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
+                    readyTimeSubscription.unsubscribe();
+                }
             }
         });
+    }
+
+    /**
+     * 设置监听器
+     * @param callBack  监听器
+     */
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
     }
 
     /**
      * 释放资源
      */
     public void close() {
+        if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
+            readyTimeSubscription.unsubscribe();
+        }
+        readyTimeSubscription = null;
         callBack = null;
         singleThreadExecutor.shutdown();
         recorder.release();
@@ -318,19 +379,14 @@ public class AudioRecordHelper {
         out.write(header, 0, 44);
     }
 
-    /**
-     * 设置监听器
-     * @param callBack  监听器
-     */
-    public void setCallBack(CallBack callBack) {
-        this.callBack = callBack;
-    }
     private CallBack callBack = null;
     public interface CallBack {
+        void onRecordTooShort(String file,int THE_READY_TIME);
         void onRecordStart(String file);
         void onRecordDBChange(double dbValue);
         void onRecordFail(String file, String msg);
         void onRecordEnd(String file);
+        void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft);
     }
 
     private short[] Bytes2Shorts(byte[] buf) {

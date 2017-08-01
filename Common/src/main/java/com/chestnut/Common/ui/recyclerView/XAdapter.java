@@ -1,7 +1,6 @@
 package com.chestnut.Common.ui.recyclerView;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -56,7 +55,6 @@ public abstract class XAdapter<ITEM extends XItem> extends RecyclerView.Adapter<
     @Override
     public void onViewDetachedFromWindow(XHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        Log.e(TAG,"onViewDetachedFromWindow invoke...");
         //释放资源
         int position = holder.getAdapterPosition();
         //越界检查

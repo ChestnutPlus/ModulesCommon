@@ -8,6 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chestnut.Common.Helper.AudioRecordHelper;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -46,9 +47,9 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"",
-            "2_"+"",
-            "3_"+"",
+            "1_"+"init",
+            "2_"+"开始录音",
+            "3_"+"停止录音",
             "4_"+"",
             "5_"+"",
             "6_"+"",
@@ -131,16 +132,52 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
+    private AudioRecordHelper audioRecordHelper;
+
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
+                audioRecordHelper = new AudioRecordHelper().init();
+                audioRecordHelper.setCallBack(new AudioRecordHelper.CallBack() {
+                    @Override
+                    public void onRecordTooShort(String file, int THE_READY_TIME) {
+                        LogUtils.i(OpenLog,"onRecordTooShort");
+                    }
+
+                    @Override
+                    public void onRecordStart(String file) {
+                        LogUtils.i(OpenLog,"onRecordStart");
+                    }
+
+                    @Override
+                    public void onRecordDBChange(double dbValue) {
+                        LogUtils.i("onRecordDBChange","onRecordDBChange:"+dbValue);
+                    }
+
+                    @Override
+                    public void onRecordFail(String file, String msg) {
+                        LogUtils.i(OpenLog,"onRecordFail");
+                    }
+
+                    @Override
+                    public void onRecordEnd(String file) {
+                        LogUtils.i(OpenLog,"onRecordEnd");
+                    }
+
+                    @Override
+                    public void onRecordTooLong(String file, int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft) {
+                        LogUtils.i(OpenLog,"onRecordTooLong:"+theTimeLeft);
+                    }
+                });
                 break;
             case R.id.btn_2:
+                audioRecordHelper.startRecord();
                 break;
             case R.id.btn_3:
+                audioRecordHelper.stopRecord();
                 break;
             case R.id.btn_4:
                 break;
