@@ -363,6 +363,8 @@ public class StringUtils {
     /**
      * sub字符串，
      *  例如："(请务必在#号之间输入内容)name=#用户名#password=#密码#"
+     *      上面的字符串中，以“#”号分隔了字符。
+     *      从左到右给字符编号：0，1，2，3，4
      *      System.out.println("name:"+getSubStr(FilePath,'#',2,3));
      *      System.out.println("pad:"+getSubStr(FilePath,'#',4,5));
      *              就能获取：

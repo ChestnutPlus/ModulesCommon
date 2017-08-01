@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 8
-        versionName "1.0.6"
+        versionName "1.0.7"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
          *      1.0.2:  修改包名的拼写错误，更新部分代码。
@@ -38,6 +38,10 @@ android {
          *              ~ XTextView 修复字体带来的OOM
          *              ~ 增加NetWorkUtils，监听网络的变化
          *              ~ 增加ScreenUtils，屏幕按键的监听
+         *
+         *    1.0.7
+         *          8。 XJsonUtils：增加回调：gson
+         *              MediaPlayerHelper：增加回调的参数
          *          8.  2017年8月1日23:13:44
          *              ~ AudioRecordHelper，增加，准备时间，最大录音时间的定义。
          *                                  修改了，默认的存储位置为UtilsManager的统一路径。

@@ -60,4 +60,8 @@ public class XJsonUtils implements Json{
             return null;
         }
     }
+
+    public Gson getGson() {
+        return gson;
+    }
 }
