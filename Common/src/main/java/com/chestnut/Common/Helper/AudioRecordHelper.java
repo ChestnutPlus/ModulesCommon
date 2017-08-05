@@ -63,7 +63,7 @@ public class AudioRecordHelper {
 
     //定义准备时间的概念，如果，太快调用stop方法，会触发回调：onRecordTooShort
     private boolean isReady = false;
-    private int READY_TIME_SECOND = 1;
+    private int READY_TIME_MS = 500;
     private Subscription readyTimeSubscription;
 
     //定义最大的录音时长，并在剩余N秒的时候，回调接口：onRecordTooLong
@@ -73,11 +73,11 @@ public class AudioRecordHelper {
 
     /**
      * 设置准备时间
-     * @param timeSecond    准备时间，秒
+     * @param timeMs    准备时间，毫秒
      * @return this
      */
-    public AudioRecordHelper setReadyTime(int timeSecond) {
-        this.READY_TIME_SECOND = timeSecond;
+    public AudioRecordHelper setReadyTime(int timeMs) {
+        this.READY_TIME_MS = timeMs;
         return this;
     }
 
@@ -152,7 +152,7 @@ public class AudioRecordHelper {
     public void startRecord() {
         isReady = false;
         readyTimeSubscription = Observable.just(1)
-                .delay(READY_TIME_SECOND, TimeUnit.SECONDS)
+                .delay(READY_TIME_MS, TimeUnit.SECONDS)
                 .subscribe(integer -> {
                     isReady = true;
                     _startRecord();
@@ -235,7 +235,7 @@ public class AudioRecordHelper {
             }
             readyTimeSubscription = null;
             if (callBack!=null)
-                callBack.onRecordTooShort(outFile,READY_TIME_SECOND);
+                callBack.onRecordTooShort(outFile,READY_TIME_MS);
             isRecording = false;
             return;
         }
