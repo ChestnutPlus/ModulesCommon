@@ -63,13 +63,14 @@ public class AudioRecordHelper {
 
     //定义准备时间的概念，如果，太快调用stop方法，会触发回调：onRecordTooShort
     private boolean isReady = false;
-    private int READY_TIME_MS = 500;
+    private int READY_TIME_MS = 700;
     private Subscription readyTimeSubscription;
 
     //定义最大的录音时长，并在剩余N秒的时候，回调接口：onRecordTooLong
     private int THE_MAX_RECORD_TIME_SECOND = 60;    //最大录音时长
     private int THE_LEFT_TIME_NOTIFY_SECOND = 5;    //剩余多少秒的时候，回调函数
     private Subscription recordTimeSubscription;
+    private int theRecordDuration = 0;
 
     /**
      * 设置准备时间
@@ -152,7 +153,7 @@ public class AudioRecordHelper {
     public void startRecord() {
         isReady = false;
         readyTimeSubscription = Observable.just(1)
-                .delay(READY_TIME_MS, TimeUnit.SECONDS)
+                .delay(READY_TIME_MS, TimeUnit.MILLISECONDS)
                 .subscribe(integer -> {
                     isReady = true;
                     _startRecord();
@@ -160,10 +161,12 @@ public class AudioRecordHelper {
     }
 
     private void _startRecord(){
+        theRecordDuration = 0;
         isRecording = true;
         recorder.startRecording();
         recordTimeSubscription = Observable.interval(1,TimeUnit.SECONDS)
                 .subscribe(aLong -> {
+                    theRecordDuration = aLong.intValue();
                     long a = THE_MAX_RECORD_TIME_SECOND - aLong;
                     if (a == 0) {
                         recordTimeSubscription.unsubscribe();
@@ -270,7 +273,7 @@ public class AudioRecordHelper {
                 in.close();
                 out.close();
                 if (callBack!=null)
-                    callBack.onRecordEnd(outFile);
+                    callBack.onRecordEnd(outFile,theRecordDuration);
                 if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
                     readyTimeSubscription.unsubscribe();
                 }
@@ -385,7 +388,7 @@ public class AudioRecordHelper {
         void onRecordStart(String file);
         void onRecordDBChange(double dbValue);
         void onRecordFail(String file, String msg);
-        void onRecordEnd(String file);
+        void onRecordEnd(String file, int duration);
         void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft);
     }
 

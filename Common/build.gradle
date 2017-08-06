@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 9
+        versionCode 10
         versionName "1.0.7"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
@@ -48,6 +48,9 @@ android {
          *                                  修改了，默认的存储位置为UtilsManager的统一路径。
          *              ~ NotificationUtils，增加清除通知的方法。
          *              + RxDeliverBean
+         *
+         *          10. ~：RecorderHelper
+         *              ~: AudioRecordHelper
          */
     }
     buildTypes {

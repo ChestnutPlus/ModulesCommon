@@ -8,7 +8,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chestnut.Common.Helper.AudioRecordHelper;
+import com.chestnut.Common.Helper.RecorderHelper;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -50,7 +50,7 @@ public class MainActivity extends RxAppCompatActivity {
             "1_"+"init",
             "2_"+"开始录音",
             "3_"+"停止录音",
-            "4_"+"",
+            "4_"+"close",
             "5_"+"",
             "6_"+"",
             "7_"+"",
@@ -132,7 +132,7 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
-    private AudioRecordHelper audioRecordHelper;
+    private RecorderHelper audioRecordHelper;
 
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
@@ -140,8 +140,8 @@ public class MainActivity extends RxAppCompatActivity {
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
-                audioRecordHelper = new AudioRecordHelper().init();
-                audioRecordHelper.setCallBack(new AudioRecordHelper.CallBack() {
+                audioRecordHelper = new RecorderHelper().init();
+                audioRecordHelper.setCallBack(new RecorderHelper.CallBack() {
                     @Override
                     public void onRecordTooShort(String file, int THE_READY_TIME) {
                         LogUtils.i(OpenLog,"onRecordTooShort");
@@ -163,8 +163,8 @@ public class MainActivity extends RxAppCompatActivity {
                     }
 
                     @Override
-                    public void onRecordEnd(String file) {
-                        LogUtils.i(OpenLog,"onRecordEnd");
+                    public void onRecordEnd(String file, int duration) {
+                        LogUtils.i(OpenLog,"onRecordEnd:"+duration);
                     }
 
                     @Override
@@ -180,6 +180,7 @@ public class MainActivity extends RxAppCompatActivity {
                 audioRecordHelper.stopRecord();
                 break;
             case R.id.btn_4:
+                audioRecordHelper.close();
                 break;
             case R.id.btn_5:
                 break;
