@@ -263,18 +263,10 @@ public class RecorderHelper {
      * 设置监听器
      * @param callBack  监听器
      */
-    public void setCallBack(CallBack callBack) {
+    public void setCallBack(RecorderListener callBack) {
         this.callBack = callBack;
     }
-    private CallBack callBack = null;
-    public interface CallBack {
-        void onRecordTooShort(String file,int THE_READY_TIME);
-        void onRecordStart(String file);
-        void onRecordDBChange(double dbValue);
-        void onRecordFail(String file, String msg);
-        void onRecordEnd(String file, int duration);
-        void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft);
-    }
+    private RecorderListener callBack = null;
 
     /**
      * 查询当前分贝

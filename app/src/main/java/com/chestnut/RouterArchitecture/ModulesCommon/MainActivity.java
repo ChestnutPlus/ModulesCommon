@@ -1,6 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,9 +9,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chestnut.Common.Helper.MediaPlayerHelper;
+import com.chestnut.Common.Helper.MediaPlayerHelperListener;
 import com.chestnut.Common.Helper.RecorderHelper;
+import com.chestnut.Common.Helper.RecorderListener;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
+import com.chestnut.Common.utils.UtilsManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
@@ -133,6 +138,7 @@ public class MainActivity extends RxAppCompatActivity {
     }
 
     private RecorderHelper audioRecordHelper;
+    private MediaPlayerHelper mediaPlayerHelper;
 
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
@@ -140,36 +146,22 @@ public class MainActivity extends RxAppCompatActivity {
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
-                audioRecordHelper = new RecorderHelper().init();
-                audioRecordHelper.setCallBack(new RecorderHelper.CallBack() {
-                    @Override
-                    public void onRecordTooShort(String file, int THE_READY_TIME) {
-                        LogUtils.i(OpenLog,"onRecordTooShort");
-                    }
-
+                mediaPlayerHelper = new MediaPlayerHelper().init(this);
+                audioRecordHelper = new RecorderHelper().init(UtilsManager.getCachePath()+"/temp.wav");
+                audioRecordHelper.setCallBack(new RecorderListener() {
                     @Override
                     public void onRecordStart(String file) {
                         LogUtils.i(OpenLog,"onRecordStart");
                     }
 
                     @Override
-                    public void onRecordDBChange(double dbValue) {
-                        LogUtils.i("onRecordDBChange","onRecordDBChange:"+dbValue);
-                    }
-
-                    @Override
-                    public void onRecordFail(String file, String msg) {
-                        LogUtils.i(OpenLog,"onRecordFail");
-                    }
-
-                    @Override
                     public void onRecordEnd(String file, int duration) {
-                        LogUtils.i(OpenLog,"onRecordEnd:"+duration);
+                        LogUtils.i(OpenLog,"onRecordEnd");
                     }
 
                     @Override
-                    public void onRecordTooLong(String file, int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft) {
-                        LogUtils.i(OpenLog,"onRecordTooLong:"+theTimeLeft);
+                    public void onRecordDBChange(double dbValue) {
+                        LogUtils.i(OpenLog,"onRecordDBChange:"+dbValue);
                     }
                 });
                 break;
@@ -183,6 +175,17 @@ public class MainActivity extends RxAppCompatActivity {
                 audioRecordHelper.close();
                 break;
             case R.id.btn_5:
+                mediaPlayerHelper.setUrl(UtilsManager.getCachePath()+"/temp.wav").play(new MediaPlayerHelperListener() {
+                    @Override
+                    public void onStart(MediaPlayer mediaPlayer, int allSecond) {
+
+                    }
+
+                    @Override
+                    public void onStop(MediaPlayer mediaPlayer) {
+
+                    }
+                });
                 break;
             case R.id.btn_6:
                 break;

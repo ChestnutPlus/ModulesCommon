@@ -39,4 +39,8 @@ public class TimeLineActivity extends AppCompatActivity {
         simpleAdapter.add(new Item2(null));
         simpleAdapter.add(new Item2(null));
     }
+
+
+
+
 }

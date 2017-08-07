@@ -37,7 +37,7 @@ public class MediaPlayerHelper {
     /* 变量*/
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private MediaPlayer mediaPlayer = null;
-    private CallBack callBack = null;
+    private MediaPlayerHelperListener callBack = null;
     private String url = null;
     private boolean isStop = true;
     private boolean isPause = true;
@@ -112,7 +112,7 @@ public class MediaPlayerHelper {
      * @param callBack  回调
      * @return  this
      */
-    public MediaPlayerHelper play(CallBack callBack) {
+    public MediaPlayerHelper play(MediaPlayerHelperListener callBack) {
         if (url==null || mediaPlayer==null)
             return this;
         this.callBack = callBack;
@@ -215,17 +215,6 @@ public class MediaPlayerHelper {
         mediaPlayer = null;
         isPause = true;
         isStop = true;
-    }
-
-    /*接口，类*/
-    public interface CallBack {
-        void onStart(MediaPlayer mediaPlayer, int allSecond);     //开始播放的时候回调
-        void onReStart(MediaPlayer mediaPlayer);    //暂停后，开始播放
-        void onCompleted(MediaPlayer mediaPlayer);  //播放完成时候回调
-        void onStop(MediaPlayer mediaPlayer);      //播放为完成时，强制结束
-        void onPause(MediaPlayer mediaPlayer);     //未播放完成时，暂停回调
-        void onError(MediaPlayer mediaPlayer);     //出错时候回调
-        void onProgressChange(MediaPlayer mediaPlayer, int nowSecond);  //回调当前的进度
     }
 
     /**

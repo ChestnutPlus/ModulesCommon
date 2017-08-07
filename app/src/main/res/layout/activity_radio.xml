@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tape_bg"
+    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.RadioActivity">
+
+    <ImageView
+        android:id="@+id/img_close"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="17.5dp"
+        android:layout_marginBottom="17.5dp"
+        android:src="@drawable/last_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_left_wheel"
+        android:background="@drawable/wheel"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="77.5dp"
+        android:layout_marginTop="-62dp"
+        android:layout_marginBottom="211dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/img_right_wheel"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/wheel"
+        android:layout_marginEnd="77.5dp"
+        android:layout_marginTop="-62dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/img_play"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="19dp"
+        android:layout_marginStart="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/play_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_next"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="27dp"
+        android:layout_marginEnd="45.5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/next_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_last"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="27dp"
+        android:layout_marginEnd="119dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/last_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txt_title"
+        android:background="#B73E35"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:layout_marginStart="205dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="39.5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:text="嘟嘟和巴啦啦的就离开房间阿里山机房建设大街"
+        android:textColor="#fff"
+        android:layout_width="230dp"
+        android:layout_height="51.5dp" />
+
+    <TextView
+        android:id="@+id/txt_time_now"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/txt_title"
+        android:layout_marginBottom="9dp"
+        android:textSize="9sp"
+        android:textColor="#fff"
+        android:text="00:01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txt_time_all"
+        android:layout_alignEnd="@+id/txt_title"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="9dp"
+        android:textSize="9sp"
+        android:textColor="#fff"
+        android:text="03:01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/progress_time"
+        android:layout_marginBottom="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="205dp"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:max="100"
+        android:progress="25"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

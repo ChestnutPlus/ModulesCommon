@@ -292,7 +292,7 @@ public class AudioRecordHelper {
      * 设置监听器
      * @param callBack  监听器
      */
-    public void setCallBack(CallBack callBack) {
+    public void setCallBack(RecorderListener callBack) {
         this.callBack = callBack;
     }
 
@@ -382,7 +382,7 @@ public class AudioRecordHelper {
         out.write(header, 0, 44);
     }
 
-    private CallBack callBack = null;
+    private RecorderListener callBack = null;
     public interface CallBack {
         void onRecordTooShort(String file,int THE_READY_TIME);
         void onRecordStart(String file);
