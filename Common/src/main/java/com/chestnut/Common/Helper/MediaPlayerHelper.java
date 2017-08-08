@@ -217,6 +217,10 @@ public class MediaPlayerHelper {
         isStop = true;
     }
 
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
+    }
+
     /**
      * 获得音频文件的时长
      * @return  时长，秒

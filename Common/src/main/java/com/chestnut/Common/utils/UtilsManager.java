@@ -23,11 +23,13 @@ public class UtilsManager {
 
     private static String CACHE_PATH = null;
     private static String TAG = "UtilsManager";
+    private static Context applicationContext;
 
     public static void init(Context c,String SP_NAME) {
         Observable.just(c.getApplicationContext())
                 .observeOn(Schedulers.newThread())
                 .subscribe(context -> {
+                    applicationContext = context.getApplicationContext();
                     //初始化缓存地址
                     if (context.getExternalCacheDir()!=null) {
                         CACHE_PATH = context.getExternalCacheDir().getAbsolutePath();
@@ -59,5 +61,9 @@ public class UtilsManager {
     public static String getCachePath() {
         LogUtils.i(true,"cache_path:"+CACHE_PATH);
         return CACHE_PATH;
+    }
+
+    public static Context getApplicationContext() {
+        return applicationContext;
     }
 }

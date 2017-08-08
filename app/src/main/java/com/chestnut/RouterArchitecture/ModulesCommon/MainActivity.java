@@ -1,7 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,17 +8,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chestnut.Common.Helper.MediaPlayerHelper;
-import com.chestnut.Common.Helper.MediaPlayerHelperListener;
-import com.chestnut.Common.Helper.RecorderHelper;
-import com.chestnut.Common.Helper.RecorderListener;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
+import com.chestnut.Common.utils.SimpleDownloadUtils;
 import com.chestnut.Common.utils.UtilsManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends RxAppCompatActivity {
@@ -52,10 +51,10 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"init",
-            "2_"+"开始录音",
-            "3_"+"停止录音",
-            "4_"+"close",
+            "1_"+"",
+            "2_"+"",
+            "3_"+"",
+            "4_"+"",
             "5_"+"",
             "6_"+"",
             "7_"+"",
@@ -137,8 +136,6 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
-    private RecorderHelper audioRecordHelper;
-    private MediaPlayerHelper mediaPlayerHelper;
 
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
@@ -146,46 +143,36 @@ public class MainActivity extends RxAppCompatActivity {
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
-                mediaPlayerHelper = new MediaPlayerHelper().init(this);
-                audioRecordHelper = new RecorderHelper().init(UtilsManager.getCachePath()+"/temp.wav");
-                audioRecordHelper.setCallBack(new RecorderListener() {
-                    @Override
-                    public void onRecordStart(String file) {
-                        LogUtils.i(OpenLog,"onRecordStart");
-                    }
-
-                    @Override
-                    public void onRecordEnd(String file, int duration) {
-                        LogUtils.i(OpenLog,"onRecordEnd");
-                    }
-
-                    @Override
-                    public void onRecordDBChange(double dbValue) {
-                        LogUtils.i(OpenLog,"onRecordDBChange:"+dbValue);
-                    }
-                });
+                Intent intent = new Intent("com.hy.play.audio.action");
+                intent.putExtra("TYPE_MODE_DEFAULT_AUDIO_URL", "http://cdn.open.idaddy.cn/apsmp3/8569/honeyhy000000001/201708080000/0/YTY0LzAvcDRyajFpcG0uYXVkaW8=.mp3");
+                intent.putExtra("TYPE_MODE_DEFAULT_AUDIO_TITLE", "我是一个粉刷匠");
+                intent.putExtra("TYPE_MODE", -1);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
             case R.id.btn_2:
-                audioRecordHelper.startRecord();
+                SimpleDownloadUtils.downLoadRx("", UtilsManager.getCachePath()+"/haha.png")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aBoolean -> {
+                            toast.setText(aBoolean+"").show();
+                        },throwable -> {
+                            toast.setText(throwable.getMessage()).show();
+                        });
                 break;
             case R.id.btn_3:
-                audioRecordHelper.stopRecord();
+                SimpleDownloadUtils.downLoadRx("http://windowserl.honeybot.cn:8080/Ad/bobdog.png", UtilsManager.getCachePath()+"/haha.png")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aBoolean -> {
+                            toast.setText(aBoolean+"").show();
+                        },throwable -> {
+                            toast.setText(throwable.getMessage()).show();
+                        });
                 break;
             case R.id.btn_4:
-                audioRecordHelper.close();
                 break;
             case R.id.btn_5:
-                mediaPlayerHelper.setUrl(UtilsManager.getCachePath()+"/temp.wav").play(new MediaPlayerHelperListener() {
-                    @Override
-                    public void onStart(MediaPlayer mediaPlayer, int allSecond) {
-
-                    }
-
-                    @Override
-                    public void onStop(MediaPlayer mediaPlayer) {
-
-                    }
-                });
                 break;
             case R.id.btn_6:
                 break;
