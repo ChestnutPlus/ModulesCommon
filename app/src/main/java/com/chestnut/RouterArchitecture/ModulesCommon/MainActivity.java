@@ -151,7 +151,7 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.btn_2:
-                SimpleDownloadUtils.downLoadRx("", UtilsManager.getCachePath()+"/haha.png")
+                SimpleDownloadUtils.downLoadRx("http://windowserl.honeybot.cn:8080/Ad/bobdog.mp3?version=1", UtilsManager.getCachePath()+"/haha.mp3")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(aBoolean -> {
@@ -161,7 +161,7 @@ public class MainActivity extends RxAppCompatActivity {
                         });
                 break;
             case R.id.btn_3:
-                SimpleDownloadUtils.downLoadRx("http://windowserl.honeybot.cn:8080/Ad/bobdog.png", UtilsManager.getCachePath()+"/haha.png")
+                SimpleDownloadUtils.downLoadRx("http://windowserl.honeybot.cn:8080/Ad/bobdog.png?version=1", UtilsManager.getCachePath()+"/haha.png")
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(aBoolean -> {
