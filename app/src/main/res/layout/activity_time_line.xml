@@ -3,7 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.chestnut.RouterArchitecture.ModulesCommon.TimeLineActivity">
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:background="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="58dp">
+        <ImageView
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:id="@+id/img_arrow_back"
+            android:src="@drawable/menu_three_point"
+            android:background="@drawable/touch_bg"
+            android:padding="19dp"
+            android:layout_alignParentStart="true" />
+        <com.chestnut.Common.ui.XTextView
+            android:id="@+id/txt_title"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Common"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="60dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:layout_height="60dp"
+            android:background="@drawable/touch_round_bg"
+            android:id="@+id/txt_del"
+            android:gravity="center"
+            android:textColor="#000"
+            android:text="更多"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
     <com.cjj.MaterialRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

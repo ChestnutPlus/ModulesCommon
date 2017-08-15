@@ -89,6 +89,8 @@ public class MainActivity extends RxAppCompatActivity {
             textView.setTag(i);
         }
 
+
+
         seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

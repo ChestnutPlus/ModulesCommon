@@ -76,4 +76,15 @@ public class RxUtils {
             view.startAnimation(animation);
         }).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
     }
+
+    public static Observable<Integer> countClickNum(View view) {
+        return Observable.create(subscriber -> {
+            if (view!=null) {
+                view.setOnClickListener(v -> {
+                    subscriber.onNext(1);
+                });
+            }
+        }).debounce(1500,TimeUnit.MILLISECONDS)
+                .map(o -> 1);
+    }
 }
