@@ -77,14 +77,53 @@ public class RxUtils {
         }).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static Observable<Integer> countClickNum(View view) {
+    /**
+     * 过滤点击时间，在特定的时间内
+     *  只取最第一次点击
+     *  注意结合RxLife释放引用
+     * @param view  view
+     * @param duration  时间
+     * @param unit  时间单位
+     * @return  Observable<Object>，Object并无意义
+     */
+    public static Observable<Object> filterClick(View view, long duration, TimeUnit unit) {
         return Observable.create(subscriber -> {
-            if (view!=null) {
-                view.setOnClickListener(v -> {
-                    subscriber.onNext(1);
+            if (view!=null)
+                view.setOnClickListener(v -> subscriber.onNext(1));
+        }).throttleFirst(duration,unit);
+    }
+
+    public static Observable<Object> filterClick(View view) {
+        return filterClick(view,500,TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 统计一段时间内，View的点击次数
+     *
+     * @param view  view
+     * @param durationMs    时间为 毫秒
+     * @return  Observable<Integer> 次数
+     */
+    public static Observable<Integer> countClickNum(View view, long durationMs) {
+        int[] count = {0};
+        return Observable.create((Observable.OnSubscribe<Integer>)
+                subscriber -> {
+                    long[] time = {0,0};
+                    if (view!=null)
+                        view.setOnClickListener(v -> {
+                            time[0] = System.currentTimeMillis();
+                            if (time[0] - time[1] <= durationMs) {
+                                count[0] = count[0] + 1;
+                            } else {
+                                count[0] = 1;
+                            }
+                            subscriber.onNext(count[0]);
+                            time[1] = time[0];
+                        });
+                })
+                .throttleLast(durationMs,TimeUnit.MILLISECONDS).map(integer -> {
+                    count[0] = 0;
+                    return integer;
                 });
-            }
-        }).debounce(1500,TimeUnit.MILLISECONDS)
-                .map(o -> 1);
     }
 }

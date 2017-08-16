@@ -17,7 +17,7 @@
             android:layout_height="58dp"
             android:id="@+id/img_arrow_back"
             android:src="@drawable/menu_three_point"
-            android:background="@drawable/touch_bg"
+            android:background="#eee"
             android:padding="19dp"
             android:layout_alignParentStart="true" />
         <com.chestnut.Common.ui.XTextView
@@ -37,7 +37,7 @@
             android:paddingStart="10dp"
             android:layout_height="60dp"
             android:background="@drawable/touch_round_bg"
-            android:id="@+id/txt_del"
+            android:id="@+id/txt_more"
             android:gravity="center"
             android:textColor="#000"
             android:text="更多"

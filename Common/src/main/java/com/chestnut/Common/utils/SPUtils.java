@@ -10,7 +10,7 @@ import java.util.Map;
  *     author: Chestnut
  *     blog  :
  *     time  : 2016年10月18日22:41:43
- *     desc  : SharePreference相关工具类
+ *     desc  : 封装SharePreference
  *     thanks To:
  *     dependent on:
  * </pre>
