@@ -187,6 +187,7 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
+                startActivity(new Intent(this,TestActivity.class));
                 break;
             case R.id.btn_12:
                 startActivity(new Intent(this,TimeLineActivity.class));

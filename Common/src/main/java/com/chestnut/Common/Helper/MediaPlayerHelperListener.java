@@ -14,8 +14,8 @@ import android.media.MediaPlayer;
  * </pre>
  */
 public abstract class MediaPlayerHelperListener {
-    public abstract void onStart(MediaPlayer mediaPlayer, int allSecond);   //开始播放的时候回调
-    public abstract void onStop(MediaPlayer mediaPlayer);                   //播放为完成时，强制结束
+    public void onStart(MediaPlayer mediaPlayer, int allSecond){}           //开始播放的时候回调
+    public void onStop(MediaPlayer mediaPlayer){}                           //播放为完成时，强制结束
     public void onReStart(MediaPlayer mediaPlayer){}                        //暂停后，开始播放
     public void onCompleted(MediaPlayer mediaPlayer){}                      //播放完成时候回调
     public void onPause(MediaPlayer mediaPlayer){}                          //未播放完成时，暂停回调
