@@ -5,13 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chestnut.Common.rx.RxUtils;
 import com.chestnut.Common.utils.LogUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.item.Item1;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.item.Item2;
-
-import java.util.concurrent.TimeUnit;
 
 public class TimeLineActivity extends AppCompatActivity {
 
@@ -44,16 +41,5 @@ public class TimeLineActivity extends AppCompatActivity {
         simpleAdapter.add(new Item2(null));
         simpleAdapter.add(new Item2(null));
         simpleAdapter.add(new Item2(null));
-
-
-        RxUtils.countClickNum(findViewById(R.id.txt_more),1000)
-                .subscribe(integer -> {
-                    LogUtils.i(OpenLog,TAG,"num:"+integer);
-                });
-
-        RxUtils.filterClick(findViewById(R.id.img_arrow_back),1500, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    LogUtils.i(OpenLog,TAG,"..2");
-                });
     }
 }

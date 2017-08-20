@@ -82,19 +82,18 @@ public class RxUtils {
      *  只取最第一次点击
      *  注意结合RxLife释放引用
      * @param view  view
-     * @param duration  时间
-     * @param unit  时间单位
+     * @param durationMs  时间毫秒
      * @return  Observable<Object>，Object并无意义
      */
-    public static Observable<Object> filterClick(View view, long duration, TimeUnit unit) {
+    public static Observable<Object> filterClick(View view, long durationMs) {
         return Observable.create(subscriber -> {
             if (view!=null)
                 view.setOnClickListener(v -> subscriber.onNext(1));
-        }).throttleFirst(duration,unit);
+        }).throttleFirst(durationMs,TimeUnit.MILLISECONDS);
     }
 
     public static Observable<Object> filterClick(View view) {
-        return filterClick(view,500,TimeUnit.MILLISECONDS);
+        return filterClick(view,500);
     }
 
     /**

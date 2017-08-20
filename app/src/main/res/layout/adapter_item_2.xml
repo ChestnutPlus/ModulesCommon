@@ -11,7 +11,7 @@
         android:layout_height="60dp"
         app:srcCompat="@drawable/li_bao_en" />
     <com.chestnut.Common.ui.XTextView
-        app:fontPath="fonts/Test.TTF"
+        app:fontPath="fonts/fontzipMin.ttf"
         android:focusable="true"
         android:clickable="true"
         android:background="@drawable/touch_bg"
@@ -20,5 +20,5 @@
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:text="今天的娱乐新闻只有一条：宋仲基和宋慧乔要结婚了！" />
+        android:text="今天的娱乐新闻只有一条：AaBbCc123jOijPOIJd！" />
 </LinearLayout>

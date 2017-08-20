@@ -35,6 +35,8 @@ import java.util.Map;
  *          3.  2017年7月11日16:13:30
  *              1）修复bug:因过度加载字体资源而导致内存OOM，在内部修改成，使用软引用对字体对象进行缓存
  *                  其用法仍不变。
+ *          4.  2017年8月17日10:17:33
+ *              1）增加静态加载字体的方法
  * </pre>
  */
 
@@ -95,5 +97,37 @@ public class XTextView extends AppCompatTextView {
         }
         //回收ta
         typedArray.recycle();
+    }
+
+    /**
+     * 加载字体资源
+     * @param context   上下文
+     * @param fontPath  fontPath
+     */
+    public static void loadFont(Context context, String fontPath) {
+        if (mapSoftReferenceTypeFaces==null)
+            mapSoftReferenceTypeFaces = new HashMap<>();
+        try {
+            if (fontPath!=null && fontPath.length()!=0) {
+                Typeface typeFace;
+                if (mapSoftReferenceTypeFaces.containsKey(fontPath)) {
+                    SoftReference<Typeface> softReference = mapSoftReferenceTypeFaces.get(fontPath);
+                    if (softReference.get()==null) {
+                        typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+                        mapSoftReferenceTypeFaces.remove(fontPath);
+                        mapSoftReferenceTypeFaces.put(fontPath, new SoftReference<>(typeFace));
+                    }
+                    else {
+                        typeFace = softReference.get();
+                    }
+                }
+                else {
+                    typeFace = Typeface.createFromAsset(context.getAssets(), fontPath);
+                    mapSoftReferenceTypeFaces.put(fontPath, new SoftReference<>(typeFace));
+                }
+            }
+        } catch (Exception e) {
+            ExceptionCatchUtils.catchE(e,"XTextView");
+        }
     }
 }
