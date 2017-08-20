@@ -13,9 +13,9 @@ package com.chestnut.Common.Helper;
  */
 public abstract class RecorderListener {
     public void onRecordTooShort(String file,int THE_READY_TIME){}
-    public abstract void onRecordStart(String file);
+    public void onRecordStart(String file){}
     public void onRecordDBChange(double dbValue){}
     public void onRecordFail(String file, String msg){}
-    public abstract void onRecordEnd(String file, int duration);
+    public void onRecordEnd(String file, int duration){}
     public void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft){}
 }
