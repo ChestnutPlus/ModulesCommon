@@ -46,9 +46,9 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"",
-            "2_"+"",
-            "3_"+"",
+            "1_"+"HelloKitty哈",
+            "2_"+"熊猫哈",
+            "3_"+"钢铁哈",
             "4_"+"",
             "5_"+"",
             "6_"+"",
@@ -136,12 +136,19 @@ public class MainActivity extends RxAppCompatActivity {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
+        Intent intent = new Intent(this,LockActivity.class);
         switch (view.getId()) {
             case R.id.btn_1:
+                intent.putExtra(LockActivity.ID,R.drawable._1);
+                startActivity(intent);
                 break;
             case R.id.btn_2:
+                intent.putExtra(LockActivity.ID,R.drawable._2);
+                startActivity(intent);
                 break;
             case R.id.btn_3:
+                intent.putExtra(LockActivity.ID,R.drawable._3);
+                startActivity(intent);
                 break;
             case R.id.btn_4:
                 break;
