@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 15
-        versionName "1.0.7"
+        versionCode 16
+        versionName "1.1.0"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
          *      1.0.2:  修改包名的拼写错误，更新部分代码。
@@ -59,6 +59,10 @@ android {
          *          13. ~：md ripple
          *          14. + RxUtils增加统计点击次数和过滤点击事件的方法
          *          15. ~ 更新部分接口
+         *
+         *    1.1.0
+         *          16. + XWeakRef，XSoftRef，引用的封装
+         *              + XFontUtils：字体管理单例。
          */
     }
     buildTypes {

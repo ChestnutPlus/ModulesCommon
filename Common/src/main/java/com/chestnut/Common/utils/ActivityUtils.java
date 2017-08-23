@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -108,20 +107,4 @@ public class ActivityUtils {
         String contextString = context.toString();
         return contextString.substring(contextString.lastIndexOf(".") + 1, contextString.indexOf("@"));
     }
-
-    /**
-     *      从程序开启，是否是第一次进入此Activity
-     * @param activity
-     * @return
-     */
-    private static List<String> activitys = new ArrayList<>();
-    public static boolean isFirstEnterThisActivity(Activity activity) {
-        String name = getActivityName(activity);
-        if (activitys.contains(name)) {
-            return false;
-        }
-        activitys.add(name);
-        return true;
-    }
-
 }

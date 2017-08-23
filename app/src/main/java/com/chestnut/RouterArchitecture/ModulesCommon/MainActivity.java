@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.chestnut.Common.Helper.XSoftRef;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
+import com.chestnut.Common.utils.XFontUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class MainActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        XFontUtils.getInstance().activitySetFont(this,"fonts/caonima.ttf");
         logs = new ArrayList<>();
         stringXWeakRef.setNullCallBack(stringXWeakRef.new NullCallBack() {
             @Override
@@ -166,6 +168,7 @@ public class MainActivity extends RxAppCompatActivity {
                 break;
             case R.id.btn_6:
                 Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Test.TTF");
+                Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/caonima.ttf");
                 break;
             case R.id.btn_7:
                 break;
