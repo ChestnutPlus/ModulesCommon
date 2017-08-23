@@ -1,4 +1,4 @@
-package com.chestnut.Common.RxSocket;
+package com.chestnut.Common.rx;
 
 import com.chestnut.Common.utils.LogUtils;
 

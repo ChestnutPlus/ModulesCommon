@@ -1,6 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chestnut.Common.Helper.XSoftRef;
 import com.chestnut.Common.ui.Toastc;
 import com.chestnut.Common.utils.LogUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -60,11 +62,19 @@ public class MainActivity extends RxAppCompatActivity {
             "12_"+"",
     };
 
+    XSoftRef<String> stringXWeakRef = new XSoftRef<>(new String("坑货"));
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         logs = new ArrayList<>();
+        stringXWeakRef.setNullCallBack(stringXWeakRef.new NullCallBack() {
+            @Override
+            public String createNewObject() {
+                return "坑货";
+            }
+        });
 
         img1 = (ImageView) findViewById(R.id.img_1);
         img2 = (ImageView) findViewById(R.id.img_2);
@@ -131,7 +141,6 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
-
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
@@ -151,10 +160,12 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.btn_4:
+                LogUtils.i(true,TAG,"temp:"+stringXWeakRef.get());
                 break;
             case R.id.btn_5:
                 break;
             case R.id.btn_6:
+                Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Test.TTF");
                 break;
             case R.id.btn_7:
                 break;
