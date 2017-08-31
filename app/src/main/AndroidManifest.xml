@@ -25,9 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TimeLineActivity" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".LockActivity"
-            android:theme="@style/RadioTheme"/>
+        <activity android:name=".TestActivity"></activity>
     </application>
 
 </manifest>

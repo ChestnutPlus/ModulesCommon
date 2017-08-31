@@ -25,6 +25,7 @@ public class CommonApplication extends Application{
         XFontUtils.getInstance()
                 .init(this)
                 .load("fonts/fontzipMin.ttf")
+                .load("fonts/caonima.ttf")
                 .load("fonts/Test.TTF");
     }
 }

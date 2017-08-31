@@ -5,24 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chestnut.RouterArchitecture.ModulesCommon.TestActivity">
-
-    <ImageView
-        android:src="@drawable/li_bao_en"
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/picker"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TextView
-        android:maxLines="1"
-        android:clickable="true"
-        android:focusable="true"
-        android:textSize="12sp"
-        android:textColor="@android:color/black"
-        android:layout_margin="3dp"
-        android:background="@drawable/test_bg"
-        android:gravity="center"
-        android:text="1"
-        android:id="@+id/btn_1"
-        android:layout_centerInParent="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="wrap_content"
+        app:paddingStart="100dp"
+        app:paddingEnd="50dp"
+        app:dsv_orientation="horizontal" />
 </RelativeLayout>

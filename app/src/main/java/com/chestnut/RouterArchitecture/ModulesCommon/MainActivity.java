@@ -1,7 +1,6 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,8 +8,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chestnut.Common.Helper.XSoftRef;
 import com.chestnut.Common.ui.Toastc;
+import com.chestnut.Common.utils.EncryptUtils;
 import com.chestnut.Common.utils.LogUtils;
 import com.chestnut.Common.utils.XFontUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -49,9 +48,9 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"HelloKitty哈",
-            "2_"+"熊猫哈",
-            "3_"+"钢铁哈",
+            "1_"+"mp3",
+            "2_"+"png",
+            "3_"+"",
             "4_"+"",
             "5_"+"",
             "6_"+"",
@@ -59,24 +58,16 @@ public class MainActivity extends RxAppCompatActivity {
             "8_"+"",
             "9_"+"",
             "10_"+"",
-            "11_"+"",
-            "12_"+"",
+            "11_"+"TestActivity",
+            "12_"+"TimeLineActivity",
     };
-
-    XSoftRef<String> stringXWeakRef = new XSoftRef<>(new String("坑货"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        XFontUtils.getInstance().activitySetFont(this,"fonts/caonima.ttf");
+        XFontUtils.getInstance().activitySetFont(this,"fonts/Test.TTF");
         logs = new ArrayList<>();
-        stringXWeakRef.setNullCallBack(stringXWeakRef.new NullCallBack() {
-            @Override
-            public String createNewObject() {
-                return "坑货";
-            }
-        });
 
         img1 = (ImageView) findViewById(R.id.img_1);
         img2 = (ImageView) findViewById(R.id.img_2);
@@ -147,28 +138,20 @@ public class MainActivity extends RxAppCompatActivity {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
-        Intent intent = new Intent(this,LockActivity.class);
         switch (view.getId()) {
             case R.id.btn_1:
-                intent.putExtra(LockActivity.ID,R.drawable._1);
-                startActivity(intent);
+                LogUtils.e(TAG, "mp3:"+EncryptUtils.encryptMD5File2String("/sdcard/bobdog.mp3"));
+                LogUtils.e(TAG, "png:"+EncryptUtils.encryptMD5File2String("/sdcard/bobdog.png"));
                 break;
             case R.id.btn_2:
-                intent.putExtra(LockActivity.ID,R.drawable._2);
-                startActivity(intent);
                 break;
             case R.id.btn_3:
-                intent.putExtra(LockActivity.ID,R.drawable._3);
-                startActivity(intent);
                 break;
             case R.id.btn_4:
-                LogUtils.i(true,TAG,"temp:"+stringXWeakRef.get());
                 break;
             case R.id.btn_5:
                 break;
             case R.id.btn_6:
-                Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/Test.TTF");
-                Typeface typeFace1 = Typeface.createFromAsset(getAssets(), "fonts/caonima.ttf");
                 break;
             case R.id.btn_7:
                 break;
