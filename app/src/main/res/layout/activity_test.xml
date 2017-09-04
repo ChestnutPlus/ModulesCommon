@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chestnut.RouterArchitecture.ModulesCommon.TestActivity">
-    <com.yarolegovich.discretescrollview.DiscreteScrollView
-        android:id="@+id/picker"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:paddingStart="100dp"
-        app:paddingEnd="50dp"
-        app:dsv_orientation="horizontal" />
+        android:layout_height="match_parent"
+        app:lottie_fileName="sparks.json"
+        app:lottie_loop="true"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
