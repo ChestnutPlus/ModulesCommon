@@ -16,7 +16,7 @@ public class TestSurfaceViewActivity extends Activity {
         setContentView(R.layout.activity_test_surface_view);
 
         SurfaceView mSurfaceView=  (SurfaceView) findViewById(R.id.surface_view);
-        surfaceViewAnimation= new SurfaceViewAnimation.Builder(mSurfaceView,"huabanyu")
+        surfaceViewAnimation= new SurfaceViewAnimation.Builder(mSurfaceView,"honey_happy")
                         .setRepeatMode(SurfaceViewAnimation.MODE_INFINITE)
                         .build();
         surfaceViewAnimation.start();

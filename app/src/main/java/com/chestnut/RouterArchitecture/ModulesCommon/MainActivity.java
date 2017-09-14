@@ -2,6 +2,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -170,4 +171,14 @@ public class MainActivity extends RxAppCompatActivity {
                 break;
         }
     };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_HOME){
+            //屏蔽之后的操作
+            toast.setText("KEYCODE_HOME").show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
