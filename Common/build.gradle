@@ -64,6 +64,7 @@ android {
          *          16. + XWeakRef，XSoftRef，引用的封装
          *              + XFontUtils：字体管理单例。
          *          17. ~ SimpleDownloadUtils；增加重试机制
+         *          18. ~ 更新Gson为2.8.0
          */
     }
     buildTypes {
