@@ -161,131 +161,134 @@ public class AudioRecordHelper {
     }
 
     private void _startRecord(){
-        theRecordDuration = 0;
-        isRecording = true;
-        recorder.startRecording();
-        recordTimeSubscription = Observable.interval(1,TimeUnit.SECONDS)
-                .subscribe(aLong -> {
-                    theRecordDuration = aLong.intValue();
-                    long a = THE_MAX_RECORD_TIME_SECOND - aLong;
-                    if (a == 0) {
-                        recordTimeSubscription.unsubscribe();
-                        stopRecord();
-                    }
-                    else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
-                        if (callBack!=null)
-                            callBack.onRecordTooLong(outFile,THE_MAX_RECORD_TIME_SECOND,(int)a);
-                    }
-                });
-        singleThreadExecutor.execute(() -> {
-            //建立文件输出流
-            BufferedOutputStream os = null;
-            try {
-                os = new BufferedOutputStream(new FileOutputStream(new File(inFile)));
-            }catch (IOException e){
-                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
-                if (callBack!=null)
-                    callBack.onRecordFail(outFile,e.getMessage());
-                return;
-            }
-            if (callBack!=null)
-                callBack.onRecordStart(outFile);
-            byte[] buffer = new byte[bufferSize];
-            while (isRecording) {
-                int r = recorder.read(buffer, 0, bufferSize);
-                try {
-                    if (callBack!=null) {
-                        float v = 0;
-                        // 将 buffer 内容取出，进行平方和运算
-                        for (short aBuffer : Bytes2Shorts(buffer)) {
-                            v += aBuffer * aBuffer;
+        if (!isRecording) {
+            theRecordDuration = 0;
+            isRecording = true;
+            recorder.startRecording();
+            recordTimeSubscription = Observable.interval(1, TimeUnit.SECONDS)
+                    .subscribe(aLong -> {
+                        theRecordDuration = aLong.intValue();
+                        long a = THE_MAX_RECORD_TIME_SECOND - aLong;
+                        if (a == 0) {
+                            recordTimeSubscription.unsubscribe();
+                            stopRecord();
+                        } else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
+                            if (callBack != null)
+                                callBack.onRecordTooLong(outFile, THE_MAX_RECORD_TIME_SECOND, (int) a);
                         }
-                        // 平方和除以数据总长度，得到音量大小。
-                        double mean = v / (double) r;
-                        double volume = 10 * Math.log10(mean);
-                        callBack.onRecordDBChange(volume);
+                    });
+            singleThreadExecutor.execute(() -> {
+                //建立文件输出流
+                BufferedOutputStream os = null;
+                try {
+                    os = new BufferedOutputStream(new FileOutputStream(new File(inFile)));
+                } catch (IOException e) {
+                    ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
+                    if (callBack != null)
+                        callBack.onRecordFail(outFile, e.getMessage());
+                    return;
+                }
+                if (callBack != null)
+                    callBack.onRecordStart(outFile);
+                byte[] buffer = new byte[bufferSize];
+                while (isRecording) {
+                    int r = recorder.read(buffer, 0, bufferSize);
+                    try {
+                        if (callBack != null) {
+                            float v = 0;
+                            // 将 buffer 内容取出，进行平方和运算
+                            for (short aBuffer : Bytes2Shorts(buffer)) {
+                                v += aBuffer * aBuffer;
+                            }
+                            // 平方和除以数据总长度，得到音量大小。
+                            double mean = v / (double) r;
+                            double volume = 10 * Math.log10(mean);
+                            callBack.onRecordDBChange(volume);
+                        }
+                    } catch (Exception e) {
+                        ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
+                        if (callBack != null) {
+                            callBack.onRecordDBChange(0);
+                        }
                     }
-                } catch (Exception e) {
-                    ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
-                    if (callBack!=null) {
-                        callBack.onRecordDBChange(0);
+                    if (r > 0) {
+                        try {
+                            os.write(buffer);
+                        } catch (IOException e) {
+                            ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
+                            if (callBack != null)
+                                callBack.onRecordFail(outFile, e.getMessage());
+                            return;
+                        }
                     }
                 }
-                if(r>0){
-                    try{
-                        os.write(buffer);
-                    }catch(IOException e){
-                        ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
-                        if (callBack!=null)
-                            callBack.onRecordFail(outFile,e.getMessage());
-                        return;
-                    }
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
                 }
-            }
-            try {
-                os.close();
-            } catch (IOException e) {
-                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
-            }
-        });
+            });
+        }
     }
 
     //停止录音
     public void stopRecord(){
-        if (!isReady) {
-            if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
-                readyTimeSubscription.unsubscribe();
+        if (isRecording) {
+            if (!isReady) {
+                if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
+                    readyTimeSubscription.unsubscribe();
+                }
+                readyTimeSubscription = null;
+                if (callBack != null)
+                    callBack.onRecordTooShort(outFile, READY_TIME_MS);
+                isRecording = false;
+                return;
             }
-            readyTimeSubscription = null;
-            if (callBack!=null)
-                callBack.onRecordTooShort(outFile,READY_TIME_MS);
             isRecording = false;
-            return;
-        }
-        isRecording = false;
-        recorder.stop();
+            recorder.stop();
 
-        if (recordTimeSubscription!=null && !recordTimeSubscription.isUnsubscribed()) {
-            recordTimeSubscription.unsubscribe();
-        }
-        recordTimeSubscription = null;
-
-        singleThreadExecutor.execute(() -> {
-            // 这里得到可播放的音频文件
-            FileInputStream in;
-            FileOutputStream out;
-            long totalAudioLen;
-            long totalDataLen;
-            long longSampleRate = audioRate;
-            int channels = 1;
-            long byteRate = 16 * audioRate * channels / 8;
-            byte[] data = new byte[bufferSize];
-            try {
-                in = new FileInputStream(inFile);
-                out = new FileOutputStream(outFile);
-                totalAudioLen = in.getChannel().size();
-                //由于不包括RIFF和WAV
-                totalDataLen = totalAudioLen + 36;
-                WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
-                while (in.read(data) != -1) {
-                    out.write(data);
-                }
-                in.close();
-                out.close();
-                if (callBack!=null)
-                    callBack.onRecordEnd(outFile,theRecordDuration);
-                if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
-                    readyTimeSubscription.unsubscribe();
-                }
-            } catch (IOException e) {
-                ExceptionCatchUtils.catchE(e,"AudioRecordHelper");
-                if (callBack!=null)
-                    callBack.onRecordFail(outFile,e.getMessage());
-                if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
-                    readyTimeSubscription.unsubscribe();
-                }
+            if (recordTimeSubscription != null && !recordTimeSubscription.isUnsubscribed()) {
+                recordTimeSubscription.unsubscribe();
             }
-        });
+            recordTimeSubscription = null;
+
+            singleThreadExecutor.execute(() -> {
+                // 这里得到可播放的音频文件
+                FileInputStream in;
+                FileOutputStream out;
+                long totalAudioLen;
+                long totalDataLen;
+                long longSampleRate = audioRate;
+                int channels = 1;
+                long byteRate = 16 * audioRate * channels / 8;
+                byte[] data = new byte[bufferSize];
+                try {
+                    in = new FileInputStream(inFile);
+                    out = new FileOutputStream(outFile);
+                    totalAudioLen = in.getChannel().size();
+                    //由于不包括RIFF和WAV
+                    totalDataLen = totalAudioLen + 36;
+                    WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, channels, byteRate);
+                    while (in.read(data) != -1) {
+                        out.write(data);
+                    }
+                    in.close();
+                    out.close();
+                    if (callBack != null)
+                        callBack.onRecordEnd(outFile, theRecordDuration);
+                    if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
+                        readyTimeSubscription.unsubscribe();
+                    }
+                } catch (IOException e) {
+                    ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
+                    if (callBack != null)
+                        callBack.onRecordFail(outFile, e.getMessage());
+                    if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
+                        readyTimeSubscription.unsubscribe();
+                    }
+                }
+            });
+        }
     }
 
     /**

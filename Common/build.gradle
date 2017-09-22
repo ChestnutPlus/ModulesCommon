@@ -64,6 +64,7 @@ android {
          *          16. + XWeakRef，XSoftRef，引用的封装
          *              + XFontUtils：字体管理单例。
          *          17. ~ SimpleDownloadUtils；增加重试机制
+         *          18. ~ 更新Gson为2.8.0
          */
     }
     buildTypes {
@@ -94,7 +95,7 @@ dependencies {
     //  ImgLoader
     compile files('libs/glide-3.7.0.jar')
     //  Json
-    compile files('libs/gson-2.2.4.jar')
+    compile files('libs/gson-2.8.0.jar')
     //  RxPermission
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
     //  RxLife
