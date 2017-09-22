@@ -56,7 +56,7 @@ public class MainActivity extends RxAppCompatActivity {
             "6_"+"",
             "7_"+"",
             "8_"+"",
-            "9_"+"",
+            "9_"+"TestSurfaceViewActivity2",
             "10_"+"TestSurfaceViewActivity",
             "11_"+"TestActivity",
             "12_"+"TimeLineActivity",
@@ -158,6 +158,7 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_8:
                 break;
             case R.id.btn_9:
+                startActivity(new Intent(this,TestSurfaceViewActivity2.class));
                 break;
             case R.id.btn_10:
                 startActivity(new Intent(this,TestSurfaceViewActivity.class));
