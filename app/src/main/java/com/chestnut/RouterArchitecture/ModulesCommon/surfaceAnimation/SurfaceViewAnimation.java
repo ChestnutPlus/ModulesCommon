@@ -323,8 +323,11 @@ public final class SurfaceViewAnimation {
         private void clearSurface() {
             mCanvas = mSurfaceHolder.lockCanvas();
             //clear surfaceView
-            mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+            if (mCanvas!=null) {
+                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+                if (mSurfaceHolder != null)
+                    mSurfaceHolder.unlockCanvasAndPost(mCanvas);
+            }
         }
 
         private void startAnim() {
