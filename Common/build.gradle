@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 17
+        versionCode 19
         versionName "1.1.0"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
@@ -65,6 +65,7 @@ android {
          *              + XFontUtils：字体管理单例。
          *          17. ~ SimpleDownloadUtils；增加重试机制
          *          18. ~ 更新Gson为2.8.0
+         *          19. ~ 更新部分接口
          */
     }
     buildTypes {

@@ -607,18 +607,24 @@ public class AppUtils {
      *          uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"
      * @param context 上下文
      */
-    public static void exitApp(Context context) {
+    public static void exitApp(Context context, boolean isBackToLaunch) {
         int currentVersion = android.os.Build.VERSION.SDK_INT;
         if (currentVersion > android.os.Build.VERSION_CODES.ECLAIR_MR1) {
-            Intent startMain =  new Intent(Intent.ACTION_MAIN);
-            startMain.addCategory(Intent.CATEGORY_HOME);
-            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(startMain);
+            if (isBackToLaunch) {
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(startMain);
+            }
             System.exit(0);
         }  else {// android2.1
             ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
             am.restartPackage(context.getPackageName());
         }
+    }
+
+    public static void exitApp(Context context) {
+        exitApp(context,true);
     }
 
     /**
@@ -629,7 +635,7 @@ public class AppUtils {
         void beginExit();
     }
     private static long exitTime = 0;
-    public static void pressTwiceExitApp(Activity activity, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
+    public static void pressTwiceExitApp(Activity activity, boolean isBackToLaunch, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
         if ((System.currentTimeMillis()-exitTime)>exitTimeMsSpace) {
             Toast.makeText(activity, EmptyUtils.isEmpty(msg)?"再按一次退出程序...":msg,Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
@@ -639,8 +645,12 @@ public class AppUtils {
             if (exitAppCallBack!=null)
                 exitAppCallBack.beginExit();
             activity.finish();
-            exitApp(activity);
+            exitApp(activity,isBackToLaunch);
         }
+    }
+
+    public static void pressTwiceExitApp(Activity activity, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
+        pressTwiceExitApp(activity,true,msg,exitTimeMsSpace,exitAppCallBack);
     }
 
     /**

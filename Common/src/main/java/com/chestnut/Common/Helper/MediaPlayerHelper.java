@@ -2,6 +2,8 @@ package com.chestnut.Common.Helper;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RawRes;
 
 import com.chestnut.Common.utils.ExceptionCatchUtils;
@@ -44,10 +46,12 @@ public class MediaPlayerHelper {
     private int TYPE = 0;   //内部定义：0：本地path/网络，1：raw
     private Context context;
     private Subscription subscription;  //用于刷新播放进度
+    private Handler handler;
 
     /*方法*/
     public MediaPlayerHelper init(Context context) {
         this.context = context.getApplicationContext();
+        handler = new Handler(Looper.getMainLooper());
         switch (TYPE) {
             case 0:
                 mediaPlayer = new MediaPlayer();
@@ -66,12 +70,12 @@ public class MediaPlayerHelper {
                 startTimer();
             });
             if (callBack != null)
-                callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000);
+                handler.post(()-> callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000));
         };
         MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
             stopTimer();
             if (callBack != null)
-                callBack.onCompleted(mediaPlayer);
+                handler.post(()-> callBack.onCompleted(mediaPlayer));
             isStop = true;
             isPause = true;
             mediaPlayer.reset();
@@ -79,15 +83,21 @@ public class MediaPlayerHelper {
         MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
             stopTimer();
             if (callBack != null)
-                callBack.onError(mediaPlayer);
+                handler.post(()-> callBack.onError(mediaPlayer));
             isPause = true;
             isPause = true;
             url = null;
             return false;
         };
+        MediaPlayer.OnBufferingUpdateListener onBufferingUpdateListener = (mp, percent) -> {
+            if (callBack!=null) {
+                handler.post(() -> callBack.onBufferUpdate(mp, percent));
+            }
+        };
         mediaPlayer.setOnErrorListener(onErrorListener);
         mediaPlayer.setOnPreparedListener(onPreparedListener);
         mediaPlayer.setOnCompletionListener(onCompletionListener);
+        mediaPlayer.setOnBufferingUpdateListener(onBufferingUpdateListener);
         return this;
     }
 
@@ -107,15 +117,17 @@ public class MediaPlayerHelper {
         return this;
     }
 
+    public void setCallBack(MediaPlayerHelperListener callBack) {
+        this.callBack = callBack;
+    }
+
     /**
      * 播放
-     * @param callBack  回调
      * @return  this
      */
-    public MediaPlayerHelper play(MediaPlayerHelperListener callBack) {
+    public MediaPlayerHelper play() {
         if (url==null || mediaPlayer==null)
             return this;
-        this.callBack = callBack;
         if (isStop) {
             try {
                 switch (TYPE) {
@@ -139,7 +151,7 @@ public class MediaPlayerHelper {
                     startTimer();
                 });
                 if (this.callBack != null)
-                    this.callBack.onReStart(mediaPlayer);
+                    handler.post(()-> this.callBack.onReStart(mediaPlayer));
             } else
                 pause();
         }
@@ -154,7 +166,7 @@ public class MediaPlayerHelper {
         subscription = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribe(aLong -> {
                     if (callBack!=null)
-                        callBack.onProgressChange(mediaPlayer,mediaPlayer.getCurrentPosition()/1000);
+                        handler.post(()-> callBack.onProgressChange(mediaPlayer,mediaPlayer.getCurrentPosition()/1000));
                 });
     }
 
@@ -164,18 +176,13 @@ public class MediaPlayerHelper {
         subscription = null;
     }
 
-    public MediaPlayerHelper play() {
-        play(null);
-        return this;
-    }
-
     public MediaPlayerHelper stop() {
         stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
         mediaPlayer.stop();
         if (callBack!=null)
-            callBack.onStop(mediaPlayer);
+            handler.post(()-> callBack.onStop(mediaPlayer));
         isStop = true;
         mediaPlayer.reset();
         return this;
@@ -188,7 +195,7 @@ public class MediaPlayerHelper {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             if (callBack!=null)
-                callBack.onPause(mediaPlayer);
+                handler.post(()-> callBack.onPause(mediaPlayer));
             isPause = true;
         }
         return this;
@@ -215,6 +222,7 @@ public class MediaPlayerHelper {
         mediaPlayer = null;
         isPause = true;
         isStop = true;
+        handler = null;
     }
 
     public boolean isPlaying() {
