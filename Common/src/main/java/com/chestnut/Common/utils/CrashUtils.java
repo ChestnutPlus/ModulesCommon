@@ -1,6 +1,5 @@
 package com.chestnut.Common.utils;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -68,12 +67,12 @@ public class CrashUtils implements UncaughtExceptionHandler {
     /**
      * 初始化
      *
-     * @param application 应用
+     * @param mContext 应用
      */
-    public void init(Application application) {
+    public void init(Context mContext) {
         if (mInitialized) return;
         mInitialized = true;
-        mContext = application.getApplicationContext();
+        this.mContext = mContext.getApplicationContext();
         mHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -81,12 +80,12 @@ public class CrashUtils implements UncaughtExceptionHandler {
     /**
      *  初始化
      *
-     * @param application   应用
+     * @param mContext   应用
      * @param callBack  回掉
      */
-    public void init(Application application,CallBack callBack) {
+    public void init(Context mContext,CallBack callBack) {
         this.callBack = callBack;
-        init(application);
+        init(mContext);
     }
 
     @Override

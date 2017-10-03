@@ -2,6 +2,8 @@ package com.chestnut.Common.Helper;
 
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.chestnut.Common.utils.ExceptionCatchUtils;
@@ -36,6 +38,7 @@ public class RecorderHelper {
     private CountDownTimer countDownTimer = null;
     private String outFile = UtilsManager.getCachePath()+"/RecorderHelper-Temp.amr";
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+    private Handler handler;
 
     //定义准备时间的概念，如果，太快调用stop方法，会触发回调：onRecordTooShort
     private boolean isReady = false;
@@ -94,6 +97,7 @@ public class RecorderHelper {
         readyTimeSubscription = null;
         recordTimeSubscription = null;
         callBack = null;
+        handler = null;
     }
 
     //开始录音
@@ -138,7 +142,7 @@ public class RecorderHelper {
             ExceptionCatchUtils.catchE(e,"RecorderHelper");
             Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
             if (callBack!=null) {
-                callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());
+                handler.post(()-> callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage()));
             }
             recorder.reset();
             recorder = null;
@@ -176,7 +180,7 @@ public class RecorderHelper {
                         }
                         else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
                             if (callBack!=null)
-                                callBack.onRecordTooLong(fileName,THE_MAX_RECORD_TIME_SECOND,(int)a);
+                                handler.post(()-> callBack.onRecordTooLong(fileName,THE_MAX_RECORD_TIME_SECOND,(int)a));
                         }
                     });
             singleThreadExecutor.execute(()->{
@@ -185,7 +189,7 @@ public class RecorderHelper {
                     recorder.start();
                     isRecording = true;
                     if (callBack!=null) {
-                        callBack.onRecordStart(fileName);
+                        handler.post(()-> callBack.onRecordStart(fileName));
                     }
                     if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
                         readyTimeSubscription.unsubscribe();
@@ -194,7 +198,7 @@ public class RecorderHelper {
                     ExceptionCatchUtils.catchE(e,"RecorderHelper");
                     Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
                     if (callBack!=null) {
-                        callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage());
+                        handler.post(()-> callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage()));
                     }
                     recorder.reset();
                     if (countDownTimer!=null)
@@ -222,7 +226,7 @@ public class RecorderHelper {
             }
             readyTimeSubscription = null;
             if (callBack!=null)
-                callBack.onRecordTooShort(fileName,READY_TIME_MS);
+                handler.post(()-> callBack.onRecordTooShort(fileName,READY_TIME_MS));
             isRecording = false;
             return;
         }
@@ -234,7 +238,7 @@ public class RecorderHelper {
             isRecording = false;
             recorder.stop();
             if (callBack!=null) {
-                callBack.onRecordEnd(fileName,theRecordDuration);
+                handler.post(()-> callBack.onRecordEnd(fileName,theRecordDuration));
             }
             if (countDownTimer!=null)
                 countDownTimer.cancel();
@@ -255,6 +259,8 @@ public class RecorderHelper {
      * @return 返回 this 指针
      */
     public RecorderHelper init(String fileName) {
+        if (handler==null)
+            handler = new Handler(Looper.getMainLooper());
         this.fileName = fileName;
         return this;
     }
@@ -273,12 +279,14 @@ public class RecorderHelper {
      */
     private void updateMicStatus() {
         if (recorder != null) {
-            double ratio = (double)recorder.getMaxAmplitude() / 1;
-            double db = 0;// 分贝
-            if (ratio > 1)
-                db = 20 * Math.log10(ratio);
             if (callBack!=null) {
-                callBack.onRecordDBChange(db);
+                handler.post(()-> {
+                    double ratio = (double)recorder.getMaxAmplitude() / 1;
+                    double db = 0;// 分贝
+                    if (ratio > 1)
+                        db = 20 * Math.log10(ratio);
+                    callBack.onRecordDBChange(db);
+                });
             }
         }
     }

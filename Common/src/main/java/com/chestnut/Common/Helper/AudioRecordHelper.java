@@ -3,6 +3,8 @@ package com.chestnut.Common.Helper;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.chestnut.Common.utils.ExceptionCatchUtils;
 import com.chestnut.Common.utils.UtilsManager;
@@ -71,6 +73,7 @@ public class AudioRecordHelper {
     private int THE_LEFT_TIME_NOTIFY_SECOND = 5;    //剩余多少秒的时候，回调函数
     private Subscription recordTimeSubscription;
     private int theRecordDuration = 0;
+    private Handler handler;
 
     /**
      * 设置准备时间
@@ -130,6 +133,8 @@ public class AudioRecordHelper {
      * @param outFile   录音文件路径
      */
     public AudioRecordHelper init(String outFile) {
+        if (handler==null)
+            handler = new Handler(Looper.getMainLooper());
         this.outFile = outFile;
         //创建文件
         File pcmFile = new File(inFile);
@@ -174,7 +179,7 @@ public class AudioRecordHelper {
                             stopRecord();
                         } else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
                             if (callBack != null)
-                                callBack.onRecordTooLong(outFile, THE_MAX_RECORD_TIME_SECOND, (int) a);
+                                handler.post(()-> callBack.onRecordTooLong(outFile, THE_MAX_RECORD_TIME_SECOND, (int) a));
                         }
                     });
             singleThreadExecutor.execute(() -> {
@@ -185,11 +190,11 @@ public class AudioRecordHelper {
                 } catch (IOException e) {
                     ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
                     if (callBack != null)
-                        callBack.onRecordFail(outFile, e.getMessage());
+                        handler.post(()-> callBack.onRecordFail(outFile, e.getMessage()));
                     return;
                 }
                 if (callBack != null)
-                    callBack.onRecordStart(outFile);
+                    handler.post(()-> callBack.onRecordStart(outFile));
                 byte[] buffer = new byte[bufferSize];
                 while (isRecording) {
                     int r = recorder.read(buffer, 0, bufferSize);
@@ -203,12 +208,12 @@ public class AudioRecordHelper {
                             // 平方和除以数据总长度，得到音量大小。
                             double mean = v / (double) r;
                             double volume = 10 * Math.log10(mean);
-                            callBack.onRecordDBChange(volume);
+                            handler.post(()-> callBack.onRecordDBChange(volume));
                         }
                     } catch (Exception e) {
                         ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
                         if (callBack != null) {
-                            callBack.onRecordDBChange(0);
+                            handler.post(()-> callBack.onRecordDBChange(0));
                         }
                     }
                     if (r > 0) {
@@ -217,7 +222,7 @@ public class AudioRecordHelper {
                         } catch (IOException e) {
                             ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
                             if (callBack != null)
-                                callBack.onRecordFail(outFile, e.getMessage());
+                                handler.post(()-> callBack.onRecordFail(outFile, e.getMessage()));
                             return;
                         }
                     }
@@ -240,7 +245,7 @@ public class AudioRecordHelper {
                 }
                 readyTimeSubscription = null;
                 if (callBack != null)
-                    callBack.onRecordTooShort(outFile, READY_TIME_MS);
+                    handler.post(()-> callBack.onRecordTooShort(outFile, READY_TIME_MS));
                 isRecording = false;
                 return;
             }
@@ -275,14 +280,14 @@ public class AudioRecordHelper {
                     in.close();
                     out.close();
                     if (callBack != null)
-                        callBack.onRecordEnd(outFile, theRecordDuration);
+                        handler.post(()-> callBack.onRecordEnd(outFile, theRecordDuration));
                     if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
                         readyTimeSubscription.unsubscribe();
                     }
                 } catch (IOException e) {
                     ExceptionCatchUtils.catchE(e, "AudioRecordHelper");
                     if (callBack != null)
-                        callBack.onRecordFail(outFile, e.getMessage());
+                        handler.post(()-> callBack.onRecordFail(outFile, e.getMessage()));
                     if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
                         readyTimeSubscription.unsubscribe();
                     }
@@ -310,6 +315,7 @@ public class AudioRecordHelper {
         callBack = null;
         singleThreadExecutor.shutdown();
         recorder.release();
+        handler = null;
     }
 
     /**
@@ -386,14 +392,6 @@ public class AudioRecordHelper {
     }
 
     private RecorderListener callBack = null;
-    public interface CallBack {
-        void onRecordTooShort(String file,int THE_READY_TIME);
-        void onRecordStart(String file);
-        void onRecordDBChange(double dbValue);
-        void onRecordFail(String file, String msg);
-        void onRecordEnd(String file, int duration);
-        void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft);
-    }
 
     private short[] Bytes2Shorts(byte[] buf) {
         byte bLength = 2;

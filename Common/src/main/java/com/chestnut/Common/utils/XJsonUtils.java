@@ -61,7 +61,16 @@ public class XJsonUtils implements Json{
         }
     }
 
+    @Override
+    public <Bean> String toJson(@NonNull Bean bean) {
+        return gson.toJson(bean);
+    }
+
     public Gson getGson() {
         return gson;
+    }
+
+    public void setGson(Gson gson) {
+        this.gson = gson;
     }
 }

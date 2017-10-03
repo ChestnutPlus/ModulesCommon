@@ -15,6 +15,7 @@ import android.media.MediaPlayer;
  */
 public abstract class MediaPlayerHelperListener {
     public void onStart(MediaPlayer mediaPlayer, int allSecond){}           //开始播放的时候回调
+    public void onBufferUpdate(MediaPlayer mediaPlayer, int percent){}      //当播放为网络资源时候，会回调这个方法
     public void onStop(MediaPlayer mediaPlayer){}                           //播放为完成时，强制结束
     public void onReStart(MediaPlayer mediaPlayer){}                        //暂停后，开始播放
     public void onCompleted(MediaPlayer mediaPlayer){}                      //播放完成时候回调

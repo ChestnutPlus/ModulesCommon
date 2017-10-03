@@ -2,7 +2,6 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
-import com.chestnut.Common.utils.EncryptUtils;
+import com.chestnut.Common.utils.AppUtils;
 import com.chestnut.Common.utils.LogUtils;
 import com.chestnut.Common.utils.XFontUtils;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -49,8 +48,8 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"mp3",
-            "2_"+"png",
+            "1_"+"",
+            "2_"+"",
             "3_"+"",
             "4_"+"",
             "5_"+"",
@@ -141,8 +140,6 @@ public class MainActivity extends RxAppCompatActivity {
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
-                LogUtils.e(TAG, "mp3:"+EncryptUtils.encryptMD5File2String("/sdcard/bobdog.mp3"));
-                LogUtils.e(TAG, "png:"+EncryptUtils.encryptMD5File2String("/sdcard/bobdog.png"));
                 break;
             case R.id.btn_2:
                 break;
@@ -175,12 +172,17 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_HOME){
-            //屏蔽之后的操作
-            toast.setText("KEYCODE_HOME").show();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        AppUtils.pressTwiceExitApp(this, false, "王尼玛，你敢再按一次试一试？", 2000, new AppUtils.ExitAppCallBack() {
+            @Override
+            public void firstAsk() {
+                LogUtils.i(OpenLog,TAG,"firstAsk");
+            }
+
+            @Override
+            public void beginExit() {
+                LogUtils.i(OpenLog,TAG,"beginExit");
+            }
+        });
     }
 }
