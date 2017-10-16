@@ -9,6 +9,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import java.io.File;
@@ -95,6 +97,25 @@ public class AppUtils {
     public static void installApp(Activity activity, File file, int requestCode) {
         if (file == null) return;
         activity.startActivityForResult(IntentUtils.getInstallAppIntent(file), requestCode);
+    }
+
+    /**
+     * 7.0以上，安装app
+     * @param context   上下文
+     * @param fileProviderStr   provider str
+     * @param file  file apk
+     */
+    public static void installAppOver7_0(Context context, String fileProviderStr, File file) {
+        if (DeviceUtils.getSDK()>=24) {
+            if (file != null && file.exists() && file.isFile()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Uri apkUri = FileProvider.getUriForFile(context, fileProviderStr, file);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                context.startActivity(intent);
+            }
+        }
     }
 
     /**

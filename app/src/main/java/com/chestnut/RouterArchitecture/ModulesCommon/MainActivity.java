@@ -48,7 +48,7 @@ public class MainActivity extends RxAppCompatActivity {
     };
 
     String toastAndBtnName[] = {
-            "1_"+"",
+            "1_"+"PayTest",
             "2_"+"",
             "3_"+"",
             "4_"+"",
@@ -140,6 +140,7 @@ public class MainActivity extends RxAppCompatActivity {
         viewLog(TAG,toastAndBtnName[(int) view.getTag()]);
         switch (view.getId()) {
             case R.id.btn_1:
+                startActivity(new Intent(this,PayActivity.class));
                 break;
             case R.id.btn_2:
                 break;

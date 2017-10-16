@@ -170,6 +170,11 @@ public class AudioRecordHelper {
             theRecordDuration = 0;
             isRecording = true;
             recorder.startRecording();
+            recorder.startRecording();
+            if (!isRecording) {
+                //当，6.0以下的时候，会同步卡在上面的语句
+                return;
+            }
             recordTimeSubscription = Observable.interval(1, TimeUnit.SECONDS)
                     .subscribe(aLong -> {
                         theRecordDuration = aLong.intValue();

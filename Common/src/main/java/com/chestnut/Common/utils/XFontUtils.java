@@ -20,9 +20,9 @@ import java.util.Map;
  *     desc  :  封装，自定义字体
  *          自定义字体，通常使用以下的方法：
  *              1.  直接对 TextView 设置 Typeface
- *              2.  集成TextView，在新的类里面去读取设置并设置 Typeface ，其实是1的变种。
+ *              2.  继承TextView，在新的类里面去读取设置并设置 Typeface ，其实是1的变种。
  *              3.  在Activity的onCreate中，去遍历View，找出继承于：TextView 的 View，并对其设置 Typeface
- *              4.  Android 8.0
+ *              4.  Android 8.0 的新特性
  *           这里，封装1，3.
  *           方法一，请看XTextView.
  *     thanks To:

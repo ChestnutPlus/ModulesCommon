@@ -34,9 +34,11 @@
             android:name=".DiyTestSurfaceViewActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".DiyTestImgViewFrameAnimActivity"
+        <activity
+            android:name=".DiyTestImgViewFrameAnimActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity android:name=".PayActivity"></activity>
     </application>
 
 </manifest>
