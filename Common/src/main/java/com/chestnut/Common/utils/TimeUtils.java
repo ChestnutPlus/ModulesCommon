@@ -615,4 +615,100 @@ public class TimeUtils {
         else
             return a+":"+String.format("%02d",b)+":"+String.format("%02d",second);
     }
+
+    /**
+     * 传入时间戳，得到年份
+     * @param timestampMs   时间戳
+     * @return  年份
+     */
+    public static int getYear(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d));
+    }
+
+    /**
+     * 传入时间戳，得到月
+     * @param timestampMs   时间戳
+     * @return  月份
+     */
+    public static int getMonth(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("MM", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d))+1;
+    }
+
+    /**
+     * 传入时间戳，得到天
+     * @param timestampMs   时间戳
+     * @return  天
+     */
+    public static int getDay(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("dd", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d));
+    }
+
+    /**
+     * 传入时间戳，得到时
+     * @param timestampMs   时间戳
+     * @return  时
+     */
+    public static int getHour(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("HH", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d));
+    }
+
+    /**
+     * 传入时间戳，得到分
+     * @param timestampMs   时间戳
+     * @return  分
+     */
+    public static int getMin(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("mm", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d));
+    }
+
+    /**
+     * 传入时间戳，得到秒
+     * @param timestampMs   时间戳
+     * @return  秒
+     */
+    public static int getSecond(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("ss", Locale.ENGLISH);
+        return Integer.parseInt(sf.format(d));
+    }
+
+    /**
+     * 传入时间戳，得到星期
+     *  返回 1-7
+     * @param timestampMs   时间戳
+     * @return  星期
+     */
+    public static int getWeek(long timestampMs) {
+        Date d = new Date(timestampMs);
+        SimpleDateFormat sf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        String s = sf.format(d);
+        switch (s) {
+            case "Monday":
+                return 1;
+            case "Tuesday":
+                return 2;
+            case "Wednesday":
+                return 3;
+            case "Thursday":
+                return 4;
+            case "Friday":
+                return 5;
+            case "Saturday":
+                return 6;
+            case "Sunday":
+                return 7;
+            default:
+                return -1;
+        }
+    }
 }
