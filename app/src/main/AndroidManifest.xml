@@ -39,6 +39,7 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity android:name=".PayActivity"></activity>
+        <activity android:name=".RecordPlayActivity"/>
     </application>
 
 </manifest>
