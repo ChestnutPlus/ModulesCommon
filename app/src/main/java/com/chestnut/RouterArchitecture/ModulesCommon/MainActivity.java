@@ -9,13 +9,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chestnut.Common.ui.Toastc;
-import com.chestnut.Common.utils.AppUtils;
 import com.chestnut.Common.utils.LogUtils;
 import com.chestnut.Common.utils.XFontUtils;
+import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.subjects.PublishSubject;
 
 
 public class MainActivity extends RxAppCompatActivity {
@@ -31,6 +34,7 @@ public class MainActivity extends RxAppCompatActivity {
     SeekBar seekBar1;
     SeekBar seekBar2;
     List<String> logs;
+    private PublishSubject<Integer> publishSubject;
 
     int btnIds[] = {
             R.id.btn_1,
@@ -49,7 +53,7 @@ public class MainActivity extends RxAppCompatActivity {
 
     String toastAndBtnName[] = {
             "1_"+"PayTest",
-            "2_"+"",
+            "2_"+"蓝牙",
             "3_"+"",
             "4_"+"",
             "5_"+"",
@@ -120,6 +124,13 @@ public class MainActivity extends RxAppCompatActivity {
 
             }
         });
+
+        publishSubject = PublishSubject.create();
+        publishSubject.throttleFirst(5, TimeUnit.SECONDS)
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(integer -> {
+                    LogUtils.i(OpenLog,TAG,String.valueOf(System.currentTimeMillis()));
+                });
     }
 
     private void viewLog(String TAG,String msg) {
@@ -143,6 +154,7 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(new Intent(this,PayActivity.class));
                 break;
             case R.id.btn_2:
+                startActivity(new Intent(this,RecordPlayActivity.class));
                 break;
             case R.id.btn_3:
                 break;
@@ -153,7 +165,6 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_6:
                 break;
             case R.id.btn_7:
-                startActivity(new Intent(this,RecordPlayActivity.class));
                 break;
             case R.id.btn_8:
                 startActivity(new Intent(this,DiyTestImgViewFrameAnimActivity.class));
@@ -175,16 +186,17 @@ public class MainActivity extends RxAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AppUtils.pressTwiceExitApp(this, false, "王尼玛，你敢再按一次试一试？", 2000, new AppUtils.ExitAppCallBack() {
-            @Override
-            public void firstAsk() {
-                LogUtils.i(OpenLog,TAG,"firstAsk");
-            }
-
-            @Override
-            public void beginExit() {
-                LogUtils.i(OpenLog,TAG,"beginExit");
-            }
-        });
+        publishSubject.onNext(1);
+//        AppUtils.pressTwiceExitApp(this, false, "王尼玛，你敢再按一次试一试？", 2000, new AppUtils.ExitAppCallBack() {
+//            @Override
+//            public void firstAsk() {
+//                LogUtils.i(OpenLog,TAG,"firstAsk");
+//            }
+//
+//            @Override
+//            public void beginExit() {
+//                LogUtils.i(OpenLog,TAG,"beginExit");
+//            }
+//        });
     }
 }
