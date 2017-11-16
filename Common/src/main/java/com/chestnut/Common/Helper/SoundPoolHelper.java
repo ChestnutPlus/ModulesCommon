@@ -108,7 +108,11 @@ public class SoundPoolHelper {
         if (uri==null)
             load(context,"default", R.raw.reminder);
         else
-            load(context,"default",ConvertUtils.uri2Path(context,uri));
+            try {
+                load(context,"default", ConvertUtils.uri2Path(context,uri));
+            } catch (Exception e) {
+                load(context,"default", R.raw.reminder);
+            }
         return this;
     }
 

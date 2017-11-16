@@ -167,9 +167,13 @@ public class AudioRecordHelper {
 
     private void _startRecord(){
         if (!isRecording) {
-            theRecordDuration = 0;
             isRecording = true;
+            theRecordDuration = 0;
             recorder.startRecording();
+            if (!isRecording) {
+                //当，6.0以下的时候，会同步卡在上面的语句
+                return;
+            }
             recordTimeSubscription = Observable.interval(1, TimeUnit.SECONDS)
                     .subscribe(aLong -> {
                         theRecordDuration = aLong.intValue();
@@ -177,7 +181,8 @@ public class AudioRecordHelper {
                         if (a == 0) {
                             recordTimeSubscription.unsubscribe();
                             stopRecord();
-                        } else if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
+                        }
+                        if (a <= THE_LEFT_TIME_NOTIFY_SECOND) {
                             if (callBack != null)
                                 handler.post(()-> callBack.onRecordTooLong(outFile, THE_MAX_RECORD_TIME_SECOND, (int) a));
                         }
@@ -238,17 +243,16 @@ public class AudioRecordHelper {
 
     //停止录音
     public void stopRecord(){
-        if (isRecording) {
-            if (!isReady) {
-                if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
-                    readyTimeSubscription.unsubscribe();
-                }
-                readyTimeSubscription = null;
-                if (callBack != null)
-                    handler.post(()-> callBack.onRecordTooShort(outFile, READY_TIME_MS));
-                isRecording = false;
-                return;
+        if (!isReady) {
+            if (readyTimeSubscription != null && !readyTimeSubscription.isUnsubscribed()) {
+                readyTimeSubscription.unsubscribe();
             }
+            readyTimeSubscription = null;
+            if (callBack != null)
+                handler.post(()-> callBack.onRecordTooShort(outFile, READY_TIME_MS));
+            return;
+        }
+        if (isRecording) {
             isRecording = false;
             recorder.stop();
 
@@ -300,8 +304,9 @@ public class AudioRecordHelper {
      * 设置监听器
      * @param callBack  监听器
      */
-    public void setCallBack(RecorderListener callBack) {
+    public AudioRecordHelper setCallBack(RecorderListener callBack) {
         this.callBack = callBack;
+        return this;
     }
 
     /**

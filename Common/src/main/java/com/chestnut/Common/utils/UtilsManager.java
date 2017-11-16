@@ -5,9 +5,6 @@ import android.os.Environment;
 
 import java.io.File;
 
-import rx.Observable;
-import rx.schedulers.Schedulers;
-
 /**
  * <pre>
  *     author: Chestnut
@@ -25,33 +22,29 @@ public class UtilsManager {
     private static String TAG = "UtilsManager";
     private static Context applicationContext;
 
-    public static void init(Context c,String SP_NAME) {
-        Observable.just(c.getApplicationContext())
-                .observeOn(Schedulers.newThread())
-                .subscribe(context -> {
-                    applicationContext = context.getApplicationContext();
-                    //初始化缓存地址
-                    if (context.getExternalCacheDir()!=null) {
-                        CACHE_PATH = context.getExternalCacheDir().getAbsolutePath();
-                    }
-                    else if (Environment.getExternalStorageDirectory()!=null){
-                        CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+AppUtils.getAppPackageName(context);
-                        File file = new File(CACHE_PATH);
-                        if (!file.exists()) {
-                            if (!file.mkdir()) {
-                                throw new RuntimeException("UtilsManager CACHE_PATH create fail...");
-                            }
-                        }
-                    }
-                    else {
-                        CACHE_PATH = context.getCacheDir().getAbsolutePath();
-                    }
-                    LogUtils.i(true,"cache_path:"+CACHE_PATH);
-                    //初始化LogUtils
-                    LogUtils.init(context.getApplicationContext());
-                    //初始化SPUtils
-                    SPUtils.getInstance().init(context, SP_NAME);
-                },throwable -> LogUtils.e(true,"init-error:"+throwable.getMessage()));
+    public static void init(Context context,String SP_NAME) {
+        applicationContext = context.getApplicationContext();
+        //初始化缓存地址
+        if (context.getExternalCacheDir()!=null) {
+            CACHE_PATH = context.getExternalCacheDir().getAbsolutePath();
+        }
+        else if (Environment.getExternalStorageDirectory()!=null){
+            CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+AppUtils.getAppPackageName(context);
+            File file = new File(CACHE_PATH);
+            if (!file.exists()) {
+                if (!file.mkdir()) {
+                    throw new RuntimeException("UtilsManager CACHE_PATH create fail...");
+                }
+            }
+        }
+        else {
+            CACHE_PATH = context.getCacheDir().getAbsolutePath();
+        }
+        LogUtils.i(true,"cache_path:"+CACHE_PATH);
+        //初始化LogUtils
+        LogUtils.init(context.getApplicationContext());
+        //初始化SPUtils
+        SPUtils.getInstance().init(context, SP_NAME);
     }
 
     public static void init(Context context) {

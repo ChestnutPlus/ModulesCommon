@@ -10,6 +10,6 @@
     <!--DIY Toolbar-->
     <color name="toolbar_bg">#E8F1F6</color>
 
-    <color name="touch_round_bg">#cfcdcd</color>
-    <color name="touch_bg">#f0f0f0</color>
+    <color name="touch_round_bg">#7dcfcdcd</color>
+    <color name="touch_bg">#7dcfcdcd</color>
 </resources>
