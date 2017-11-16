@@ -269,8 +269,9 @@ public class RecorderHelper {
      * 设置监听器
      * @param callBack  监听器
      */
-    public void setCallBack(RecorderListener callBack) {
+    public RecorderHelper setCallBack(RecorderListener callBack) {
         this.callBack = callBack;
+        return this;
     }
     private RecorderListener callBack = null;
 

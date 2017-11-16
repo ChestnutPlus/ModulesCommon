@@ -406,9 +406,9 @@ public class LogUtils {
         int indexOf = x.indexOf("(");
         String threadMsg = thread.getName() + " : " + x.substring(indexOf);
 
-        String dateLogContent = LOG_FORMAT.format(nowTime) +
-                " [" + level + "] [" + tag + "] \n\t\t" +
-                threadMsg + "\n\t\t" +
+        String dateLogContent ="[" + LOG_FORMAT.format(nowTime) +
+                "] [" + level + "] [" + tag + "] \t" +
+                threadMsg + "\t" +
                 text + "\n"; // 日志输出格式
 
         File destDir = new File(LOG_FILE_PATH);
