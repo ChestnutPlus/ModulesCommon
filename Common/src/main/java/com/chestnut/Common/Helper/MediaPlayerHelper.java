@@ -241,10 +241,12 @@ public class MediaPlayerHelper {
                 mediaPlayer.setDataSource(mp3Path);
                 mediaPlayer.setOnPreparedListener(mediaPlayer1 -> {
                     subscriber.onNext(mediaPlayer1.getDuration()/1000);
+                    subscriber.onCompleted();
                     mediaPlayer1.release();
                 });
                 mediaPlayer.setOnErrorListener((mediaPlayer12, i, i1) -> {
                     subscriber.onNext(0);
+                    subscriber.onCompleted();
                     mediaPlayer12.release();
                    return false;
                 });
@@ -252,6 +254,7 @@ public class MediaPlayerHelper {
             } catch (IOException e) {
                 ExceptionCatchUtils.catchE(e,"MediaPlayerHelper");
                 subscriber.onNext(0);
+                subscriber.onCompleted();
             }
         });
     }
@@ -265,6 +268,7 @@ public class MediaPlayerHelper {
             MediaPlayer mediaPlayer = MediaPlayer.create(context,rawRes);
             mediaPlayer.setOnPreparedListener(mediaPlayer1 -> {
                 subscriber.onNext(mediaPlayer1.getDuration()/1000);
+                subscriber.onCompleted();
                 mediaPlayer1.release();
             });
         });

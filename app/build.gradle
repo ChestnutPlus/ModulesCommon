@@ -35,4 +35,5 @@ dependencies {
     compile 'com.yarolegovich:discrete-scrollview:1.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.airbnb.android:lottie:2.2.0'
+    compile 'com.androidadvance:topsnackbar:1.1.1'
 }
