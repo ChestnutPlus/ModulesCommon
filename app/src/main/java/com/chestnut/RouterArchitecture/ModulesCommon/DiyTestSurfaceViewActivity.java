@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
-import com.chestnut.common.utils.LogUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.surfaceAnimation.FrameAnimationSurfaceView;
 
 public class DiyTestSurfaceViewActivity extends Activity {

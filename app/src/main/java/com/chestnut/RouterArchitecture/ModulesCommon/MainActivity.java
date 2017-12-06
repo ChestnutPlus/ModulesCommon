@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
-import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.XFontUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
