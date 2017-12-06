@@ -5,9 +5,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.chestnut.Common.ui.recyclerView.XHolder;
-import com.chestnut.Common.ui.recyclerView.XItem;
-import com.chestnut.Common.utils.MathUtils;
+import com.chestnut.common.ui.recyclerView.XHolder;
+import com.chestnut.common.ui.recyclerView.XItem;
+import com.chestnut.common.utils.MathUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
 

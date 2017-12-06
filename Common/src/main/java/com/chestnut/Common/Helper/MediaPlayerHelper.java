@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RawRes;
 
-import com.chestnut.Common.utils.ExceptionCatchUtils;
+import com.chestnut.common.utils.ExceptionCatchUtils;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -180,7 +180,8 @@ public class MediaPlayerHelper {
         stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
-        mediaPlayer.stop();
+        //当正在缓冲网络资源的时候，Stop会导致ANR。
+//            mediaPlayer.stop();
         if (callBack!=null)
             handler.post(()-> callBack.onStop(mediaPlayer));
         isStop = true;

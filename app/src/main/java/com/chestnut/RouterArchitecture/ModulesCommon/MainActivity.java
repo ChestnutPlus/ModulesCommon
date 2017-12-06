@@ -8,9 +8,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chestnut.Common.ui.Toastc;
-import com.chestnut.Common.utils.LogUtils;
-import com.chestnut.Common.utils.XFontUtils;
+import com.chestnut.common.ui.XToast;
+import com.chestnut.common.utils.AppUtils;
+import com.chestnut.common.utils.LogUtils;
+import com.chestnut.common.utils.XFontUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -25,7 +26,7 @@ public class MainActivity extends RxAppCompatActivity {
 
     private String TAG = "MainActivity";
     private boolean OpenLog = true;
-    private Toastc toast;
+    private XToast toast;
     ImageView img1;
     ImageView img2;
     ImageView img3;
@@ -80,7 +81,9 @@ public class MainActivity extends RxAppCompatActivity {
 
         seekBar1 = (SeekBar) findViewById(R.id.seekBar_1);
         seekBar2 = (SeekBar) findViewById(R.id.seekBar_2);
-        toast = new Toastc(this, Toast.LENGTH_LONG);
+        toast = new XToast(this, Toast.LENGTH_LONG);
+        toast.setTextTypeface(XFontUtils.getInstance().get("fonts/caonima.ttf"));
+        toast.setTextSize(20);
 
         TextView textView = null;
         txtLog = (TextView) findViewById(R.id.txt_log);
@@ -186,17 +189,16 @@ public class MainActivity extends RxAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        publishSubject.onNext(1);
-//        AppUtils.pressTwiceExitApp(this, false, "王尼玛，你敢再按一次试一试？", 2000, new AppUtils.ExitAppCallBack() {
-//            @Override
-//            public void firstAsk() {
-//                LogUtils.i(OpenLog,TAG,"firstAsk");
-//            }
-//
-//            @Override
-//            public void beginExit() {
-//                LogUtils.i(OpenLog,TAG,"beginExit");
-//            }
-//        });
+        AppUtils.pressTwiceExitApp(this, false, "再按一次就退出", 2000, new AppUtils.ExitAppCallBack() {
+            @Override
+            public void firstAsk() {
+                LogUtils.i(OpenLog,TAG,"firstAsk");
+            }
+
+            @Override
+            public void beginExit() {
+                LogUtils.i(OpenLog,TAG,"beginExit");
+            }
+        });
     }
 }

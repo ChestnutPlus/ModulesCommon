@@ -81,21 +81,21 @@ public class RecordPlayActivity extends Activity implements OnClickListener
 		bt_exit = (Button) findViewById(R.id.bt_yinpinhuilu_testing_exit);
 		bt_exit.setOnClickListener(this);
 		m_in_buf_size = AudioRecord.getMinBufferSize(sampleRateLnHz,
-				AudioFormat.CHANNEL_CONFIGURATION_MONO,
-				AudioFormat.ENCODING_PCM_16BIT);
+				AudioFormat.CHANNEL_IN_STEREO,
+				AudioFormat.ENCODING_PCM_16BIT) / 4;
 		m_in_rec = new AudioRecord(MediaRecorder.AudioSource.MIC,sampleRateLnHz,
-				AudioFormat.CHANNEL_CONFIGURATION_MONO,
+				AudioFormat.CHANNEL_IN_STEREO,
 				AudioFormat.ENCODING_PCM_16BIT, m_in_buf_size);
 		m_in_bytes = new byte[m_in_buf_size];
 
 		m_out_buf_size = AudioTrack.getMinBufferSize(sampleRateLnHz,
-				AudioFormat.CHANNEL_CONFIGURATION_MONO,
+				AudioFormat.CHANNEL_OUT_STEREO,
 				AudioFormat.ENCODING_PCM_16BIT);
 		//audioTrack播放的时候，会断断续续，
 		//解决：buff扩大：http://blog.csdn.net/samguoyi/article/details/7410779
 		m_out_trk = new AudioTrack(AudioManager.STREAM_MUSIC,sampleRateLnHz,
-				AudioFormat.CHANNEL_CONFIGURATION_MONO,
-				AudioFormat.ENCODING_PCM_16BIT, m_out_buf_size*2,
+				AudioFormat.CHANNEL_OUT_STEREO,
+				AudioFormat.ENCODING_PCM_16BIT, m_out_buf_size*4,
 				AudioTrack.MODE_STREAM);
 	}
 

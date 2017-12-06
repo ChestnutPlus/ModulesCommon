@@ -1,18 +1,18 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import java.util.regex.Pattern;
 
-import static com.chestnut.Common.utils.ConstUtils.REGEX_CHZ;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_DATE;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_EMAIL;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_IDCARD15;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_IDCARD18;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_IP;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_MOBILE_EXACT;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_MOBILE_SIMPLE;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_TEL;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_URL;
-import static com.chestnut.Common.utils.ConstUtils.REGEX_USERNAME;
+import static com.chestnut.common.utils.ConstUtils.REGEX_CHZ;
+import static com.chestnut.common.utils.ConstUtils.REGEX_DATE;
+import static com.chestnut.common.utils.ConstUtils.REGEX_EMAIL;
+import static com.chestnut.common.utils.ConstUtils.REGEX_IDCARD15;
+import static com.chestnut.common.utils.ConstUtils.REGEX_IDCARD18;
+import static com.chestnut.common.utils.ConstUtils.REGEX_IP;
+import static com.chestnut.common.utils.ConstUtils.REGEX_MOBILE_EXACT;
+import static com.chestnut.common.utils.ConstUtils.REGEX_MOBILE_SIMPLE;
+import static com.chestnut.common.utils.ConstUtils.REGEX_TEL;
+import static com.chestnut.common.utils.ConstUtils.REGEX_URL;
+import static com.chestnut.common.utils.ConstUtils.REGEX_USERNAME;
 
 
 /**

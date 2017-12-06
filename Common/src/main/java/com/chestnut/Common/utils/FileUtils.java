@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.text.TextUtils;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.chestnut.Common.utils.ConstUtils.KB;
+import static com.chestnut.common.utils.ConstUtils.KB;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.chestnut.Common.rx;
+package com.chestnut.common.rx;
 
 import android.view.View;
 import android.view.animation.Animation;

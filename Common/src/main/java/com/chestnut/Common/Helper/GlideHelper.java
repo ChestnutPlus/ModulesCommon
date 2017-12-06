@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import android.content.Context;
 import android.content.res.Resources;

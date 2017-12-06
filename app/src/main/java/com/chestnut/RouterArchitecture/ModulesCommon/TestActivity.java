@@ -12,7 +12,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.FloatLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
-import com.chestnut.Common.utils.ImageUtils;
+import com.chestnut.common.utils.ImageUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.vLayout.FloatAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.vLayout.LinearAdapter;
 

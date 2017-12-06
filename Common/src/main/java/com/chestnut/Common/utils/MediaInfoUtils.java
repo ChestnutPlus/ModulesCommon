@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;

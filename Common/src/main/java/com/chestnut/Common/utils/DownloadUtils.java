@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.app.DownloadManager;
 import android.content.Context;

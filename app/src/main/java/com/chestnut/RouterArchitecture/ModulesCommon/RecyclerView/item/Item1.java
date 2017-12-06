@@ -4,9 +4,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.chestnut.Common.ui.recyclerView.XHolder;
-import com.chestnut.Common.ui.recyclerView.XItem;
-import com.chestnut.Common.utils.XFontUtils;
+import com.chestnut.common.ui.recyclerView.XHolder;
+import com.chestnut.common.ui.recyclerView.XItem;
+import com.chestnut.common.utils.XFontUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.bean.ItemBean1;

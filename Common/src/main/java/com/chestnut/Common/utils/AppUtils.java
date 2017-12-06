@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -84,7 +84,7 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public static void installApp(Activity activity, String filePath, int requestCode) {
-        installApp(activity, FileUtils.getFileByPath(filePath), requestCode);
+        installApp(activity, com.chestnut.common.utils.FileUtils.getFileByPath(filePath), requestCode);
     }
 
     /**
@@ -96,7 +96,7 @@ public class AppUtils {
      */
     public static void installApp(Activity activity, File file, int requestCode) {
         if (file == null) return;
-        activity.startActivityForResult(IntentUtils.getInstallAppIntent(file), requestCode);
+        activity.startActivityForResult(com.chestnut.common.utils.IntentUtils.getInstallAppIntent(file), requestCode);
     }
 
     /**
@@ -106,7 +106,7 @@ public class AppUtils {
      * @param file  file apk
      */
     public static void installAppOver7_0(Context context, String fileProviderStr, File file) {
-        if (DeviceUtils.getSDK()>=24) {
+        if (com.chestnut.common.utils.DeviceUtils.getSDK()>=24) {
             if (file != null && file.exists() && file.isFile()) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -125,8 +125,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public static void uninstallApp(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        context.startActivity(IntentUtils.getUninstallAppIntent(packageName));
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return;
+        context.startActivity(com.chestnut.common.utils.IntentUtils.getUninstallAppIntent(packageName));
     }
 
     /**
@@ -137,8 +137,8 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public static void uninstallApp(Activity activity, String packageName, int requestCode) {
-        if (StringUtils.isSpace(packageName)) return;
-        activity.startActivityForResult(IntentUtils.getUninstallAppIntent(packageName), requestCode);
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return;
+        activity.startActivityForResult(com.chestnut.common.utils.IntentUtils.getUninstallAppIntent(packageName), requestCode);
     }
 
     /**
@@ -148,8 +148,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public static void launchApp(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        context.startActivity(IntentUtils.getLaunchAppIntent(context, packageName));
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return;
+        context.startActivity(com.chestnut.common.utils.IntentUtils.getLaunchAppIntent(context, packageName));
     }
 
     /**
@@ -160,8 +160,8 @@ public class AppUtils {
      * @param requestCode 请求值
      */
     public static void launchApp(Activity activity, String packageName, int requestCode) {
-        if (StringUtils.isSpace(packageName)) return;
-        activity.startActivityForResult(IntentUtils.getLaunchAppIntent(activity, packageName), requestCode);
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return;
+        activity.startActivityForResult(com.chestnut.common.utils.IntentUtils.getLaunchAppIntent(activity, packageName), requestCode);
     }
 
     /**
@@ -190,8 +190,8 @@ public class AppUtils {
      * @param packageName 包名
      */
     public static void getAppDetailsSettings(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return;
-        context.startActivity(IntentUtils.getAppDetailsSettingsIntent(packageName));
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return;
+        context.startActivity(com.chestnut.common.utils.IntentUtils.getAppDetailsSettingsIntent(packageName));
     }
 
     /**
@@ -212,13 +212,13 @@ public class AppUtils {
      * @return App名称
      */
     public static String getAppName(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -241,13 +241,13 @@ public class AppUtils {
      * @return App图标
      */
     public static Drawable getAppIcon(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.loadIcon(pm);
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -270,13 +270,13 @@ public class AppUtils {
      * @return App路径
      */
     public static String getAppPath(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.applicationInfo.sourceDir;
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -299,13 +299,13 @@ public class AppUtils {
      * @return App版本号
      */
     public static String getAppVersionName(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -328,13 +328,13 @@ public class AppUtils {
      * @return App版本码
      */
     public static int getAppVersionCode(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return -1;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return -1;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? -1 : pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return -1;
         }
     }
@@ -357,13 +357,13 @@ public class AppUtils {
      * @return App签名
      */
     public static Signature[] getAppSignature(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return null;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return null;
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? null : pi.signatures;
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -386,13 +386,13 @@ public class AppUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isSystemApp(Context context, String packageName) {
-        if (StringUtils.isSpace(packageName)) return false;
+        if (com.chestnut.common.utils.StringUtils.isSpace(packageName)) return false;
         try {
             PackageManager pm = context.getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
             return ai != null && (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
         }
         return false;
     }
@@ -540,7 +540,7 @@ public class AppUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return getBean(pm, pi);
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return null;
         }
     }
@@ -610,13 +610,13 @@ public class AppUtils {
      * @return 是否成功
      */
     public static boolean cleanAppData(Context context, File... dirs) {
-        boolean isSuccess = CleanUtils.cleanInternalCache(context);
-        isSuccess &= CleanUtils.cleanInternalDbs(context);
-        isSuccess &= CleanUtils.cleanInternalSP(context);
-        isSuccess &= CleanUtils.cleanInternalFiles(context);
-        isSuccess &= CleanUtils.cleanExternalCache(context);
+        boolean isSuccess = com.chestnut.common.utils.CleanUtils.cleanInternalCache(context);
+        isSuccess &= com.chestnut.common.utils.CleanUtils.cleanInternalDbs(context);
+        isSuccess &= com.chestnut.common.utils.CleanUtils.cleanInternalSP(context);
+        isSuccess &= com.chestnut.common.utils.CleanUtils.cleanInternalFiles(context);
+        isSuccess &= com.chestnut.common.utils.CleanUtils.cleanExternalCache(context);
         for (File dir : dirs) {
-            isSuccess &= CleanUtils.cleanCustomCache(dir);
+            isSuccess &= com.chestnut.common.utils.CleanUtils.cleanCustomCache(dir);
         }
         return isSuccess;
     }
@@ -658,7 +658,7 @@ public class AppUtils {
     private static long exitTime = 0;
     public static void pressTwiceExitApp(Activity activity, boolean isBackToLaunch, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
         if ((System.currentTimeMillis()-exitTime)>exitTimeMsSpace) {
-            Toast.makeText(activity, EmptyUtils.isEmpty(msg)?"再按一次退出程序...":msg,Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, com.chestnut.common.utils.EmptyUtils.isEmpty(msg)?"再按一次退出程序...":msg,Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
             if (exitAppCallBack!=null)
                 exitAppCallBack.firstAsk();
@@ -687,12 +687,12 @@ public class AppUtils {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(signature.toByteArray());
             byte[] digest = md.digest();
-            return isUpper ? ConvertUtils.bytes2HexString(digest) : StringUtils.changeTOLowerCase(ConvertUtils.bytes2HexString(digest));
+            return isUpper ? com.chestnut.common.utils.ConvertUtils.bytes2HexString(digest) : com.chestnut.common.utils.StringUtils.changeTOLowerCase(com.chestnut.common.utils.ConvertUtils.bytes2HexString(digest));
         } catch (PackageManager.NameNotFoundException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return "null";
         } catch (NoSuchAlgorithmException e) {
-            ExceptionCatchUtils.catchE(e,"AppUtils");
+            com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return "null";
         }
     }

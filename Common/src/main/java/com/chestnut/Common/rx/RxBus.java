@@ -1,4 +1,4 @@
-package com.chestnut.Common.rx;
+package com.chestnut.common.rx;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;

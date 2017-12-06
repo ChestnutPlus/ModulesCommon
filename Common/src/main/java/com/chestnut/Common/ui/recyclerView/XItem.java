@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui.recyclerView;
+package com.chestnut.common.ui.recyclerView;
 
 import android.view.View;
 import android.view.ViewGroup;

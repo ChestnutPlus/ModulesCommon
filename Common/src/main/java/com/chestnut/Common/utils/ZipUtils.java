@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -16,7 +16,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import static com.chestnut.Common.utils.ConstUtils.KB;
+import static com.chestnut.common.utils.ConstUtils.KB;
 
 
 /**
@@ -62,7 +62,7 @@ public class ZipUtils {
      */
     public static boolean zipFiles(Collection<File> resFiles, String zipFilePath, String comment)
             throws IOException {
-        return zipFiles(resFiles, FileUtils.getFileByPath(zipFilePath), comment);
+        return zipFiles(resFiles, com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath), comment);
     }
 
     /**
@@ -129,7 +129,7 @@ public class ZipUtils {
      */
     public static boolean zipFile(String resFilePath, String zipFilePath, String comment)
             throws IOException {
-        return zipFile(FileUtils.getFileByPath(resFilePath), FileUtils.getFileByPath(zipFilePath), comment);
+        return zipFile(com.chestnut.common.utils.FileUtils.getFileByPath(resFilePath), com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath), comment);
     }
 
     /**
@@ -180,13 +180,13 @@ public class ZipUtils {
      */
     private static boolean zipFile(File resFile, String rootPath, ZipOutputStream zos, String comment)
             throws IOException {
-        rootPath = rootPath + (StringUtils.isSpace(rootPath) ? "" : File.separator) + resFile.getName();
+        rootPath = rootPath + (com.chestnut.common.utils.StringUtils.isSpace(rootPath) ? "" : File.separator) + resFile.getName();
         if (resFile.isDirectory()) {
             File[] fileList = resFile.listFiles();
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
             if (fileList == null || fileList.length <= 0) {
                 ZipEntry entry = new ZipEntry(rootPath + '/');
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!com.chestnut.common.utils.StringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 zos.closeEntry();
             } else {
@@ -200,7 +200,7 @@ public class ZipUtils {
             try {
                 is = new BufferedInputStream(new FileInputStream(resFile));
                 ZipEntry entry = new ZipEntry(rootPath);
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!com.chestnut.common.utils.StringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 byte buffer[] = new byte[KB];
                 int len;
@@ -225,7 +225,7 @@ public class ZipUtils {
      */
     public static boolean unzipFiles(Collection<File> zipFiles, String destDirPath)
             throws IOException {
-        return unzipFiles(zipFiles, FileUtils.getFileByPath(destDirPath));
+        return unzipFiles(zipFiles, com.chestnut.common.utils.FileUtils.getFileByPath(destDirPath));
     }
 
     /**
@@ -255,7 +255,7 @@ public class ZipUtils {
      */
     public static boolean unzipFile(String zipFilePath, String destDirPath)
             throws IOException {
-        return unzipFile(FileUtils.getFileByPath(zipFilePath), FileUtils.getFileByPath(destDirPath));
+        return unzipFile(com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath), com.chestnut.common.utils.FileUtils.getFileByPath(destDirPath));
     }
 
     /**
@@ -282,8 +282,8 @@ public class ZipUtils {
      */
     public static List<File> unzipFileByKeyword(String zipFilePath, String destDirPath, String keyword)
             throws IOException {
-        return unzipFileByKeyword(FileUtils.getFileByPath(zipFilePath),
-                FileUtils.getFileByPath(destDirPath), keyword);
+        return unzipFileByKeyword(com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath),
+                com.chestnut.common.utils.FileUtils.getFileByPath(destDirPath), keyword);
     }
 
     /**
@@ -304,14 +304,14 @@ public class ZipUtils {
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             String entryName = entry.getName();
-            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
+            if (com.chestnut.common.utils.StringUtils.isEmpty(keyword) || com.chestnut.common.utils.FileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
                 String filePath = destDir + File.separator + entryName;
                 File file = new File(filePath);
                 files.add(file);
                 if (entry.isDirectory()) {
-                    if (!FileUtils.createOrExistsDir(file)) return null;
+                    if (!com.chestnut.common.utils.FileUtils.createOrExistsDir(file)) return null;
                 } else {
-                    if (!FileUtils.createOrExistsFile(file)) return null;
+                    if (!com.chestnut.common.utils.FileUtils.createOrExistsFile(file)) return null;
                     InputStream in = null;
                     OutputStream out = null;
                     try {
@@ -340,7 +340,7 @@ public class ZipUtils {
      */
     public static List<String> getFilesPath(String zipFilePath)
             throws IOException {
-        return getFilesPath(FileUtils.getFileByPath(zipFilePath));
+        return getFilesPath(com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath));
     }
 
     /**
@@ -370,7 +370,7 @@ public class ZipUtils {
      */
     public static List<String> getComments(String zipFilePath)
             throws IOException {
-        return getComments(FileUtils.getFileByPath(zipFilePath));
+        return getComments(com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath));
     }
 
     /**
@@ -401,7 +401,7 @@ public class ZipUtils {
      */
     public static Enumeration<?> getEntries(String zipFilePath)
             throws IOException {
-        return getEntries(FileUtils.getFileByPath(zipFilePath));
+        return getEntries(com.chestnut.common.utils.FileUtils.getFileByPath(zipFilePath));
     }
 
     /**

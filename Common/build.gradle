@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 23
-        versionName "1.1.0"
+        versionName "1.1.1"
         /**
          *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
          *      1.0.2:  修改包名的拼写错误，更新部分代码。
@@ -71,6 +71,9 @@ android {
          *
          *          22. ~ TimeUtils：增加方法
          *          23. ~ AudioRecordHelper
+         *
+         *    1.1.1-23. ~ LogUtils 重写部分方法，并加入删除日志。
+         *
          */
     }
     buildTypes {

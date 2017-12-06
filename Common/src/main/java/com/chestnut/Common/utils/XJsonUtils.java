@@ -1,8 +1,8 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.support.annotation.NonNull;
 
-import com.chestnut.Common.Interface.json.Json;
+import com.chestnut.common.interfaceX.json.Json;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * </pre>
  */
 
-public class XJsonUtils implements Json{
+public class XJsonUtils implements Json {
 
     /*单例*/
     private static volatile XJsonUtils defaultInstance;

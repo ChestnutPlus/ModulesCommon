@@ -1,6 +1,6 @@
-package com.chestnut.Common.rx;
+package com.chestnut.common.rx;
 
-import com.chestnut.Common.utils.LogUtils;
+import com.chestnut.common.utils.LogUtils;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -14,8 +14,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
 
 /**
  * <pre>
@@ -43,12 +41,12 @@ public class RxSocket {
 
     /*  单例
     * */
-    private Subject<Object,byte[]> readSubject;
-    private Subject<Object,SocketStatus> connectStatus;
+    private PublishSubject<byte[]> readSubject;
+    private PublishSubject<SocketStatus> connectStatus;
     private static volatile RxSocket defaultInstance;
     private RxSocket() {
-        readSubject = new SerializedSubject(PublishSubject.create());
-        connectStatus = new SerializedSubject(PublishSubject.create());
+        readSubject = PublishSubject.create();
+        connectStatus = PublishSubject.create();
     }
     public static RxSocket getInstance() {
         RxSocket rxSocket = defaultInstance;

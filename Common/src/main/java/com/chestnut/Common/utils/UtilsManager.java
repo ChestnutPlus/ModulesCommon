@@ -1,7 +1,8 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.StringRes;
 
 import java.io.File;
 
@@ -19,7 +20,6 @@ import java.io.File;
 public class UtilsManager {
 
     private static String CACHE_PATH = null;
-    private static String TAG = "UtilsManager";
     private static Context applicationContext;
 
     public static void init(Context context,String SP_NAME) {
@@ -40,10 +40,8 @@ public class UtilsManager {
         else {
             CACHE_PATH = context.getCacheDir().getAbsolutePath();
         }
-        LogUtils.i(true,"cache_path:"+CACHE_PATH);
-        //初始化LogUtils
-        LogUtils.init(context.getApplicationContext());
-        //初始化SPUtils
+        LogUtils.init();
+        LogUtils.i(true,"UtilsManager","cache_path:"+CACHE_PATH);
         SPUtils.getInstance().init(context, SP_NAME);
     }
 
@@ -52,11 +50,15 @@ public class UtilsManager {
     }
 
     public static String getCachePath() {
-        LogUtils.i(true,"cache_path:"+CACHE_PATH);
+        LogUtils.i(true,"UtilsManager","cache_path:"+CACHE_PATH);
         return CACHE_PATH;
     }
 
     public static Context getApplicationContext() {
         return applicationContext;
+    }
+
+    public static String getStringRes(@StringRes int stringRes) {
+        return getApplicationContext().getString(stringRes);
     }
 }

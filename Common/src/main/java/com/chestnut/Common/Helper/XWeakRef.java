@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import java.lang.ref.WeakReference;
 

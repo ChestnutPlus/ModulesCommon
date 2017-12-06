@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,10 +24,10 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Locale;
 
-import static com.chestnut.Common.utils.ConstUtils.BYTE;
-import static com.chestnut.Common.utils.ConstUtils.GB;
-import static com.chestnut.Common.utils.ConstUtils.KB;
-import static com.chestnut.Common.utils.ConstUtils.MB;
+import static com.chestnut.common.utils.ConstUtils.BYTE;
+import static com.chestnut.common.utils.ConstUtils.GB;
+import static com.chestnut.common.utils.ConstUtils.KB;
+import static com.chestnut.common.utils.ConstUtils.MB;
 
 
 /**

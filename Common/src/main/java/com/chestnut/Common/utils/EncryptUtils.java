@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,8 +12,8 @@ import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import static com.chestnut.Common.utils.ConvertUtils.bytes2HexString;
-import static com.chestnut.Common.utils.ConvertUtils.hexString2Bytes;
+import static com.chestnut.common.utils.ConvertUtils.bytes2HexString;
+import static com.chestnut.common.utils.ConvertUtils.hexString2Bytes;
 
 
 /**

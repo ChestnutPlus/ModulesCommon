@@ -2,8 +2,8 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.app.Application;
 
-import com.chestnut.Common.utils.UtilsManager;
-import com.chestnut.Common.utils.XFontUtils;
+import com.chestnut.common.utils.UtilsManager;
+import com.chestnut.common.utils.XFontUtils;
 
 /**
  * <pre>

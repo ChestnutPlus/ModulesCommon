@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -6,8 +6,8 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.chestnut.Common.utils.ExceptionCatchUtils;
-import com.chestnut.Common.utils.UtilsManager;
+import com.chestnut.common.utils.ExceptionCatchUtils;
+import com.chestnut.common.utils.UtilsManager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

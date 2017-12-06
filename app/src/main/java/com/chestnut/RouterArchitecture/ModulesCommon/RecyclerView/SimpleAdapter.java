@@ -1,8 +1,8 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView;
 
-import com.chestnut.Common.ui.recyclerView.XAdapter;
-import com.chestnut.Common.ui.recyclerView.XHolder;
-import com.chestnut.Common.ui.recyclerView.XItem;
+import com.chestnut.common.ui.recyclerView.XAdapter;
+import com.chestnut.common.ui.recyclerView.XHolder;
+import com.chestnut.common.ui.recyclerView.XItem;
 
 /**
  * <pre>

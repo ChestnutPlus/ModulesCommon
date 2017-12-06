@@ -36,10 +36,10 @@
 -keep class com.google.gson.** {*;}
 
 # Utils
--keep class com.chestnut.Common.ui.XTextView{ *; }
--keep class com.chestnut.Common.utils.LogUtils{ *; }
--keep class com.chestnut.Common.utils.CrashUtils{ *; }
--keep class com.chestnut.Common.utils.XJsonUtils{ *; }
+-keep class com.chestnut.common.ui.XTextView{ *; }
+-keep class com.chestnut.common.utils.LogUtils{ *; }
+-keep class com.chestnut.common.utils.CrashUtils{ *; }
+-keep class com.chestnut.common.utils.XJsonUtils{ *; }
 
 # Retrolambda
 -dontwarn java.lang.invoke.*

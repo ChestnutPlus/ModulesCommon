@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui;
+package com.chestnut.common.ui;
 
 import android.app.Notification;
 import android.app.NotificationManager;

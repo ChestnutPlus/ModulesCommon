@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.chestnut.Common.utils.ConvertUtils;
+import com.chestnut.common.utils.ConvertUtils;
 
 /**
  * Created by jameson on 8/30/16.

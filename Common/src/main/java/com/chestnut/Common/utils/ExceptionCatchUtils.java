@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.support.annotation.NonNull;
 
@@ -28,11 +28,7 @@ public class ExceptionCatchUtils {
             TAG = "ExceptionCatchUtils";
         e.printStackTrace();
         String msg = e.getMessage() == null ? "null" : e.getMessage();
-        LogUtils.eD(msg,ExceptionCatchUtils.class);
-        if (isLogToFile) {
-            LogUtils.Config.LOG_TO_FILE = true;
-            LogUtils.eToFile(TAG,msg);
-        }
+        LogUtils.e(true,TAG,msg,isLogToFile);
     }
 
     public static void catchE(Exception e) {

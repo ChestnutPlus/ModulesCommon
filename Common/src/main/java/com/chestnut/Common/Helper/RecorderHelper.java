@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
@@ -6,8 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.chestnut.Common.utils.ExceptionCatchUtils;
-import com.chestnut.Common.utils.UtilsManager;
+import com.chestnut.common.utils.ExceptionCatchUtils;
+import com.chestnut.common.utils.UtilsManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

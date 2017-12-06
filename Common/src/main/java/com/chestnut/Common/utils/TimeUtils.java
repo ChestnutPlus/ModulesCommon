@@ -1,16 +1,16 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.chestnut.Common.utils.ConstUtils.DAY;
-import static com.chestnut.Common.utils.ConstUtils.HOUR;
-import static com.chestnut.Common.utils.ConstUtils.MIN;
-import static com.chestnut.Common.utils.ConstUtils.MSEC;
-import static com.chestnut.Common.utils.ConstUtils.SEC;
-import static com.chestnut.Common.utils.ConstUtils.TimeUnit;
+import static com.chestnut.common.utils.ConstUtils.DAY;
+import static com.chestnut.common.utils.ConstUtils.HOUR;
+import static com.chestnut.common.utils.ConstUtils.MIN;
+import static com.chestnut.common.utils.ConstUtils.MSEC;
+import static com.chestnut.common.utils.ConstUtils.SEC;
+import static com.chestnut.common.utils.ConstUtils.TimeUnit;
 
 
 /**

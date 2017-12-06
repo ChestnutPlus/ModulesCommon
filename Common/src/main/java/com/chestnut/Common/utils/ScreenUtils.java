@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -20,7 +20,7 @@ import android.view.View;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.chestnut.Common.utils.ConvertUtils.px2dp;
+import static com.chestnut.common.utils.ConvertUtils.px2dp;
 
 
 /**

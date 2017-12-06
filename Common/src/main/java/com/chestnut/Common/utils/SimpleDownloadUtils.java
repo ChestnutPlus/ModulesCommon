@@ -1,4 +1,4 @@
-package com.chestnut.Common.utils;
+package com.chestnut.common.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,7 +73,7 @@ public class SimpleDownloadUtils {
                     if (i==retryNum)
                         subscriber.onNext(false);
                     else
-                        LogUtils.i(true,"SimpleDownloadUtils:"+url+",retry:"+(i+1));
+                        LogUtils.i(true,"SimpleDownloadUtils",url+",retry:"+(i+1));
                 }
                 subscriber.onCompleted();
             });

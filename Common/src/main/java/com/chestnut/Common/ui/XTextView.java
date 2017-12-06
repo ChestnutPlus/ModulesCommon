@@ -1,4 +1,4 @@
-package com.chestnut.Common.ui;
+package com.chestnut.common.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,8 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
-import com.chestnut.Common.R;
-import com.chestnut.Common.utils.ExceptionCatchUtils;
+import com.chestnut.common.R;
+import com.chestnut.common.utils.ExceptionCatchUtils;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;

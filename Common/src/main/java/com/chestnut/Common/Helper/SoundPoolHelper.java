@@ -1,4 +1,4 @@
-package com.chestnut.Common.Helper;
+package com.chestnut.common.helper;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -9,9 +9,9 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.RawRes;
 
-import com.chestnut.Common.R;
-import com.chestnut.Common.utils.ConvertUtils;
-import com.chestnut.Common.utils.ExceptionCatchUtils;
+import com.chestnut.common.R;
+import com.chestnut.common.utils.ConvertUtils;
+import com.chestnut.common.utils.ExceptionCatchUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
