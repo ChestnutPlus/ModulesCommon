@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.surfaceAnimation.FrameAnimationSurfaceView;
+import com.chestnut.common.utils.LogUtils;
 
 public class DiyTestSurfaceViewActivity extends Activity {
 

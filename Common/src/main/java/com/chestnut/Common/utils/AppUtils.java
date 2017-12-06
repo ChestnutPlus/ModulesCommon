@@ -11,7 +11,6 @@ import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
-import android.widget.Toast;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -656,9 +655,8 @@ public class AppUtils {
         void beginExit();
     }
     private static long exitTime = 0;
-    public static void pressTwiceExitApp(Activity activity, boolean isBackToLaunch, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
+    public static void pressTwiceExitApp(Activity activity, boolean isBackToLaunch, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
         if ((System.currentTimeMillis()-exitTime)>exitTimeMsSpace) {
-            Toast.makeText(activity, com.chestnut.common.utils.EmptyUtils.isEmpty(msg)?"再按一次退出程序...":msg,Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
             if (exitAppCallBack!=null)
                 exitAppCallBack.firstAsk();
@@ -671,7 +669,7 @@ public class AppUtils {
     }
 
     public static void pressTwiceExitApp(Activity activity, String msg, long exitTimeMsSpace, ExitAppCallBack exitAppCallBack) {
-        pressTwiceExitApp(activity,true,msg,exitTimeMsSpace,exitAppCallBack);
+        pressTwiceExitApp(activity,true,exitTimeMsSpace,exitAppCallBack);
     }
 
     /**

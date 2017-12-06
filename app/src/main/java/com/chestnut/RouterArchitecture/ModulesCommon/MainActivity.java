@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
+import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.XFontUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -188,10 +189,11 @@ public class MainActivity extends RxAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AppUtils.pressTwiceExitApp(this, false, "再按一次就退出", 2000, new AppUtils.ExitAppCallBack() {
+        AppUtils.pressTwiceExitApp(this,false,2000, new AppUtils.ExitAppCallBack() {
             @Override
             public void firstAsk() {
                 LogUtils.i(OpenLog,TAG,"firstAsk");
+                toast.setText("再按一次就退出啦~").show();
             }
 
             @Override
