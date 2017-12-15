@@ -81,7 +81,11 @@ public class RecorderHelper {
      */
     public void close() {
         if (recorder!=null) {
-            recorder.release();
+            try {
+                recorder.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             recorder = null;
         }
         singleThreadExecutor.shutdown();
@@ -121,30 +125,35 @@ public class RecorderHelper {
             if (recorder==null) {
                 //  1.  实例化
                 recorder = new MediaRecorder();
-            }
-            //  2.  设置录音音频的来源，MIC 是指 Microphone audio source
-            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            //  3.  设置录音音频的格式：
-            //      格式有：3Gp,AMR,AAC
-            recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-            //  4.0 设置音频的 编码格式
-            //      编码格式：对应于录音的格式
-            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            //  4.1 设置音频的 编码位率,?,比特率？ 采样率*声道*采样位数 = 比特率
+                //  2.  设置录音音频的来源，MIC 是指 Microphone audio source
+                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                //  3.  设置录音音频的格式：
+                //      格式有：3Gp,AMR,AAC
+                recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+                //  4.0 设置音频的 编码格式
+                //      编码格式：对应于录音的格式
+                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+                //  4.1  设置录音音频的存放地方
+                recorder.setOutputFile(fileName);
+                //  4.2  设置音频的 编码位率,?,比特率？ 采样率*声道*采样位数 = 比特率
 //                recorder.setAudioEncodingBitRate(256000);
-            //  4.2 设置音频的 采样率
+                //  4.3  设置音频的 采样率
 //                recorder.setAudioSamplingRate(16000);
-            //  4.3 设置声道，1：单声道，2：立体声道
+                //  4.4  设置声道，1：单声道，2：立体声道
 //                recorder.setAudioChannels(2);
-            //  5.  设置录音音频的存放地方
-            recorder.setOutputFile(fileName);
+            }
         } catch (Exception e) {
-            ExceptionCatchUtils.catchE(e,"RecorderHelper");
+            e.printStackTrace();
             Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
             if (callBack!=null) {
                 handler.post(()-> callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage()));
             }
-            recorder.reset();
+            try {
+                recorder.reset();
+                recorder.release();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             recorder = null;
             if (countDownTimer!=null)
                 countDownTimer.cancel();
@@ -157,7 +166,7 @@ public class RecorderHelper {
             readyTimeSubscription = null;
             recordTimeSubscription = null;
         }
-        if ( recorder!=null && !isRecording ) {
+        if (recorder!=null && !isRecording ) {
             countDownTimer = new CountDownTimer(Integer.MAX_VALUE,300) {
                 @Override
                 public void onTick(long l) {
@@ -170,7 +179,7 @@ public class RecorderHelper {
                 }
             };
             countDownTimer.start();
-            recordTimeSubscription = Observable.interval(1,TimeUnit.SECONDS)
+            recordTimeSubscription = Observable.interval(1, TimeUnit.SECONDS)
                     .subscribe(aLong -> {
                         theRecordDuration = aLong.intValue();
                         long a = THE_MAX_RECORD_TIME_SECOND - aLong;
@@ -200,7 +209,13 @@ public class RecorderHelper {
                     if (callBack!=null) {
                         handler.post(()-> callBack.onRecordFail(fileName,e.getMessage()==null?"null":e.getMessage()));
                     }
-                    recorder.reset();
+                    try {
+                        recorder.reset();
+                        recorder.release();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                    recorder = null;
                     if (countDownTimer!=null)
                         countDownTimer.cancel();
                     if (readyTimeSubscription!=null && !readyTimeSubscription.isUnsubscribed()) {
@@ -245,6 +260,9 @@ public class RecorderHelper {
         }
         if (recorder!=null)
             recorder.reset();
+        if (recorder!=null)
+            recorder.release();
+        recorder = null;
     }
 
 
@@ -269,9 +287,8 @@ public class RecorderHelper {
      * 设置监听器
      * @param callBack  监听器
      */
-    public RecorderHelper setCallBack(RecorderListener callBack) {
+    public void setCallBack(RecorderListener callBack) {
         this.callBack = callBack;
-        return this;
     }
     private RecorderListener callBack = null;
 
@@ -282,11 +299,17 @@ public class RecorderHelper {
         if (recorder != null) {
             if (callBack!=null) {
                 handler.post(()-> {
-                    double ratio = (double)recorder.getMaxAmplitude() / 1;
-                    double db = 0;// 分贝
-                    if (ratio > 1)
-                        db = 20 * Math.log10(ratio);
-                    callBack.onRecordDBChange(db);
+                    if (recorder!=null) {
+                        try {
+                            double ratio = (double) recorder.getMaxAmplitude() / 1;
+                            double db = 0;// 分贝
+                            if (ratio > 1)
+                                db = 20 * Math.log10(ratio);
+                            callBack.onRecordDBChange(db);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 });
             }
         }

@@ -37,6 +37,7 @@ public class LogUtils {
     public final static SimpleDateFormat FILE_SUFFIX = new SimpleDateFormat("yyyy-MM-dd");          //日志文件格式
     @SuppressLint("SimpleDateFormat")
     public final static SimpleDateFormat LOG_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //日志的输出格式
+    public static boolean OpenLogCat = true;
 
     private LogUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
@@ -299,6 +300,8 @@ public class LogUtils {
      * @param stackTraceElement stackTraceElement
      */
     private static void log(String msg, char logLevel, Thread thread, StackTraceElement stackTraceElement) {
+        if (!OpenLogCat)
+            return;
         if (msg==null || msg.isEmpty())
             msg = "null";
         String x = stackTraceElement.toString();
@@ -329,6 +332,8 @@ public class LogUtils {
      * @param level v.i.e.w.d
      */
     private static void log(String tag, String msg, char level) {
+        if (!OpenLogCat)
+            return;
         if (tag==null)
             tag = "TAG";
         if (msg==null || msg.isEmpty())
