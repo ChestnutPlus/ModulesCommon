@@ -10,78 +10,26 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 23
+        versionCode 24
         versionName "1.1.1"
         /**
-         *      1.0.1:  继承于：TestModules：的 1.0.22 代码库。其中，去掉了一些View层的代码。
-         *      1.0.2:  修改包名的拼写错误，更新部分代码。
-         *      1.0.3:
-         *          1.  2017年6月22日12:01:58 增加XTextView，扩展TextView。
-         *          2.  2017年6月28日12:09:27  完成SoundPoolHelper
-         *          3.  2017年6月29日14:54:32  完成MediaPlayerHelper
-         *      1.0.4
-         *          1.  2017年7月5日10:34:14   更新一些库
-         *      1.0.5
-         *          4.  2017年7月5日10:36:03   更新为1.0.5
-         *              1）网络请求使用：RxVolley，暂时不封装
-         *              2）图片加载使用：Glide，暂时不封装
-         *              3）Json，使用GSon，并封装了XJsonUtils
-         *
-         *     1.0.6
-         *          5.  回滚代码，使用回RxJava1.X
-         *          6.  2017年7月6日11:01:47
-         *              + UtilsManger : 统一对工具类进行管理和初始化
-         *              + MediaInfoUtils ： 对媒体文件进行详细信息提取
-         *              ~ 更新部分的Utils
-         *          7.  2017年7月11日16:18:53
-         *              - XEditView
-         *              ~ XTextView 修复字体带来的OOM
-         *              ~ 增加NetWorkUtils，监听网络的变化
-         *              ~ 增加ScreenUtils，屏幕按键的监听
-         *
-         *    1.0.7
-         *          8。 XJsonUtils：增加回调：gson
-         *              MediaPlayerHelper：增加回调的参数
-         *
-         *          9.  2017年8月1日23:13:44
-         *              ~ AudioRecordHelper，增加，准备时间，最大录音时间的定义。
-         *                                  修改了，默认的存储位置为UtilsManager的统一路径。
-         *              ~ NotificationUtils，增加清除通知的方法。
-         *              + RxDeliverBean
-         *
-         *          10. ~：RecorderHelper
-         *              ~: AudioRecordHelper
-         *
-         *          11. ~ : 对 helper 包下，一些监听器进行修改，使其得到更便捷的使用。
-         *          12. ~：MediaPlayerHelper:增加isPlaying方法
-         *              ~：UtilsManger：增加保存Context
-         *              +：SimpleDownloadUtils，增加一个简单的下载工具类
-         *          13. ~：md ripple
-         *          14. + RxUtils增加统计点击次数和过滤点击事件的方法
-         *          15. ~ 更新部分接口
-         *
-         *    1.1.0
-         *          16. + XWeakRef，XSoftRef，引用的封装
-         *              + XFontUtils：字体管理单例。
-         *          17. ~ SimpleDownloadUtils；增加重试机制
-         *          18. ~ 更新Gson为2.8.0
-         *          19. ~ 更新部分接口
-         *          20. ~ 更新部分Res
-         *          21. ~ 更新UitlsManager
-         *
-         *          22. ~ TimeUtils：增加方法
-         *          23. ~ AudioRecordHelper
-         *
          *    1.1.1-23. ~ LogUtils 重写部分方法，并加入删除日志。
-         *
+         *    1.1.1-24. ~ EncryptUtils 重写获取MD5的算法，避免文件太大的时候，OOM
          */
     }
     buildTypes {
         debug {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

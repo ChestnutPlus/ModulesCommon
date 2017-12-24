@@ -60,11 +60,11 @@ public class MainActivity extends RxAppCompatActivity {
             "5_"+"",
             "6_"+"",
             "7_"+"",
-            "8_"+"DiyTestImgViewFrameAnimActivity",
+            "8_"+"",
             "9_"+"DiyTestSurfaceViewActivity",
-            "10_"+"TestSurfaceViewActivity",
+            "10_"+"",
             "11_"+"TestActivity",
-            "12_"+"TimeLineActivity",
+            "12_"+"",
     };
 
     @Override
@@ -170,19 +170,16 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_7:
                 break;
             case R.id.btn_8:
-                startActivity(new Intent(this,DiyTestImgViewFrameAnimActivity.class));
                 break;
             case R.id.btn_9:
                 startActivity(new Intent(this,DiyTestSurfaceViewActivity.class));
                 break;
             case R.id.btn_10:
-                startActivity(new Intent(this,TestSurfaceViewActivity.class));
                 break;
             case R.id.btn_11:
                 startActivity(new Intent(this,TestActivity.class));
                 break;
             case R.id.btn_12:
-                startActivity(new Intent(this,TimeLineActivity.class));
                 break;
         }
     };

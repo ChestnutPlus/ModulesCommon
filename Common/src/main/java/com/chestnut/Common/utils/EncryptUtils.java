@@ -3,7 +3,7 @@ package com.chestnut.common.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -145,7 +145,8 @@ public class EncryptUtils {
      * @return 文件的16进制密文
      */
     public static String encryptMD5File2String(File file) {
-        return encryptMD5File(file) != null ? bytes2HexString(encryptMD5File(file)) : "";
+        byte[] result = encryptMD5File(file);
+        return result == null ? "" : bytes2HexString(result);
     }
 
     /**
@@ -155,20 +156,27 @@ public class EncryptUtils {
      * @return 文件的MD5校验码
      */
     public static byte[] encryptMD5File(File file) {
-        FileInputStream fis = null;
+        FileInputStream fStream = null;
         try {
-            fis = new FileInputStream(file);
-            FileChannel channel = fis.getChannel();
-            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(buffer);
-            return md.digest();
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            fStream = new FileInputStream(file);
+            FileChannel fChannel = fStream.getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate(8*1024);
+            long s = System.currentTimeMillis();
+            for ( int count = fChannel.read( buffer ); count !=-1 ; count = fChannel.read( buffer )) {
+                buffer.flip();
+                md5.update( buffer );
+                if( !buffer.hasRemaining() ){
+                    buffer.clear();
+                }
+            }
+            return md5.digest();
         } catch (NoSuchAlgorithmException | IOException e) {
-            ExceptionCatchUtils.catchE(e,"EncryptUtils");
-        } finally {
-            FileUtils.closeIO(fis);
+            e.printStackTrace();
+            return null;
+        } finally{
+            FileUtils.closeIO(fStream);
         }
-        return null;
     }
 
     /**

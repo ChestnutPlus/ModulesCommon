@@ -23,6 +23,17 @@ public class DiyTestSurfaceViewActivity extends Activity {
         frameAnimationSurfaceView = new FrameAnimationSurfaceView.Builder(surfaceView)
                 .setMode(FrameAnimationSurfaceView.MODE_INFINITE)
                 .build();
+        frameAnimationSurfaceView.setCallback(new FrameAnimationSurfaceView.Callback() {
+            @Override
+            public void onStart() {
+                LogUtils.i(OpenLog,TAG,"onStart-Thread:"+android.os.Process.myTid());
+            }
+
+            @Override
+            public void onEnd() {
+                LogUtils.i(OpenLog,TAG,"onEnd-Thread:"+android.os.Process.myTid());
+            }
+        });
         frameAnimationSurfaceView.load(R.drawable.spark_list,this);
 
         findViewById(R.id.btn_pause).setOnClickListener(v -> {
@@ -43,6 +54,12 @@ public class DiyTestSurfaceViewActivity extends Activity {
                     .load(R.drawable.presenter_enter_list,this)
                     .start();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        frameAnimationSurfaceView.release();
     }
 }
 

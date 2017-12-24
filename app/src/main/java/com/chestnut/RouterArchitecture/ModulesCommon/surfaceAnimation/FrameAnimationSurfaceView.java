@@ -8,7 +8,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.os.Handler;
 import android.support.annotation.IntDef;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -41,6 +43,7 @@ public final class FrameAnimationSurfaceView {
     private SurfaceHolder surfaceHolder;
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
     private ArrayList<MyFrame> frames;
+    private Callback callback;
 
     private boolean isLoaded = false;
     private boolean isStart = false;
@@ -88,7 +91,8 @@ public final class FrameAnimationSurfaceView {
 
                 @Override
                 public void surfaceDestroyed(SurfaceHolder holder) {
-
+                    Log.e("Builder","surfaceDestroyed");
+                    frameAnimationSurfaceView.release();
                 }
             });
         }
@@ -130,6 +134,11 @@ public final class FrameAnimationSurfaceView {
             isStart = true;
             isPause = false;
             fixedThreadPool.execute(() -> {
+                new Handler(surfaceView.getContext().getMainLooper())
+                        .post(() -> {
+                            if (callback!=null)
+                                callback.onStart();
+                        });
                 while (!isEnd) {
                     for (int i = 0; i < frames.size(); i++) {
                         changeToFrame(i,surfaceHolder,frames);
@@ -153,8 +162,13 @@ public final class FrameAnimationSurfaceView {
                         break;
                     }
                 }
-                if (isEndCallback != null)
-                    isEndCallback.onEnd();
+                new Handler(surfaceView.getContext().getMainLooper())
+                        .post(() -> {
+                            if (callback!=null)
+                                callback.onEnd();
+                            if (isEndCallback != null)
+                                isEndCallback.onEnd();
+                        });
             });
         } else
             isPause = false;
@@ -288,14 +302,16 @@ public final class FrameAnimationSurfaceView {
         });
     }
 
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
     /**
      * 每一帧对象
      */
     public static class MyFrame {
         byte[] bytes;
         int duration;
-        Bitmap bitmap;
-        boolean isReady = false;
     }
 
     /**
@@ -312,5 +328,10 @@ public final class FrameAnimationSurfaceView {
 
     private interface IsStopCallback {
         void stop();
+    }
+
+    public interface Callback {
+        void onStart();
+        void onEnd();
     }
 }

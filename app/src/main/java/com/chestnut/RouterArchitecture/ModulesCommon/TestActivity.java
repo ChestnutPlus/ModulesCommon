@@ -60,7 +60,7 @@ public class TestActivity extends AppCompatActivity {
 
         //浮动布局
         FloatLayoutHelper floatLayoutHelper = new FloatLayoutHelper();
-        floatLayoutHelper.setDefaultLocation(20,250);
+        floatLayoutHelper.setDefaultLocation(0,250);
         //制作假数据：
         List<Integer> integers = new ArrayList<>();
         integers.add(R.drawable.li_bao_en);
