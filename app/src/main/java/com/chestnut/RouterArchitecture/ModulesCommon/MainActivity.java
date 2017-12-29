@@ -1,5 +1,8 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -55,7 +58,7 @@ public class MainActivity extends RxAppCompatActivity {
     String toastAndBtnName[] = {
             "1_"+"PayTest",
             "2_"+"蓝牙",
-            "3_"+"",
+            "3_"+"重启程序",
             "4_"+"",
             "5_"+"",
             "6_"+"",
@@ -160,6 +163,13 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(new Intent(this,RecordPlayActivity.class));
                 break;
             case R.id.btn_3:
+                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                if (mgr!=null) {
+                    mgr.setExact(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent);
+                }
+                AppUtils.exitApp(this);
                 break;
             case R.id.btn_4:
                 break;

@@ -3,6 +3,8 @@ package com.chestnut.common.utils;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +13,7 @@ import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * <pre>
@@ -27,6 +30,54 @@ public class IntentUtils {
 
     private IntentUtils() {
         throw new UnsupportedOperationException("u can't fuck me...");
+    }
+
+    /**
+     * 由一个隐式的Intent得到一个显式的Intent
+     *
+     * @param context   上下文
+     * @param implicitIntent    隐式Intent
+     * @return  显式的Intent
+     */
+    public static Intent createExplicitFromImplicitIntent(Context context, Intent implicitIntent) {
+        // Retrieve all services that can match the given intent
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolveInfo = pm.queryIntentServices(implicitIntent, 0);
+        // Make sure only one match was found
+        if (resolveInfo == null || resolveInfo.size() != 1) {
+            return null;
+        }
+        // Get component info and create ComponentName
+        ResolveInfo serviceInfo = resolveInfo.get(0);
+        String packageName = serviceInfo.serviceInfo.packageName;
+        String className = serviceInfo.serviceInfo.name;
+        ComponentName component = new ComponentName(packageName, className);
+        // Create a new intent. Use the old one for extras and such reuse
+        Intent explicitIntent = new Intent(implicitIntent);
+        // Set the component to be explicit
+        explicitIntent.setComponent(component);
+        return explicitIntent;
+    }
+
+    public static Intent createExplicitFromImplicitIntent(Context context, String action) {
+        Intent implicitIntent = new Intent(action);
+        // Retrieve all services that can match the given intent
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolveInfo = pm.queryIntentServices(implicitIntent, 0);
+        // Make sure only one match was found
+        if (resolveInfo == null || resolveInfo.size() != 1) {
+            return null;
+        }
+        // Get component info and create ComponentName
+        ResolveInfo serviceInfo = resolveInfo.get(0);
+        String packageName = serviceInfo.serviceInfo.packageName;
+        String className = serviceInfo.serviceInfo.name;
+        ComponentName component = new ComponentName(packageName, className);
+        // Create a new intent. Use the old one for extras and such reuse
+        Intent explicitIntent = new Intent(implicitIntent);
+        // Set the component to be explicit
+        explicitIntent.setComponent(component);
+        return explicitIntent;
     }
 
     /**

@@ -32,6 +32,89 @@ public class SDCardUtils {
     }
 
     /**
+     * 获取内部存储卡的总大小，MB
+     * 若不存在，则为0.
+     * @return MB
+     */
+    private int getInternalSdTotalSizeMb() {
+        File internalSDPath;
+        try {
+            internalSDPath = Environment.getExternalStorageDirectory();
+            if (internalSDPath.exists()) {
+                StatFs stat = new StatFs(internalSDPath.getPath());
+                return (int)(stat.getTotalBytes()/1024/1024);
+            }
+            else
+                return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * 获取外部存储卡的总大小，MB
+     * 若不存在，则为0.
+     * @return  MB
+     */
+    private int getExternalSdTotalSizeMb() {
+        File externalSDPath;
+        try {
+            externalSDPath = new File("/mnt/external_sd/");
+            if (externalSDPath.exists()) {
+                StatFs stat = new StatFs(externalSDPath.getPath());
+                return (int)(stat.getTotalBytes()/1024/1024);
+            }
+            else
+                return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * 获得内部存储卡剩余容量，即可用大小
+     * @return MB
+     */
+    private int getInternalSdAvailableSizeMb() {
+        File internalSDPath;
+        try {
+            internalSDPath = Environment.getExternalStorageDirectory();
+            if (internalSDPath.exists()) {
+                StatFs stat = new StatFs(internalSDPath.getPath());
+                return (int)(stat.getAvailableBytes()/1024/1024);
+            }
+            else
+                return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * 获取外部存储卡的剩余容量，MB
+     * 若不存在，则为0.
+     * @return  MB
+     */
+    private int getExternalSdAvailableSizeMb() {
+        File externalSDPath;
+        try {
+            externalSDPath = new File("/mnt/external_sd/");
+            if (externalSDPath.exists()) {
+                StatFs stat = new StatFs(externalSDPath.getPath());
+                return (int)(stat.getAvailableBytes()/1024/1024);
+            }
+            else
+                return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
      * 判断SD卡是否可用
      *
      * @return true : 可用<br>false : 不可用

@@ -2,6 +2,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.app.Application;
 
+import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.UtilsManager;
 import com.chestnut.common.utils.XFontUtils;
 
@@ -27,5 +28,6 @@ public class CommonApplication extends Application{
                 .load("fonts/fontzipMin.ttf")
                 .load("fonts/caonima.ttf")
                 .load("fonts/Test.TTF");
+        LogUtils.i("TestBgService","CommonApplication:onCreate");
     }
 }

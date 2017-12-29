@@ -2,6 +2,7 @@ package com.chestnut.common.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -22,7 +23,9 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -62,6 +65,39 @@ public class ImageUtils {
 
     private ImageUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    /**
+     * 通知图库更新
+     *  THANKS ： http://blog.csdn.net/a751608624/article/details/50728336
+     *
+     * @param file  文件
+     * @param context   上下文
+     * @return  是否成功
+     */
+    public static boolean notifyAfterSavePicture(File file,Context context) {
+        if (file==null)
+            return false;
+        else
+            try {
+                // 其次把文件插入到系统图库
+                try {
+                    MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), null);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                // 最后通知图库更新
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getPath())));
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+    }
+
+    public static boolean notifyAfterSavePicture(String filePath,Context context) {
+        return !StringUtils.isEmpty(filePath) && notifyAfterSavePicture(new File(filePath), context);
     }
 
     /**

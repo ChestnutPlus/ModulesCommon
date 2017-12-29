@@ -31,6 +31,14 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity android:name=".PayActivity"></activity>
         <activity android:name=".RecordPlayActivity"/>
+        <service android:name=".TestBgService"
+            android:process=":TestBgService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.hy.TestBgService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
