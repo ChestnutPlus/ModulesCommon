@@ -29,16 +29,21 @@
             android:name=".DiyTestSurfaceViewActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".PayActivity"></activity>
-        <activity android:name=".RecordPlayActivity"/>
-        <service android:name=".TestBgService"
-            android:process=":TestBgService"
+        <activity android:name=".PayActivity" />
+        <activity android:name=".RecordPlayActivity" />
+
+        <service
+            android:name=".TestBgService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":TestBgService">
             <intent-filter>
-                <action android:name="com.hy.TestBgService"/>
+                <action android:name="com.hy.TestBgService" />
             </intent-filter>
         </service>
+
+        <activity android:name=".OemHWLActivity" />
+        <activity android:name=".DemoInstallUninstallActivity"></activity>
     </application>
 
 </manifest>

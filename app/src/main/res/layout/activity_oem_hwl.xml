@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.OemHWLActivity">
+
+    <TextView
+        android:id="@+id/txt_wakeup_start"
+        android:background="@drawable/touch_bg"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="startWakeup" />
+
+    <TextView
+        android:id="@+id/txt_wakeup_stop"
+        android:background="@drawable/touch_bg"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="stopWakeup" />
+
+    <TextView
+        android:id="@+id/txt_ai_start"
+        android:background="@drawable/touch_bg"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"
+        android:text="startAi" />
+
+    <TextView
+        android:id="@+id/txt_ai_stop"
+        android:background="@drawable/touch_bg"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="260dp"
+        android:text="stopAi" />
+
+</RelativeLayout>

@@ -59,8 +59,8 @@ public class MainActivity extends RxAppCompatActivity {
             "1_"+"PayTest",
             "2_"+"蓝牙",
             "3_"+"重启程序",
-            "4_"+"",
-            "5_"+"",
+            "4_"+"OemHWLActivity",
+            "5_"+"DemoInstallUninstallActivity",
             "6_"+"",
             "7_"+"",
             "8_"+"",
@@ -172,8 +172,10 @@ public class MainActivity extends RxAppCompatActivity {
                 AppUtils.exitApp(this);
                 break;
             case R.id.btn_4:
+                startActivity(new Intent(this,OemHWLActivity.class));
                 break;
             case R.id.btn_5:
+                startActivity(new Intent(this,DemoInstallUninstallActivity.class));
                 break;
             case R.id.btn_6:
                 break;
