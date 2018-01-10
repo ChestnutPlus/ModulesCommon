@@ -15,6 +15,7 @@ import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.XFontUtils;
+import com.chestnut.common.utils.XmlUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -64,9 +65,9 @@ public class MainActivity extends RxAppCompatActivity {
             "6_"+"",
             "7_"+"",
             "8_"+"",
-            "9_"+"DiyTestSurfaceViewActivity",
+            "9_"+"",
             "10_"+"",
-            "11_"+"TestActivity",
+            "11_"+"",
             "12_"+"",
     };
 
@@ -184,14 +185,17 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_8:
                 break;
             case R.id.btn_9:
-                startActivity(new Intent(this,DiyTestSurfaceViewActivity.class));
                 break;
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
-                startActivity(new Intent(this,TestActivity.class));
+                XmlUtils.loadWithPull("/sdcard/packages.xml");
                 break;
             case R.id.btn_12:
+                XmlUtils.loadWithDomRx("/sdcard/packages.xml")
+                        .subscribe(document -> {
+                            LogUtils.i(OpenLog,TAG,"document");
+                        });
                 break;
         }
     };
