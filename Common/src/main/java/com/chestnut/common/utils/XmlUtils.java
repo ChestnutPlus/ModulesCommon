@@ -52,8 +52,7 @@ public class XmlUtils {
         try {
             File file = new File(xmlFilePath);
             if (!file.exists()) {
-                Observable.error(new RuntimeException("not find file:" + xmlFilePath));
-                return null;
+                throw new RuntimeException("not find file:" + xmlFilePath);
             }
             else {
                 InputStream inputStream = new FileInputStream(file);
