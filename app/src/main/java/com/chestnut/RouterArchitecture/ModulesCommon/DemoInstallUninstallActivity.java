@@ -113,5 +113,29 @@ public class DemoInstallUninstallActivity extends AppCompatActivity {
                 }
             }
         });
+        findViewById(R.id.txt_test_dom).setOnClickListener(view -> {
+            if (installManager!=null) {
+                try {
+                    installManager.installApkQuietlyCallBack("test", "test", new InstallCallBack.Stub() {
+                        @Override
+                        public void startInstall(String packageName, String appFile) throws RemoteException {
+                            LogUtils.i(OpenLog,TAG,"startInstall"+",packageName:"+packageName);
+                        }
+
+                        @Override
+                        public void endInstall(String packageName, String appFile) throws RemoteException {
+                            LogUtils.i(OpenLog,TAG,"endInstall"+",packageName:"+packageName);
+                        }
+
+                        @Override
+                        public void failInstall(int errCode, String msg, String packageName, String appFile) throws RemoteException {
+                            LogUtils.i(OpenLog,TAG,"failInstall"+",packageName:"+packageName);
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

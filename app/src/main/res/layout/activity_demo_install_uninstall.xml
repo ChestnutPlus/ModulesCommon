@@ -29,4 +29,16 @@
         android:background="@drawable/touch_bg"
         android:layout_width="100dp"
         android:layout_height="50dp" />
+
+    <TextView
+        android:layout_marginTop="160dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/txt_test_dom"
+        android:gravity="center"
+        android:text="testDom"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/touch_bg"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
 </RelativeLayout>

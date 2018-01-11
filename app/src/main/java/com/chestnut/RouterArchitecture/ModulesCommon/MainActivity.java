@@ -19,6 +19,10 @@ import com.chestnut.common.utils.XmlUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -192,9 +196,29 @@ public class MainActivity extends RxAppCompatActivity {
                 XmlUtils.loadWithPull("/sdcard/packages.xml");
                 break;
             case R.id.btn_12:
+//                XmlUtils.loadWithDomRx("/data/system/packages.xml")
                 XmlUtils.loadWithDomRx("/sdcard/packages.xml")
                         .subscribe(document -> {
-                            LogUtils.i(OpenLog,TAG,"document");
+                            if (document!=null && document.getDocumentElement()!=null) {
+                                NodeList nodeList = document.getDocumentElement().getChildNodes();
+                                if (nodeList != null) {
+                                    for (int i = 0; i < nodeList.getLength(); i++) {
+                                        Node node = nodeList.item(i);
+                                        if (node.getNodeName() != null && node.getNodeName().equals("package")) {
+                                            NamedNodeMap namedNodeMap = node.getAttributes();
+                                            if (namedNodeMap != null && namedNodeMap.getLength()>0) {
+                                                Node n = namedNodeMap.item(0);
+                                                if (n.getNodeName()!=null && n.getNodeName().equals("name")) {
+                                                    if (n.getTextContent()!=null && n.getTextContent().equals("com.qiyi.video.child")) {
+                                                        document.getDocumentElement().removeChild(node);
+                                                        XmlUtils.saveXmlWithDom(document,"/sdcard/1.xml");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         });
                 break;
         }

@@ -85,6 +85,7 @@ public class XmlUtils {
             Transformer transformer = tFactory.newTransformer();
             //设置输出的xml的格式，utf-8
             transformer.setOutputProperty("encoding", "utf-8");
+            transformer.setOutputProperty("version",doc.getXmlVersion());
             DOMSource source = new DOMSource(doc);
             //打开输出流
             File file = new File(saveXmlFilePath);
