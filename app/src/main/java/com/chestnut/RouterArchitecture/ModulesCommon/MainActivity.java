@@ -15,7 +15,6 @@ import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.XFontUtils;
-import com.chestnut.common.utils.XmlUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -189,13 +188,8 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
-                XmlUtils.loadWithPull("/sdcard/packages.xml");
                 break;
             case R.id.btn_12:
-                XmlUtils.loadWithDomRx("/sdcard/packages.xml")
-                        .subscribe(document -> {
-                            LogUtils.i(OpenLog,TAG,"document");
-                        });
                 break;
         }
     };
