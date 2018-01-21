@@ -52,7 +52,7 @@ dependencies {
     //  ImgLoader
     compile files('libs/glide-3.7.0.jar')
     //  Json
-    compile files('libs/gson-2.8.0.jar')
+//    compile files('libs/gson-2.8.0.jar')
     //  RxPermission
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
     //  RxLife
