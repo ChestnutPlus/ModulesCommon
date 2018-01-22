@@ -1,32 +1,39 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.AppListBean;
+import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.GetAppList;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
+import com.chestnut.common.utils.NetworkUtils;
 import com.chestnut.common.utils.XFontUtils;
-import com.chestnut.common.utils.XmlUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.subjects.PublishSubject;
 
 
@@ -156,6 +163,8 @@ public class MainActivity extends RxAppCompatActivity {
         txtLog.setText(result.toString());
     }
 
+    private String url = "http://windowserl.honeybot.cn:8080/Market/getAppList?pageIndex=0&pageSize=8";
+
     private View.OnClickListener onClickListener = view -> {
         toast.setText(toastAndBtnName[(int) view.getTag()]).show();
         LogUtils.i(OpenLog,TAG,"btn-info:"+toastAndBtnName[(int) view.getTag()]);
@@ -168,13 +177,6 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(new Intent(this,RecordPlayActivity.class));
                 break;
             case R.id.btn_3:
-                Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-                AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                if (mgr!=null) {
-                    mgr.setExact(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent);
-                }
-                AppUtils.exitApp(this);
                 break;
             case R.id.btn_4:
                 startActivity(new Intent(this,OemHWLActivity.class));
@@ -193,33 +195,92 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
-                XmlUtils.loadWithPull("/sdcard/packages.xml");
                 break;
             case R.id.btn_12:
-//                XmlUtils.loadWithDomRx("/data/system/packages.xml")
-                XmlUtils.loadWithDomRx("/sdcard/packages.xml")
-                        .subscribe(document -> {
-                            if (document!=null && document.getDocumentElement()!=null) {
-                                NodeList nodeList = document.getDocumentElement().getChildNodes();
-                                if (nodeList != null) {
-                                    for (int i = 0; i < nodeList.getLength(); i++) {
-                                        Node node = nodeList.item(i);
-                                        if (node.getNodeName() != null && node.getNodeName().equals("package")) {
-                                            NamedNodeMap namedNodeMap = node.getAttributes();
-                                            if (namedNodeMap != null && namedNodeMap.getLength()>0) {
-                                                Node n = namedNodeMap.item(0);
-                                                if (n.getNodeName()!=null && n.getNodeName().equals("name")) {
-                                                    if (n.getTextContent()!=null && n.getTextContent().equals("com.qiyi.video.child")) {
-                                                        document.getDocumentElement().removeChild(node);
-                                                        XmlUtils.saveXmlWithDom(document,"/sdcard/1.xml");
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                //声明缓存地址和大小
+                Cache cache = new Cache(this.getCacheDir(),10*1024*1024);
+                //构建 Client
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .retryOnConnectionFailure(true)
+                        //addInterceptor()添加的是应用拦截器，他只会在response被调用一次。
+                        .addInterceptor(new Interceptor() {
+                            @Override
+                            public Response intercept(Chain chain) throws IOException {
+                                Request request = chain.request();
+                                Log.i(TAG,"0");
+                                if (!NetworkUtils.isConnected(MainActivity.this)) {
+                                    Log.i(TAG,"1,not-net-work");
+                                    request = request.newBuilder()
+                                            .cacheControl(CacheControl.FORCE_CACHE)
+                                            .build();
+                                    return chain.proceed(request)
+                                            .newBuilder()
+                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + 30)
+                                            .removeHeader("Pragma")
+                                            .build();
                                 }
+                                else
+                                    return chain.proceed(request);
                             }
-                        });
+                        })
+                        .addNetworkInterceptor(new Interceptor() {
+                            @Override
+                            public Response intercept(Chain chain) throws IOException {
+                                Request request = chain.request();
+                                Response response = chain.proceed(request);
+                                Log.i(TAG,"3");
+                                if (NetworkUtils.isConnected(MainActivity.this)) {
+                                    int maxAge = 20;
+                                    // 有网络时 设置缓存超时时间0个小时
+                                    Log.i(TAG,"4");
+                                    response.newBuilder()
+                                            .header("Cache-Control", "public, max-age=" + maxAge)
+                                            .removeHeader("Pragma")
+                                            .build();
+                                } else {
+                                    // 无网络时，设置超时为1周
+                                    int maxStale = 30;
+                                    Log.i(TAG,"5");
+                                    response.newBuilder()
+                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                                            .removeHeader("Pragma")
+                                            .build();
+                                }
+                                return response;
+                            }
+                        })
+                        //addNetworkInterceptor()添加的是网络拦截器，它会在request和response时分别被调用一次
+                        .cache(cache)
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(20, TimeUnit.SECONDS)
+                        .writeTimeout(20, TimeUnit.SECONDS)
+                        .build();
+                //构建 Retrofit
+                Retrofit retrofit1 = new Retrofit.Builder()
+                        .baseUrl("http://windowserl.honeybot.cn:8080/Market/") //设置网络请求的Url地址
+                        .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
+                        .client(client)
+                        .build();
+                // 创建 网络请求接口 的实例
+                GetAppList getAppList = retrofit1.create(GetAppList.class);
+                Call<AppListBean> appListBeanCall1 = getAppList.get(1,8);
+                appListBeanCall1.enqueue(new Callback<AppListBean>() {
+                    @Override
+                    public void onResponse(Call<AppListBean> call, retrofit2.Response<AppListBean> response) {
+                        if (response!=null && response.isSuccessful()) {
+                            if (response.body()!=null && response.body().data!=null)
+                                for (AppListBean.DataBean d :
+                                        response.body().data) {
+                                    LogUtils.i(TAG,d.toString());
+                                }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AppListBean> call, Throwable t) {
+                        LogUtils.i(TAG,t.getMessage());
+                    }
+                });
                 break;
         }
     };
