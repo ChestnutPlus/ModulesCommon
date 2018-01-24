@@ -17,8 +17,10 @@ import retrofit2.http.Query;
  */
 
 public interface GetAppList {
+
     @GET("getAppList?pageIndex=0&pageSize=8")
     Call<AppListBean> get();
+
     @GET("getAppList")
     Call<AppListBean> get(@Query("pageIndex") int pageIndex, @Query("pageSize") int pageSize);
 }

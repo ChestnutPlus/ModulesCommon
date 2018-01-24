@@ -200,8 +200,9 @@ public class MainActivity extends RxAppCompatActivity {
                 //声明缓存地址和大小
                 Cache cache = new Cache(this.getCacheDir(),10*1024*1024);
                 //构建 Client
+                //参考：http://blog.csdn.net/changsimeng/article/details/54668884
                 OkHttpClient client = new OkHttpClient.Builder()
-                        .retryOnConnectionFailure(true)
+//                        .retryOnConnectionFailure(true)
                         //addInterceptor()添加的是应用拦截器，他只会在response被调用一次。
                         .addInterceptor(new Interceptor() {
                             @Override
@@ -209,44 +210,34 @@ public class MainActivity extends RxAppCompatActivity {
                                 Request request = chain.request();
                                 Log.i(TAG,"0");
                                 if (!NetworkUtils.isConnected(MainActivity.this)) {
-                                    Log.i(TAG,"1,not-net-work");
-                                    request = request.newBuilder()
-                                            .cacheControl(CacheControl.FORCE_CACHE)
+                                    Log.i(TAG,"1");
+                                    /**
+                                     * 离线缓存控制  总的缓存时间=在线缓存时间+设置离线缓存时间
+                                     */
+                                    int maxStale = 50; // 离线时缓存保存4周,单位:秒
+                                    CacheControl tempCacheControl = new CacheControl.Builder()
+                                            .onlyIfCached()
+                                            .maxStale(maxStale, TimeUnit.SECONDS)
                                             .build();
-                                    return chain.proceed(request)
-                                            .newBuilder()
-                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + 30)
-                                            .removeHeader("Pragma")
+                                    request = request.newBuilder()
+                                            .cacheControl(tempCacheControl)
                                             .build();
                                 }
-                                else
-                                    return chain.proceed(request);
+                                return chain.proceed(request);
                             }
                         })
                         .addNetworkInterceptor(new Interceptor() {
                             @Override
                             public Response intercept(Chain chain) throws IOException {
+                                Log.i(TAG,"2");
                                 Request request = chain.request();
-                                Response response = chain.proceed(request);
-                                Log.i(TAG,"3");
-                                if (NetworkUtils.isConnected(MainActivity.this)) {
-                                    int maxAge = 20;
-                                    // 有网络时 设置缓存超时时间0个小时
-                                    Log.i(TAG,"4");
-                                    response.newBuilder()
-                                            .header("Cache-Control", "public, max-age=" + maxAge)
-                                            .removeHeader("Pragma")
-                                            .build();
-                                } else {
-                                    // 无网络时，设置超时为1周
-                                    int maxStale = 30;
-                                    Log.i(TAG,"5");
-                                    response.newBuilder()
-                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                                            .removeHeader("Pragma")
-                                            .build();
-                                }
-                                return response;
+                                Response originalResponse = chain.proceed(request);
+                                int maxAge = 20;    // 在线缓存,单位:秒
+                                return originalResponse.newBuilder()
+                                        .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+                                        .removeHeader("Cache-Control")
+                                        .header("Cache-Control", "public, max-age=" + maxAge)
+                                        .build();
                             }
                         })
                         //addNetworkInterceptor()添加的是网络拦截器，它会在request和response时分别被调用一次
