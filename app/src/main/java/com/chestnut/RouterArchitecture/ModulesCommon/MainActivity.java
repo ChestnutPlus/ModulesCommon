@@ -1,8 +1,8 @@
 package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -11,30 +11,25 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.AppListBean;
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.GetAppList;
+import com.chestnut.common.helper.MediaPlayerHelper;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
-import com.chestnut.common.utils.NetworkUtils;
 import com.chestnut.common.utils.XFontUtils;
-import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.MoveType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.subjects.PublishSubject;
 
 
 public class MainActivity extends RxAppCompatActivity {
@@ -50,7 +45,6 @@ public class MainActivity extends RxAppCompatActivity {
     SeekBar seekBar1;
     SeekBar seekBar2;
     List<String> logs;
-    private PublishSubject<Integer> publishSubject;
 
     int btnIds[] = {
             R.id.btn_1,
@@ -70,7 +64,7 @@ public class MainActivity extends RxAppCompatActivity {
     String toastAndBtnName[] = {
             "1_"+"PayTest",
             "2_"+"蓝牙",
-            "3_"+"重启程序",
+            "3_"+"floatView",
             "4_"+"OemHWLActivity",
             "5_"+"DemoInstallUninstallActivity",
             "6_"+"",
@@ -142,13 +136,6 @@ public class MainActivity extends RxAppCompatActivity {
 
             }
         });
-
-        publishSubject = PublishSubject.create();
-        publishSubject.throttleFirst(5, TimeUnit.SECONDS)
-                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(integer -> {
-                    LogUtils.i(OpenLog,TAG,String.valueOf(System.currentTimeMillis()));
-                });
     }
 
     private void viewLog(String TAG,String msg) {
@@ -177,6 +164,17 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(new Intent(this,RecordPlayActivity.class));
                 break;
             case R.id.btn_3:
+                ImageView imageView = new ImageView(getApplicationContext());
+                imageView.setImageResource(R.mipmap.gift_icon);
+                imageView.setOnClickListener(v -> toast.setText("img").show());
+                FloatWindow.with(getApplicationContext())
+                        .setView(imageView)
+                        .setX(1144)
+                        .setY(160)
+                        .setIsRecordXY()
+                        .setMoveType(MoveType.slide)
+                        .setMoveStyle(300,null)
+                        .build();
                 break;
             case R.id.btn_4:
                 startActivity(new Intent(this,OemHWLActivity.class));
@@ -195,6 +193,16 @@ public class MainActivity extends RxAppCompatActivity {
             case R.id.btn_10:
                 break;
             case R.id.btn_11:
+
+                MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper();
+                mediaPlayerHelper.init(this);
+                mediaPlayerHelper.setCallBack(new MediaPlayerHelper.MediaPlayerHelperListener() {
+                    @Override
+                    public void onStart(MediaPlayer mediaPlayer, int allSecond) {
+                        super.onStart(mediaPlayer, allSecond);
+                    }
+                });
+
                 break;
             case R.id.btn_12:
                 //声明缓存地址和大小
@@ -203,52 +211,52 @@ public class MainActivity extends RxAppCompatActivity {
                 OkHttpClient client = new OkHttpClient.Builder()
                         .retryOnConnectionFailure(true)
                         //addInterceptor()添加的是应用拦截器，他只会在response被调用一次。
-                        .addInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Request request = chain.request();
-                                Log.i(TAG,"0");
-                                if (!NetworkUtils.isConnected(MainActivity.this)) {
-                                    Log.i(TAG,"1,not-net-work");
-                                    request = request.newBuilder()
-                                            .cacheControl(CacheControl.FORCE_CACHE)
-                                            .build();
-                                    return chain.proceed(request)
-                                            .newBuilder()
-                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + 30)
-                                            .removeHeader("Pragma")
-                                            .build();
-                                }
-                                else
-                                    return chain.proceed(request);
-                            }
-                        })
-                        .addNetworkInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Request request = chain.request();
-                                Response response = chain.proceed(request);
-                                Log.i(TAG,"3");
-                                if (NetworkUtils.isConnected(MainActivity.this)) {
-                                    int maxAge = 20;
-                                    // 有网络时 设置缓存超时时间0个小时
-                                    Log.i(TAG,"4");
-                                    response.newBuilder()
-                                            .header("Cache-Control", "public, max-age=" + maxAge)
-                                            .removeHeader("Pragma")
-                                            .build();
-                                } else {
-                                    // 无网络时，设置超时为1周
-                                    int maxStale = 30;
-                                    Log.i(TAG,"5");
-                                    response.newBuilder()
-                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                                            .removeHeader("Pragma")
-                                            .build();
-                                }
-                                return response;
-                            }
-                        })
+//                        .addInterceptor(new Interceptor() {
+//                            @Override
+//                            public Response intercept(Chain chain) throws IOException {
+//                                Request request = chain.request();
+//                                Log.i(TAG,"0");
+//                                if (!NetworkUtils.isConnected(MainActivity.this)) {
+//                                    Log.i(TAG,"1,not-net-work");
+//                                    request = request.newBuilder()
+//                                            .cacheControl(CacheControl.FORCE_CACHE)
+//                                            .build();
+//                                    return chain.proceed(request)
+//                                            .newBuilder()
+//                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + 30)
+//                                            .removeHeader("Pragma")
+//                                            .build();
+//                                }
+//                                else
+//                                    return chain.proceed(request);
+//                            }
+//                        })
+//                        .addNetworkInterceptor(new Interceptor() {
+//                            @Override
+//                            public Response intercept(Chain chain) throws IOException {
+//                                Request request = chain.request();
+//                                Response response = chain.proceed(request);
+//                                Log.i(TAG,"3");
+//                                if (NetworkUtils.isConnected(MainActivity.this)) {
+//                                    int maxAge = 20;
+//                                    // 有网络时 设置缓存超时时间0个小时
+//                                    Log.i(TAG,"4");
+//                                    response.newBuilder()
+//                                            .header("Cache-Control", "public, max-age=" + maxAge)
+//                                            .removeHeader("Pragma")
+//                                            .build();
+//                                } else {
+//                                    // 无网络时，设置超时为1周
+//                                    int maxStale = 30;
+//                                    Log.i(TAG,"5");
+//                                    response.newBuilder()
+//                                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+//                                            .removeHeader("Pragma")
+//                                            .build();
+//                                }
+//                                return response;
+//                            }
+//                        })
                         //addNetworkInterceptor()添加的是网络拦截器，它会在request和response时分别被调用一次
                         .cache(cache)
                         .connectTimeout(10, TimeUnit.SECONDS)

@@ -1,4 +1,4 @@
-package com.chestnut.common.utils;
+package com.yhao.floatwindow;
 
 import android.content.Context;
 import android.content.SharedPreferences;

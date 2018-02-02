@@ -2,8 +2,6 @@ package com.chestnut.common.helper;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.RawRes;
 
 import com.chestnut.common.utils.ExceptionCatchUtils;
@@ -27,6 +25,10 @@ import rx.Subscription;
  *     dependent on:
  *     update log:
  *          1.  2017年7月26日09:27:47：增加监听回调，mediaPlayer
+ *          2.  2018年1月31日10:27:44
+ *              1）去掉主线程的回调，回调都在子线程
+ *              2）对MediaPlayer的所有操作都置于子线程中做
+ *              3）监听器置于本类，作为静态虚类
  * </pre>
  */
 
@@ -46,61 +48,93 @@ public class MediaPlayerHelper {
     private int TYPE = 0;   //内部定义：0：本地path/网络，1：raw
     private Context context;
     private Subscription subscription;  //用于刷新播放进度
-    private Handler handler;
 
     /*方法*/
+    /**
+     * 对外的初始化
+     * @param context 上下文
+     * @return  this
+     */
     public MediaPlayerHelper init(Context context) {
         this.context = context.getApplicationContext();
-        handler = new Handler(Looper.getMainLooper());
         switch (TYPE) {
             case 0:
-                mediaPlayer = new MediaPlayer();
+                singleThreadExecutor.execute(()-> {
+                    mediaPlayer = new MediaPlayer();
+                    initAsync();
+                });
                 break;
             case 1:
-                mediaPlayer = MediaPlayer.create(context, Integer.parseInt(url));
+                singleThreadExecutor.execute(()-> {
+                    mediaPlayer = MediaPlayer.create(context, Integer.parseInt(url));
+                    initAsync();
+                });
                 break;
             case 2:
                 break;
         }
+        return this;
+    }
+
+    /**
+     * 内部方法初始化
+     *  异步。
+     */
+    private void initAsync() {
         MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
             isStop = false;
             isPause = false;
             singleThreadExecutor.execute(() -> {
-                mediaPlayer.start();
-                startTimer();
+                singleThreadExecutor.execute(()-> {
+                    if (mediaPlayer!=null) {
+                        mediaPlayer.start();
+                        startTimer();
+                    }
+                });
             });
-            if (callBack != null)
-                handler.post(()-> callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000));
+            if (callBack != null && mediaPlayer!=null)
+                callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000);
         };
         MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
             stopTimer();
-            if (callBack != null)
-                handler.post(()-> callBack.onCompleted(mediaPlayer));
+            if (callBack != null && mediaPlayer!=null)
+                callBack.onCompleted(mediaPlayer);
             isStop = true;
             isPause = true;
-            mediaPlayer.reset();
+            singleThreadExecutor.execute(()->{
+                if (mediaPlayer!=null)
+                    mediaPlayer.reset();
+            });
         };
         MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
             stopTimer();
-            if (callBack != null)
-                handler.post(()-> callBack.onError(mediaPlayer));
+            if (callBack != null && mediaPlayer!=null)
+                callBack.onError(mediaPlayer);
             isPause = true;
             isPause = true;
             url = null;
             return false;
         };
         MediaPlayer.OnBufferingUpdateListener onBufferingUpdateListener = (mp, percent) -> {
-            if (callBack!=null) {
-                handler.post(() -> callBack.onBufferUpdate(mp, percent));
-            }
+            if (callBack!=null && mediaPlayer!=null)
+                callBack.onBufferUpdate(mp, percent);
         };
-        mediaPlayer.setOnErrorListener(onErrorListener);
-        mediaPlayer.setOnPreparedListener(onPreparedListener);
-        mediaPlayer.setOnCompletionListener(onCompletionListener);
-        mediaPlayer.setOnBufferingUpdateListener(onBufferingUpdateListener);
-        return this;
+        if (mediaPlayer!=null) {
+            mediaPlayer.setOnErrorListener(onErrorListener);
+            mediaPlayer.setOnPreparedListener(onPreparedListener);
+            mediaPlayer.setOnCompletionListener(onCompletionListener);
+            mediaPlayer.setOnBufferingUpdateListener(onBufferingUpdateListener);
+        }
     }
 
+    /**
+     * 设置播放地址：
+     *  可以是 R.raw.res资源
+     *  也可以是文件
+     *  也可以是网络链接
+     * @param url url
+     * @return this
+     */
     public MediaPlayerHelper setUrl(String url) {
         if (mediaPlayer!=null && url!=null)
             stop();
@@ -117,6 +151,12 @@ public class MediaPlayerHelper {
         return this;
     }
 
+    /**
+     * 设置回调
+     *  注意，这里是在子线程中回调
+     *  若操作UI，需手动切换主线程
+     * @param callBack callback
+     */
     public void setCallBack(MediaPlayerHelperListener callBack) {
         this.callBack = callBack;
     }
@@ -129,20 +169,24 @@ public class MediaPlayerHelper {
         if (url==null || mediaPlayer==null)
             return this;
         if (isStop) {
-            try {
-                switch (TYPE) {
-                    case 0:
-                        mediaPlayer.setDataSource(url);
-                        mediaPlayer.prepareAsync();
-                        break;
-                    case 1:
-                        init(context);
-                        break;
-                    case 2:
-                        break;
-                }
-            } catch (Exception e) {
-                ExceptionCatchUtils.catchE(e,"MediaPlayerHelper");
+            switch (TYPE) {
+                case 0:
+                    singleThreadExecutor.execute(()->{
+                        if (mediaPlayer!=null) {
+                            try {
+                                mediaPlayer.setDataSource(url);
+                                mediaPlayer.prepareAsync();
+                            } catch (Exception e) {
+                                ExceptionCatchUtils.catchE(e,"MediaPlayerHelper");
+                            }
+                        }
+                    });
+                    break;
+                case 1:
+                    init(context);
+                    break;
+                case 2:
+                    break;
             }
         } else {
             if (isPause) {
@@ -150,8 +194,8 @@ public class MediaPlayerHelper {
                     mediaPlayer.start();
                     startTimer();
                 });
-                if (this.callBack != null)
-                    handler.post(()-> this.callBack.onReStart(mediaPlayer));
+                if (this.callBack != null && mediaPlayer!=null)
+                    this.callBack.onReStart(mediaPlayer);
             } else
                 pause();
         }
@@ -165,8 +209,8 @@ public class MediaPlayerHelper {
     private void startTimer() {
         subscription = Observable.interval(1, TimeUnit.SECONDS)
                 .subscribe(aLong -> {
-                    if (callBack!=null)
-                        handler.post(()-> callBack.onProgressChange(mediaPlayer,mediaPlayer.getCurrentPosition()/1000));
+                    if (callBack!=null && mediaPlayer!=null)
+                        callBack.onProgressChange(mediaPlayer,mediaPlayer.getCurrentPosition()/1000);
                 });
     }
 
@@ -176,59 +220,91 @@ public class MediaPlayerHelper {
         subscription = null;
     }
 
+    /**
+     * 停止播放
+     * @return this
+     */
     public MediaPlayerHelper stop() {
         stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
-        //当正在缓冲网络资源的时候，Stop会导致ANR。
-//            mediaPlayer.stop();
-        if (callBack!=null)
-            handler.post(()-> callBack.onStop(mediaPlayer));
+        if (callBack != null)
+            callBack.onStop(mediaPlayer);
         isStop = true;
-        mediaPlayer.reset();
+        singleThreadExecutor.execute(()->{
+            if (mediaPlayer!=null) {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+            }
+        });
         return this;
     }
 
+    /**
+     * 暂停
+     * @return this
+     */
     public MediaPlayerHelper pause() {
         stopTimer();
         if (url==null || mediaPlayer==null)
             return this;
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            if (callBack!=null)
-                handler.post(()-> callBack.onPause(mediaPlayer));
-            isPause = true;
-        }
+        singleThreadExecutor.execute(()->{
+            if (mediaPlayer!=null && mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                if (callBack!=null)
+                    callBack.onPause(mediaPlayer);
+                isPause = true;
+            }
+        });
         return this;
     }
 
+    /**
+     * 快进到某个端点
+     * @param seconds 秒
+     * @return this
+     */
     public MediaPlayerHelper seekTo(int seconds) {
         if (url==null || mediaPlayer==null)
             return this;
-        int to = seconds * 1000;
-        to = to<=0 ? 0 : to;
-        to = to>=mediaPlayer.getDuration() ? mediaPlayer.getDuration() : to;
-        mediaPlayer.seekTo(to);
+        singleThreadExecutor.execute(()->{
+            if (mediaPlayer!=null) {
+                int to = seconds * 1000;
+                to = to<=0 ? 0 : to;
+                to = to>=mediaPlayer.getDuration() ? mediaPlayer.getDuration() : to;
+                mediaPlayer.seekTo(to);
+            }
+        });
         return this;
     }
 
+    /**
+     * 是否正在播放
+     * @return 是否
+     */
+    public boolean isPlaying() {
+        return isPause;
+    }
+
+    /**
+     * 释放
+     */
     public void release() {
         if (mediaPlayer==null)
             return;
         stop();
         stopTimer();
-        singleThreadExecutor.shutdown();
-        singleThreadExecutor = null;
-        mediaPlayer.release();
-        mediaPlayer = null;
-        isPause = true;
-        isStop = true;
-        handler = null;
+        singleThreadExecutor.execute(()->{
+            mediaPlayer.release();
+            mediaPlayer = null;
+            singleThreadExecutor.shutdown();
+            singleThreadExecutor = null;
+            isPause = true;
+            isStop = true;
+        });
     }
 
-    public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
-    }
+    /*static*/
 
     /**
      * 获得音频文件的时长
@@ -248,7 +324,7 @@ public class MediaPlayerHelper {
                     subscriber.onNext(0);
                     subscriber.onCompleted();
                     mediaPlayer12.release();
-                   return false;
+                    return false;
                 });
                 mediaPlayer.prepareAsync();
             } catch (IOException e) {
@@ -272,5 +348,17 @@ public class MediaPlayerHelper {
                 mediaPlayer1.release();
             });
         });
+    }
+
+    /*接口，类*/
+    public static abstract class MediaPlayerHelperListener {
+        public void onStart(MediaPlayer mediaPlayer, int allSecond){}           //开始播放的时候回调
+        public void onBufferUpdate(MediaPlayer mediaPlayer, int percent){}      //当播放为网络资源时候，会回调这个方法
+        public void onStop(MediaPlayer mediaPlayer){}                           //播放为完成时，强制结束
+        public void onReStart(MediaPlayer mediaPlayer){}                        //暂停后，开始播放
+        public void onCompleted(MediaPlayer mediaPlayer){}                      //播放完成时候回调
+        public void onPause(MediaPlayer mediaPlayer){}                          //未播放完成时，暂停回调
+        public void onError(MediaPlayer mediaPlayer){}                          //出错时候回调
+        public void onProgressChange(MediaPlayer mediaPlayer, int nowSecond){}  //回调当前的进度
     }
 }

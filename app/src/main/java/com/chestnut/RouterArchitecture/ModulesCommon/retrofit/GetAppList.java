@@ -2,6 +2,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon.retrofit;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
 /**
@@ -20,5 +21,6 @@ public interface GetAppList {
     @GET("getAppList?pageIndex=0&pageSize=8")
     Call<AppListBean> get();
     @GET("getAppList")
+    @Headers("Cache-Control:public,max-age=20")
     Call<AppListBean> get(@Query("pageIndex") int pageIndex, @Query("pageSize") int pageSize);
 }
