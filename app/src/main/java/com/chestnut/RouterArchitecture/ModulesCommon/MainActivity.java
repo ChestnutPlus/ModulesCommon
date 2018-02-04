@@ -2,7 +2,6 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -11,25 +10,20 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.AppListBean;
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.GetAppList;
+import com.chestnut.common.os.XInterceptor;
+import com.chestnut.common.tools.XFontTools;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
-import com.chestnut.common.utils.NetworkUtils;
-import com.chestnut.common.utils.XFontUtils;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -86,7 +80,7 @@ public class MainActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        XFontUtils.getInstance().activitySetFont(this,"fonts/Test.TTF");
+        XFontTools.getInstance().setActivityFont(this,"fonts/Test.TTF");
         logs = new ArrayList<>();
 
         img1 = (ImageView) findViewById(R.id.img_1);
@@ -97,7 +91,7 @@ public class MainActivity extends RxAppCompatActivity {
         seekBar1 = (SeekBar) findViewById(R.id.seekBar_1);
         seekBar2 = (SeekBar) findViewById(R.id.seekBar_2);
         toast = new XToast(this, Toast.LENGTH_LONG);
-        toast.setTextTypeface(XFontUtils.getInstance().get("fonts/caonima.ttf"));
+        toast.setTextTypeface(XFontTools.getInstance().get("fonts/caonima.ttf"));
         toast.setTextSize(20);
 
         TextView textView = null;
@@ -202,46 +196,12 @@ public class MainActivity extends RxAppCompatActivity {
                 //构建 Client
                 //参考：http://blog.csdn.net/changsimeng/article/details/54668884
                 OkHttpClient client = new OkHttpClient.Builder()
-//                        .retryOnConnectionFailure(true)
-                        //addInterceptor()添加的是应用拦截器，他只会在response被调用一次。
-                        .addInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Request request = chain.request();
-                                Log.i(TAG,"0");
-                                if (!NetworkUtils.isConnected(MainActivity.this)) {
-                                    Log.i(TAG,"1");
-                                    /**
-                                     * 离线缓存控制  总的缓存时间=在线缓存时间+设置离线缓存时间
-                                     */
-                                    int maxStale = 50; // 离线时缓存保存4周,单位:秒
-                                    CacheControl tempCacheControl = new CacheControl.Builder()
-                                            .onlyIfCached()
-                                            .maxStale(maxStale, TimeUnit.SECONDS)
-                                            .build();
-                                    request = request.newBuilder()
-                                            .cacheControl(tempCacheControl)
-                                            .build();
-                                }
-                                return chain.proceed(request);
-                            }
-                        })
-                        .addNetworkInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Log.i(TAG,"2");
-                                Request request = chain.request();
-                                Response originalResponse = chain.proceed(request);
-                                int maxAge = 20;    // 在线缓存,单位:秒
-                                return originalResponse.newBuilder()
-                                        .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
-                                        .removeHeader("Cache-Control")
-                                        .header("Cache-Control", "public, max-age=" + maxAge)
-                                        .build();
-                            }
-                        })
-                        //addNetworkInterceptor()添加的是网络拦截器，它会在request和response时分别被调用一次
+                        .addInterceptor(new XInterceptor.CommonNoNetCache(20,this))
+                        .addInterceptor(new XInterceptor.Retry(3))
+                        .addInterceptor(new XInterceptor.CommonLog())
+                        .addNetworkInterceptor(new XInterceptor.CommonNetCache(15))
                         .cache(cache)
+                        .retryOnConnectionFailure(true)
                         .connectTimeout(10, TimeUnit.SECONDS)
                         .readTimeout(20, TimeUnit.SECONDS)
                         .writeTimeout(20, TimeUnit.SECONDS)
