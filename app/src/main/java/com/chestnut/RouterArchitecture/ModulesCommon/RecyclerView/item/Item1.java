@@ -4,9 +4,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chestnut.common.helper.si.XFontHelper;
 import com.chestnut.common.ui.recyclerView.XHolder;
 import com.chestnut.common.ui.recyclerView.XItem;
-import com.chestnut.common.tools.XFontTools;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.bean.ItemBean1;
@@ -36,7 +36,7 @@ public class Item1 extends XItem<ItemBean1>{
     @Override
     public void onBindViewHolder(XHolder holder, int position) {
         TextView textView = (TextView) holder.getViewById(R.id.textView);
-        textView.setTypeface(XFontTools.getInstance().get("fonts/caonima.ttf"));
+        textView.setTypeface(XFontHelper.getInstance().get("fonts/caonima.ttf"));
         textView.setTag(position);
         textView.setOnClickListener(view -> {
             if (onItemListener!=null)

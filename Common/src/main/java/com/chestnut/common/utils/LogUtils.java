@@ -3,6 +3,8 @@ package com.chestnut.common.utils;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.chestnut.common.helper.si.XUtilsHelper;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -53,7 +55,7 @@ public class LogUtils {
     private static void delFile() {//删除日志文件
         try {
             long delTime = getDateBefore().getTime();
-            File path = new File(UtilsManager.getCachePath());
+            File path = new File(XUtilsHelper.getCachePath());
             if(path.isDirectory()){
                 //返回文件夹中有的数据
                 File[] files = path.listFiles();
@@ -377,11 +379,11 @@ public class LogUtils {
 
         String dateLogContent = LOG_FORMAT.format(nowTime) + " [" + level + "] [" + threadMsg + "] [" + tag + "]\t" + text;
 
-        File destDir = new File(UtilsManager.getCachePath());
+        File destDir = new File(XUtilsHelper.getCachePath());
         if (!destDir.exists()) {
             destDir.mkdirs();
         }
-        File file = new File(UtilsManager.getCachePath(), "log-" + date);
+        File file = new File(XUtilsHelper.getCachePath(), "log-" + date);
         try {
             FileWriter filerWriter = new FileWriter(file, true);
             BufferedWriter bufWriter = new BufferedWriter(filerWriter);

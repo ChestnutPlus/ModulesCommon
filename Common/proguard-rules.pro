@@ -25,27 +25,26 @@
 #-renamesourcefileattribute SourceFile
 
 
-# Glide
+#---------------------Glide---------------------------
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
     **[] $VALUES;
     public *;
 }
 
-# Gson
+#---------------------GSon---------------------------
 -keep class com.google.gson.** {*;}
 
-# Utils
+#---------------------Utils---------------------------
 -keep class com.chestnut.common.ui.XTextView{ *; }
 -keep class com.chestnut.common.utils.LogUtils{ *; }
 -keep class com.chestnut.common.utils.CrashUtils{ *; }
--keep class com.chestnut.common.utils.XJsonUtils{ *; }
+-keep class com.chestnut.common.helper.si.XJsonHelper{ *; }
 
-# Retrolambda
+#------------------Retrolambda---------------------
 -dontwarn java.lang.invoke.*
 
-# RxJava
-# RxAndroid 1.X
+#---------------------Rx---------------------------
 -dontwarn sun.misc.**
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
     long producerIndex;
@@ -57,3 +56,16 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+
+#---------------Retrofit2.0，Okhttp3.x，Okio---------------
+# Retrofit
+-dontnote retrofit2.Platform
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+-dontwarn retrofit2.Platform$Java8
+-keepattributes Signature
+-keepattributes Exceptions
+# Okhttp3.x，Okio
+-dontwarn okio.**
+-keep class okio.** { *;}
+-dontwarn okhttp3.**
+-keep class okhttp3.** { *;}

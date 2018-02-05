@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.AppListBean;
 import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.GetAppList;
-import com.chestnut.common.os.XInterceptor;
-import com.chestnut.common.tools.XFontTools;
+import com.chestnut.common.helper.si.XFontHelper;
+import com.chestnut.common.os.OkHttpCommonInterceptor;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
@@ -80,7 +80,7 @@ public class MainActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        XFontTools.getInstance().setActivityFont(this,"fonts/Test.TTF");
+        XFontHelper.getInstance().setActivityFont(this,"fonts/Test.TTF");
         logs = new ArrayList<>();
 
         img1 = (ImageView) findViewById(R.id.img_1);
@@ -91,7 +91,7 @@ public class MainActivity extends RxAppCompatActivity {
         seekBar1 = (SeekBar) findViewById(R.id.seekBar_1);
         seekBar2 = (SeekBar) findViewById(R.id.seekBar_2);
         toast = new XToast(this, Toast.LENGTH_LONG);
-        toast.setTextTypeface(XFontTools.getInstance().get("fonts/caonima.ttf"));
+        toast.setTextTypeface(XFontHelper.getInstance().get("fonts/caonima.ttf"));
         toast.setTextSize(20);
 
         TextView textView = null;
@@ -196,10 +196,10 @@ public class MainActivity extends RxAppCompatActivity {
                 //构建 Client
                 //参考：http://blog.csdn.net/changsimeng/article/details/54668884
                 OkHttpClient client = new OkHttpClient.Builder()
-                        .addInterceptor(new XInterceptor.CommonNoNetCache(20,this))
-                        .addInterceptor(new XInterceptor.Retry(3))
-                        .addInterceptor(new XInterceptor.CommonLog())
-                        .addNetworkInterceptor(new XInterceptor.CommonNetCache(15))
+                        .addInterceptor(new OkHttpCommonInterceptor.CommonNoNetCache(20,this))
+                        .addInterceptor(new OkHttpCommonInterceptor.Retry(3))
+                        .addInterceptor(new OkHttpCommonInterceptor.CommonLog())
+                        .addNetworkInterceptor(new OkHttpCommonInterceptor.CommonNetCache(15))
                         .cache(cache)
                         .retryOnConnectionFailure(true)
                         .connectTimeout(10, TimeUnit.SECONDS)
