@@ -2,9 +2,9 @@ package com.chestnut.RouterArchitecture.ModulesCommon;
 
 import android.app.Application;
 
+import com.chestnut.common.tools.XFontTools;
 import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.UtilsManager;
-import com.chestnut.common.utils.XFontUtils;
 
 /**
  * <pre>
@@ -23,11 +23,11 @@ public class CommonApplication extends Application{
     public void onCreate() {
         super.onCreate();
         UtilsManager.init(this);
-        XFontUtils.getInstance()
+        XFontTools.getInstance()
                 .init(this)
-                .load("fonts/fontzipMin.ttf")
-                .load("fonts/caonima.ttf")
-                .load("fonts/Test.TTF");
+                .loadWithStrongRef("fonts/fontzipMin.ttf")
+                .loadWithSoftRef("fonts/caonima.ttf")
+                .loadWithSoftRef("fonts/Test.TTF");
         LogUtils.i("TestBgService","CommonApplication:onCreate");
     }
 }

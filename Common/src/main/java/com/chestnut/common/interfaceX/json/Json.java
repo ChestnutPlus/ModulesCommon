@@ -4,8 +4,9 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-public interface Json {
+public interface Json<Factory> {
     <Bean> Bean getBean(@NonNull String json,@NonNull Class<Bean> beanClass);
     <Bean> List<Bean> getListBean(@NonNull String json,@NonNull Class<Bean> beanClass);
     <Bean> String toJson(@NonNull Bean bean);
+    Factory getFactory();
 }
