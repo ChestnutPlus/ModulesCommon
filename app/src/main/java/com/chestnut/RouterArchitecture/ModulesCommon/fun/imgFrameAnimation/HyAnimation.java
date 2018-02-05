@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.imgFrameAnimation;
+package com.chestnut.RouterArchitecture.ModulesCommon.fun.imgFrameAnimation;
 
 /**
  * Created by cheng on 2017/2/14.

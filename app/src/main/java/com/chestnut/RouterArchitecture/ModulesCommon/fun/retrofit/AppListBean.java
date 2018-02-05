@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.retrofit;
+package com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit;
 
 import com.google.gson.annotations.SerializedName;
 

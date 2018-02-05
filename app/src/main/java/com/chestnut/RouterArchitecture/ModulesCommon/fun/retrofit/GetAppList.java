@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.retrofit;
+package com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

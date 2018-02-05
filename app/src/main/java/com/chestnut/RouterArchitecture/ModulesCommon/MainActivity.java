@@ -8,8 +8,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.AppListBean;
-import com.chestnut.RouterArchitecture.ModulesCommon.retrofit.GetAppList;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.AppListBean;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.GetAppList;
+import com.chestnut.RouterArchitecture.ModulesCommon.view.activity.CommonHomeActivity;
 import com.chestnut.common.helper.si.XFontHelper;
 import com.chestnut.common.os.OkHttpCommonInterceptor;
 import com.chestnut.common.ui.XToast;
@@ -179,6 +180,7 @@ public class MainActivity extends RxAppCompatActivity {
                 startActivity(new Intent(this,DemoInstallUninstallActivity.class));
                 break;
             case R.id.btn_6:
+                startActivity(new Intent(this,CommonHomeActivity.class));
                 break;
             case R.id.btn_7:
                 break;

@@ -1,4 +1,4 @@
-package com.chestnut.RouterArchitecture.ModulesCommon.imgFrameAnimation;
+package com.chestnut.RouterArchitecture.ModulesCommon.fun.imgFrameAnimation;
 
 import android.widget.ImageView;
 

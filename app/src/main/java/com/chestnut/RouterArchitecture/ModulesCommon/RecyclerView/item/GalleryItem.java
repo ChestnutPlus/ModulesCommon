@@ -9,7 +9,7 @@ import com.chestnut.common.ui.recyclerView.XHolder;
 import com.chestnut.common.ui.recyclerView.XItem;
 import com.chestnut.common.utils.MathUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
-import com.chestnut.RouterArchitecture.ModulesCommon.RecyclerView.SimpleAdapter;
+import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
 
 /**
  * <pre>

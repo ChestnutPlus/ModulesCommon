@@ -1,10 +1,10 @@
-package com.chestnut.RouterArchitecture.ModulesCommon;
+package com.chestnut.RouterArchitecture.ModulesCommon.base;
 
 import android.app.Application;
 
 import com.chestnut.common.helper.si.XFontHelper;
-import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.helper.si.XUtilsHelper;
+import com.chestnut.common.utils.LogUtils;
 
 /**
  * <pre>
@@ -25,9 +25,9 @@ public class CommonApplication extends Application{
         XUtilsHelper.init(this);
         XFontHelper.getInstance()
                 .init(this)
-                .loadWithSoftRef("fonts/fontzipMin.ttf")
-                .loadWithStrongRef("fonts/caonima.ttf")
-                .loadWithSoftRef("fonts/Test.TTF");
+                .loadWithSoftRef(ViewConfig.TypeFace_Zip_Min)
+                .loadWithStrongRef(ViewConfig.TypeFace_Cao_Ni_Ma)
+                .loadWithSoftRef(ViewConfig.TypeFace_TEST);
         LogUtils.i("TestBgService","CommonApplication:onCreate");
     }
 }
