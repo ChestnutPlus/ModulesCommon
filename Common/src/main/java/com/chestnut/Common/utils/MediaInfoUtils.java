@@ -3,7 +3,7 @@ package com.chestnut.common.utils;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static android.R.attr.duration;
 
@@ -24,7 +24,7 @@ public class MediaInfoUtils {
         return Observable.create(subscriber -> {
             MediaInfo mediaInfo = get(path);
             subscriber.onNext(mediaInfo);
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 
@@ -73,7 +73,7 @@ public class MediaInfoUtils {
         return Observable.create(subscriber -> {
             Bitmap bitmap = getVideoThumb(url, timeS);
             subscriber.onNext(bitmap);
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 

@@ -1,4 +1,4 @@
-package com.chestnut.common.rx;
+package com.chestnut.common.helper.def;
 
 import com.chestnut.common.utils.LogUtils;
 
@@ -10,10 +10,11 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+
 
 /**
  * <pre>
@@ -90,65 +91,61 @@ public class RxSocket {
      */
     public Observable<Boolean> connectRx(String ip, int port) {
         return Observable
-                .create(new Observable.OnSubscribe<Boolean>() {
-                    @Override
-                    public void call(Subscriber<? super Boolean> subscriber) {
+                .create((ObservableOnSubscribe<Boolean>) e -> {
+                    LogUtils.i(OpenLog,TAG,"connectRx:"+"status:"+socketStatus.name());
 
-                        LogUtils.i(OpenLog,TAG,"connectRx:"+"status:"+socketStatus.name());
+                    //正在连接
+                    if (socketStatus == SocketStatus.CONNECTING) {
+                        e.onNext(false);
+                        e.onComplete();
+                        return;
+                    }
 
-                        //正在连接
-                        if (socketStatus == SocketStatus.CONNECTING) {
-                            subscriber.onNext(false);
-                            subscriber.onCompleted();
-                            return;
+                    //未连接 | 已经连接，关闭Socket
+                    socketStatus = SocketStatus.DIS_CONNECT;
+                    isReadThreadAlive = false;
+                    readThread = null;
+                    if (selector!=null)
+                        try {
+                            selector.close();
+                        } catch (Exception e1) {
+                            LogUtils.i(OpenLog,TAG,"selector.close");
+                        }
+                    if (selectionKey!=null)
+                        try {
+                            selectionKey.cancel();
+                        } catch (Exception e1) {
+                            LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
+                        }
+                    if (socketChannel!=null)
+                        try {
+                            socketChannel.close();
+                        } catch (Exception e1) {
+                            LogUtils.i(OpenLog,TAG,"socketChannel.close");
                         }
 
-                        //未连接 | 已经连接，关闭Socket
-                        socketStatus = SocketStatus.DIS_CONNECT;
-                        isReadThreadAlive = false;
-                        readThread = null;
-                        if (selector!=null)
-                            try {
-                                selector.close();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"selector.close");
-                            }
-                        if (selectionKey!=null)
-                            try {
-                                selectionKey.cancel();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
-                            }
-                        if (socketChannel!=null)
-                            try {
-                                socketChannel.close();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"socketChannel.close");
-                            }
+                    //重启Socket
+                    isReadThreadAlive = true;
+                    readThread = new ReadThread(ip,port);
+                    readThread.start();
+                    socketReconnectCallback = new SocketReconnectCallback() {
+                        @Override
+                        public void onSuccess() {
+                            LogUtils.i(OpenLog,TAG,"connectRx:"+"CONNECTED");
+                            socketStatus = SocketStatus.CONNECTED;
+                            e.onNext(true);
+                            e.onComplete();
+                        }
 
-                        //重启Socket
-                        isReadThreadAlive = true;
-                        readThread = new ReadThread(ip,port);
-                        readThread.start();
-                        socketReconnectCallback = new SocketReconnectCallback() {
-                            @Override
-                            public void onSuccess() {
-                                LogUtils.i(OpenLog,TAG,"connectRx:"+"CONNECTED");
-                                socketStatus = SocketStatus.CONNECTED;
-                                subscriber.onNext(true);
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onFail(String msg) {
-                                LogUtils.i(OpenLog,TAG,"connectRx:"+msg);
-                                subscriber.onNext(false);
-                                subscriber.onCompleted();
-                            }
-                        };
-                    }
+                        @Override
+                        public void onFail(String msg) {
+                            LogUtils.i(OpenLog,TAG,"connectRx:"+msg);
+                            e.onNext(false);
+                            e.onComplete();
+                        }
+                    };
                 })
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .map(aBoolean -> {
                     socketReconnectCallback = null;
                     return aBoolean;
@@ -162,43 +159,40 @@ public class RxSocket {
      * @return Rx true or false
      */
     public Observable<Boolean> disConnect() {
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
-                try {
-                    if (socketStatus == SocketStatus.DIS_CONNECT) {
-                        subscriber.onNext(true);
-                        subscriber.onCompleted();
-                    }
-                    else {
-                        socketStatus = SocketStatus.DIS_CONNECT;
-                        isReadThreadAlive = false;
-                        readThread = null;
-                        if (selector!=null)
-                            try {
-                                selector.close();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"selector.close");
-                            }
-                        if (selectionKey!=null)
-                            try {
-                                selectionKey.cancel();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
-                            }
-                        if (socketChannel!=null)
-                            try {
-                                socketChannel.close();
-                            } catch (Exception e) {
-                                LogUtils.i(OpenLog,TAG,"socketChannel.close");
-                            }
-                        subscriber.onNext(true);
-                        subscriber.onCompleted();
-                    }
-                } catch (Exception e) {
-                    subscriber.onNext(false);
-                    subscriber.onCompleted();
+        return Observable.create(subscriber -> {
+            try {
+                if (socketStatus == SocketStatus.DIS_CONNECT) {
+                    subscriber.onNext(true);
+                    subscriber.onComplete();
                 }
+                else {
+                    socketStatus = SocketStatus.DIS_CONNECT;
+                    isReadThreadAlive = false;
+                    readThread = null;
+                    if (selector!=null)
+                        try {
+                            selector.close();
+                        } catch (Exception e) {
+                            LogUtils.i(OpenLog,TAG,"selector.close");
+                        }
+                    if (selectionKey!=null)
+                        try {
+                            selectionKey.cancel();
+                        } catch (Exception e) {
+                            LogUtils.i(OpenLog,TAG,"selectionKey.cancel");
+                        }
+                    if (socketChannel!=null)
+                        try {
+                            socketChannel.close();
+                        } catch (Exception e) {
+                            LogUtils.i(OpenLog,TAG,"socketChannel.close");
+                        }
+                    subscriber.onNext(true);
+                    subscriber.onComplete();
+                }
+            } catch (Exception e) {
+                subscriber.onNext(false);
+                subscriber.onComplete();
             }
         });
     }
@@ -218,43 +212,40 @@ public class RxSocket {
      */
     public Observable<Boolean> write(ByteBuffer buffer) {
         return Observable
-                .create(new Observable.OnSubscribe<Boolean>() {
-                    @Override
-                    public void call(Subscriber<? super Boolean> subscriber) {
-                        if (socketStatus != SocketStatus.CONNECTED) {
-                            LogUtils.i(OpenLog, TAG, "write." + "SocketStatus.DISCONNECTED");
-                            subscriber.onNext(false);
-                            subscriber.onCompleted();
+                .create((ObservableOnSubscribe<Boolean>) subscriber -> {
+                    if (socketStatus != SocketStatus.CONNECTED) {
+                        LogUtils.i(OpenLog, TAG, "write." + "SocketStatus.DISCONNECTED");
+                        subscriber.onNext(false);
+                        subscriber.onComplete();
+                    }
+                    else {
+                        if (socketChannel!=null && socketChannel.isConnected()) {
+                            try {
+                                int result = socketChannel.write(buffer);
+                                if (result<0) {
+                                    LogUtils.i(OpenLog, TAG, "write." + "发送出错");
+                                    subscriber.onNext(false);
+                                    subscriber.onComplete();
+                                }
+                                else {
+                                    LogUtils.i(OpenLog, TAG, "write." + "success!");
+                                    subscriber.onNext(true);
+                                    subscriber.onComplete();
+                                }
+                            } catch (Exception e) {
+                                LogUtils.i(OpenLog,TAG,"write."+e.getMessage());
+                                subscriber.onNext(false);
+                                subscriber.onComplete();
+                            }
                         }
                         else {
-                            if (socketChannel!=null && socketChannel.isConnected()) {
-                                try {
-                                    int result = socketChannel.write(buffer);
-                                    if (result<0) {
-                                        LogUtils.i(OpenLog, TAG, "write." + "发送出错");
-                                        subscriber.onNext(false);
-                                        subscriber.onCompleted();
-                                    }
-                                    else {
-                                        LogUtils.i(OpenLog, TAG, "write." + "success!");
-                                        subscriber.onNext(true);
-                                        subscriber.onCompleted();
-                                    }
-                                } catch (Exception e) {
-                                    LogUtils.i(OpenLog,TAG,"write."+e.getMessage());
-                                    subscriber.onNext(false);
-                                    subscriber.onCompleted();
-                                }
-                            }
-                            else {
-                                LogUtils.i(OpenLog,TAG,"write."+"close");
-                                subscriber.onNext(false);
-                                subscriber.onCompleted();
-                            }
+                            LogUtils.i(OpenLog,TAG,"write."+"close");
+                            subscriber.onNext(false);
+                            subscriber.onComplete();
                         }
                     }
                 })
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .timeout(WRITE_TIME_OUT, TimeUnit.MILLISECONDS, Observable.just(false));
     }
 

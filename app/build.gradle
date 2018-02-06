@@ -25,15 +25,21 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    //common代码库
     compile project(path: ':Common')
+    //阿里 v-Layout
     compile('com.alibaba.android:vlayout:1.2.0@aar') {
         transitive = true
     }
+    //帧动画需要用的IO库
     compile files('libs/commons-io-2.5.jar')
+    //ariBnb 动画插件
+    compile 'com.airbnb.android:lottie:2.2.0'
+    //TSnackBar
+    compile 'com.androidadvance:topsnackbar:1.1.1'
+    //其他
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.yarolegovich:discrete-scrollview:1.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.airbnb.android:lottie:2.2.0'
-    compile 'com.androidadvance:topsnackbar:1.1.1'
 }

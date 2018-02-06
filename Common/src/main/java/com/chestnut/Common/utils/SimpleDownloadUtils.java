@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * <pre>
@@ -47,7 +47,7 @@ public class SimpleDownloadUtils {
     public static Observable<Boolean> downLoadRx(String url, String localFile) {
         return Observable.create(subscriber -> {
             subscriber.onNext(downLoad(url, localFile));
-            subscriber.onCompleted();
+            subscriber.onComplete();
         });
     }
 
@@ -75,7 +75,7 @@ public class SimpleDownloadUtils {
                     else
                         LogUtils.i(true,"SimpleDownloadUtils",url+",retry:"+(i+1));
                 }
-                subscriber.onCompleted();
+                subscriber.onComplete();
             });
     }
 

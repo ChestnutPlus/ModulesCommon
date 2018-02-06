@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2.Rx2Activity">
+
+    <TextView
+        android:id="@+id/txt_create"
+        android:background="@drawable/touch_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="create"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/txt_downRx"
+        android:layout_toEndOf="@id/txt_create"
+        android:background="@drawable/touch_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="downRx"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/txt_bus"
+        android:layout_toEndOf="@id/txt_downRx"
+        android:background="@drawable/touch_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="RxBus"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/txt_filter"
+        android:layout_below="@id/txt_create"
+        android:background="@drawable/touch_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="ClickFilter"
+        android:layout_width="100dp"
+        android:layout_height="50dp" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_centerInParent="true"
+        android:layout_width="200dp"
+        android:layout_height="120dp" />
+</RelativeLayout>

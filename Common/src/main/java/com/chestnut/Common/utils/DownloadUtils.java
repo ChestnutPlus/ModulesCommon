@@ -6,8 +6,10 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+
 
 /**
  * <pre>
@@ -65,18 +67,18 @@ public class DownloadUtils {
         DownloadManager downloadManager = (DownloadManager) appContext.getSystemService(Context.DOWNLOAD_SERVICE);
         long taskId = downloadManager.enqueue(request);
         ContentObserver[] observer = {null};
-        return Observable.create(new Observable.OnSubscribe<DownloadStatus>() {
+        return Observable.create(new ObservableOnSubscribe<DownloadStatus>() {
             @Override
-            public void call(Subscriber<? super DownloadStatus> subscriber) {
+            public void subscribe(ObservableEmitter<DownloadStatus> e) throws Exception {
                 observer[0] = new ContentObserver(null) {
                     @Override
                     public void onChange(boolean selfChange, Uri uri) {
                         super.onChange(selfChange, uri);
                         int[] status = getBytesAndStatus(appContext,taskId);
-                        subscriber.onNext(new DownloadStatus(taskId,status[1],status[0],status[2]));
-                     if (status[2] == DownloadManager.STATUS_SUCCESSFUL || status[2] == DownloadManager.STATUS_FAILED || status[2] == -1) {
+                        e.onNext(new DownloadStatus(taskId,status[1],status[0],status[2]));
+                        if (status[2] == DownloadManager.STATUS_SUCCESSFUL || status[2] == DownloadManager.STATUS_FAILED || status[2] == -1) {
                             appContext.getContentResolver().unregisterContentObserver(observer[0]);
-                            subscriber.onCompleted();
+                            e.onComplete();
                         }
                     }
                 };
@@ -98,18 +100,18 @@ public class DownloadUtils {
         else {
             Context appContext = context.getApplicationContext();
             ContentObserver[] observer = {null};
-            return Observable.create(new Observable.OnSubscribe<DownloadStatus>() {
+            return Observable.create(new ObservableOnSubscribe<DownloadStatus>() {
                 @Override
-                public void call(Subscriber<? super DownloadStatus> subscriber) {
+                public void subscribe(ObservableEmitter<DownloadStatus> e) throws Exception {
                     observer[0] = new ContentObserver(null) {
                         @Override
                         public void onChange(boolean selfChange, Uri uri) {
                             super.onChange(selfChange, uri);
                             int[] status = getBytesAndStatus(appContext,taskId);
-                            subscriber.onNext(new DownloadStatus(taskId,status[1],status[0],status[2]));
+                            e.onNext(new DownloadStatus(taskId,status[1],status[0],status[2]));
                             if (status[2] == DownloadManager.STATUS_SUCCESSFUL || status[2] == DownloadManager.STATUS_FAILED || status[2] == -1) {
                                 appContext.getContentResolver().unregisterContentObserver(observer[0]);
-                                subscriber.onCompleted();
+                                e.onComplete();
                             }
                         }
                     };

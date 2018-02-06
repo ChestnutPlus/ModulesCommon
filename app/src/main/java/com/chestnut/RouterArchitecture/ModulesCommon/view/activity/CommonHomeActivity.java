@@ -11,14 +11,20 @@ import com.chestnut.RouterArchitecture.ModulesCommon.base.ViewConfig;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.diySurfaceView.ModelSurfaceView;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyBluetoothPlay.ModelBluetoothRecordPlay;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyMarket.ModelHyMarket;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyXinYiHe.ModelXYH;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndVLayout.ModelLottieAnimationViewAndVLayout;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.oemHwl.ModelOemHwl;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.ModelRetrofit;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2.ModelRx2;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.tSnackBar.ModelTSnackBar;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
+import com.chestnut.common.helper.si.RxBus;
 import com.chestnut.common.helper.si.XFontHelper;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class CommonHomeActivity extends AppCompatActivity {
 
@@ -36,6 +42,12 @@ public class CommonHomeActivity extends AppCompatActivity {
         simpleAdapter = new SimpleAdapter();
         initData();
         recyclerView.setAdapter(simpleAdapter);
+        RxBus.getInstance().listen(String.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s -> {
+                    toast.setText(s).show();
+                    LogUtils.i("CommonHomeActivity",s);
+                });
     }
 
     private void initData() {
@@ -52,6 +64,12 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelBluetoothRecordPlay().onModelTest(simpleAdapter,toast, TAG,this);
         //Op-Retrofit
         new ModelRetrofit().onModelTest(simpleAdapter,toast, TAG,this);
+        //Hy-XinYiHe
+        new ModelXYH().onModelTest(simpleAdapter,toast, TAG,this);
+        //View-SnackBar
+        new ModelTSnackBar().onModelTest(simpleAdapter,toast, TAG,this);
+        //RxJava2
+        new ModelRx2().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override
