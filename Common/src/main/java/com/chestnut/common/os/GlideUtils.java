@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.os;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,14 +26,14 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
  * </pre>
  */
 
-public class GlideHelper {
+public class GlideUtils {
 
     /**
      * 圆形图片，
      * 使用：
      *  Glide.with(this)
      *      .load(R.drawable.li_bao_en)
-     *      .transform(new GlideHelper.CircleTransform(this))
+     *      .transform(new GlideUtils.CircleTransform(this))
      *      .into(circleView);
      */
     public static class CircleTransform extends BitmapTransformation {
@@ -75,7 +75,7 @@ public class GlideHelper {
      * 使用：
      *  Glide.with(this)
      *      .load(R.drawable.li_bao_en)
-     *      .transform(new GlideHelper.RoundTransform(this,10))
+     *      .transform(new GlideUtils.RoundTransform(this,10))
      *      .into(roundView);
      *  默认的是，4dip.
      */

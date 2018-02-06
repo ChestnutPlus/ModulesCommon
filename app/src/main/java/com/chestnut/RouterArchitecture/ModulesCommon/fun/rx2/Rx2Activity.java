@@ -22,7 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DefaultObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class Rx2Activity extends AppCompatActivity {
+public class Rx2Activity extends Rx {
 
     private String TAG = "Rx2Activity";
     private CompositeDisposable compositeDisposable;
