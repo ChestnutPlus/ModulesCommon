@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.OemHWLActivity">
+    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.fun.oemHwl.OemHWLActivity">
 
     <TextView
         android:id="@+id/txt_wakeup_start"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e79191"
-    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.DiyTestSurfaceViewActivity">
+    tools:context="com.chestnut.RouterArchitecture.ModulesCommon.fun.diySurfaceView.DiyTestSurfaceViewActivity">
 
     <SurfaceView
         android:id="@+id/surface_view"

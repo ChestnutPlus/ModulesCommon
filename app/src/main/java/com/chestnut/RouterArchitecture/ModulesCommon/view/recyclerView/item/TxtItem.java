@@ -36,6 +36,11 @@ public class TxtItem extends XItem<String>{
     public void onBindViewHolder(XHolder holder, int position) {
         TextView textView = (TextView) holder.getViewById(R.id.txt);
         textView.setText(data);
+        if (callback!=null)
+            textView.setOnClickListener(view -> {
+                if (callback!=null)
+                    callback.onItemClick(data);
+            });
     }
 
     @Override
@@ -46,5 +51,15 @@ public class TxtItem extends XItem<String>{
     @Override
     public void releaseRes() {
 
+    }
+
+    private Callback callback;
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    public interface Callback {
+        void onItemClick(String s);
     }
 }

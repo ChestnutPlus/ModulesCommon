@@ -1,5 +1,10 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.base;
 
+import android.app.Activity;
+
+import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
+import com.chestnut.common.ui.XToast;
+
 /**
  * <pre>
  *     author: Chestnut
@@ -13,4 +18,5 @@ package com.chestnut.RouterArchitecture.ModulesCommon.base;
  */
 
 public interface CommonContract {
+    void onModelTest(SimpleAdapter simpleAdapter, XToast toast, String TAG, Activity activity);
 }

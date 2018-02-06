@@ -116,8 +116,12 @@ public class MediaPlayerHelper {
             return false;
         };
         MediaPlayer.OnBufferingUpdateListener onBufferingUpdateListener = (mp, percent) -> {
-            if (callBack!=null && mediaPlayer!=null)
-                callBack.onBufferUpdate(mp, percent);
+            if (callBack!=null && mediaPlayer!=null) {
+                int currentSecond = mediaPlayer.getCurrentPosition() / 1000;
+                int totalSecond = mediaPlayer.getDuration() / 1000;
+                totalSecond = totalSecond < 0 ? 0 : totalSecond;
+                callBack.onBufferUpdate(mp, percent, currentSecond, totalSecond, (int) (currentSecond*1.0/totalSecond *100));
+            }
         };
         if (mediaPlayer!=null) {
             mediaPlayer.setOnErrorListener(onErrorListener);
@@ -353,7 +357,7 @@ public class MediaPlayerHelper {
     /*接口，类*/
     public static abstract class MediaPlayerHelperListener {
         public void onStart(MediaPlayer mediaPlayer, int allSecond){}           //开始播放的时候回调
-        public void onBufferUpdate(MediaPlayer mediaPlayer, int percent){}      //当播放为网络资源时候，会回调这个方法
+        public void onBufferUpdate(MediaPlayer mediaPlayer, int bufferUpdatePercent, int currentSecond, int totalSecond, int currentPlayPercent){}      //当播放为网络资源时候，会回调这个方法
         public void onStop(MediaPlayer mediaPlayer){}                           //播放为完成时，强制结束
         public void onReStart(MediaPlayer mediaPlayer){}                        //暂停后，开始播放
         public void onCompleted(MediaPlayer mediaPlayer){}                      //播放完成时候回调

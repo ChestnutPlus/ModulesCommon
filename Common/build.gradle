@@ -58,4 +58,5 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     //GSon
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //Rx 2.0
 }

@@ -12,12 +12,11 @@
 
     <application
         android:name=".base.CommonApplication"
-        android:icon="@drawable/li_bao_en"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.CommonHomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestActivity" />
+        <activity android:name=".fun.lottieAnimationViewAndVLayout.LottieAnimationViewAndVLayoutTestActivity" />
         <activity
-            android:name=".DiyTestSurfaceViewActivity"
+            android:name=".fun.diySurfaceView.DiyTestSurfaceViewActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".PayActivity" />
-        <activity android:name=".RecordPlayActivity" />
+        <activity android:name=".fun.hyBluetoothPlay.BluetoothRecordPlayActivity" />
 
         <service
-            android:name=".TestBgService"
+            android:name=".fun.testBgService.TestBgService"
             android:enabled="true"
             android:exported="true"
             android:process=":TestBgService">
@@ -43,9 +41,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".OemHWLActivity" />
-        <activity android:name=".DemoInstallUninstallActivity" />
-        <activity android:name=".view.activity.CommonHomeActivity"></activity>
+        <activity android:name=".fun.oemHwl.OemHWLActivity" />
+        <activity android:name=".fun.hyMarket.DemoInstallUninstallActivity" />
     </application>
 
 </manifest>
