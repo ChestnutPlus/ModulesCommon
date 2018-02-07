@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.ChestnutPlus'
 
@@ -11,10 +10,11 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 24
-        versionName "1.1.1"
+        versionName "1.1.2"
         /**
          *    1.1.1-23. ~ LogUtils 重写部分方法，并加入删除日志。
          *    1.1.1-24. ~ EncryptUtils 重写获取MD5的算法，避免文件太大的时候，OOM
+         *    1.1.2-24  替换RxJava2。
          */
     }
     buildTypes {
@@ -43,17 +43,15 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    //noinspection GradleCompatible
+    compile 'com.android.support:appcompat-v7:25.4.0'
     //RecyclerView & 上拉下拉刷新
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
     compile 'com.cjj.materialrefeshlayout:library:1.3.0'
     //ImgLoader
     compile files('libs/glide-3.7.0.jar')
     //RxPermission
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
-    //RxLife
-//    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-//    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     //Retrofit,GSon
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'//GSon响应解析器

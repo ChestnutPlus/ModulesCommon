@@ -22,7 +22,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DefaultObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class Rx2Activity extends Rx {
+public class Rx2Activity extends AppCompatActivity {
 
     private String TAG = "Rx2Activity";
     private CompositeDisposable compositeDisposable;
@@ -34,6 +34,9 @@ public class Rx2Activity extends Rx {
 
         compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(RxUtils.countDown(5)
+                .doOnSubscribe(disposable -> {
+
+                })
                 .subscribe(integer -> {
                     LogUtils.i(TAG,"countDown:"+integer);
                 },throwable -> {},()->{}));
@@ -77,8 +80,8 @@ public class Rx2Activity extends Rx {
                             LogUtils.i(TAG,"onNext,"+aBoolean);
                             if (aBoolean)
                                 Glide.with(Rx2Activity.this)
-                                    .load(XUtilsHelper.getCachePath()+"/beauty.png")
-                                    .into((ImageView) findViewById(R.id.img));
+                                        .load(XUtilsHelper.getCachePath()+"/beauty.png")
+                                        .into((ImageView) findViewById(R.id.img));
                         }
 
                         @Override
@@ -102,10 +105,33 @@ public class Rx2Activity extends Rx {
                 .subscribe(s -> LogUtils.i(TAG,"RxBus:"+s)));
 
         //click filter
-        RxUtils.filterClick(findViewById(R.id.txt_filter),2000)
+        compositeDisposable.add(RxUtils.filterClick(findViewById(R.id.txt_filter),2000)
                 .subscribe(o -> {
                     LogUtils.i(TAG,"txt_filter");
-                });
+                }));
+
+        //测试线程的切换
+        compositeDisposable.add(Observable.create((ObservableOnSubscribe<Integer>) e -> {
+                    LogUtils.i(TAG,"subscribe1:"+Thread.currentThread().getName());
+                    e.onNext(1);
+                    e.onComplete();
+                }).subscribeOn(Schedulers.newThread())
+                        .observeOn(Schedulers.io()).map(integer -> {
+                            LogUtils.i(TAG,"map1:"+Thread.currentThread().getName());
+                            return integer;
+                        })
+                        .observeOn(Schedulers.newThread()).map(integer -> {
+                            LogUtils.i(TAG,"map2:"+Thread.currentThread().getName());
+                            return integer;
+                        })
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe(integer -> {
+                            LogUtils.i(TAG,"subscribe2:"+Thread.currentThread().getName());
+                        },throwable -> {
+
+                        },()->{
+                            LogUtils.i(TAG,"compete:"+Thread.currentThread().getName());
+                        })
+        );
     }
 
     @Override
