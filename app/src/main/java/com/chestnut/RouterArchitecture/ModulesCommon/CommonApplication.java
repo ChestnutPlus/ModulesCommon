@@ -28,6 +28,6 @@ public class CommonApplication extends Application{
                 .load("fonts/fontzipMin.ttf")
                 .load("fonts/caonima.ttf")
                 .load("fonts/Test.TTF");
-        LogUtils.i("TestBgService","CommonApplication:onCreate");
+        LogUtils.i("TestBgService","CommonApplication:onCreate,branch,1.0");
     }
 }
