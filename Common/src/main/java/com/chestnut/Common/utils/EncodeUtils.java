@@ -1,9 +1,13 @@
 package com.chestnut.common.utils;
 
+import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.Html;
 import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -84,8 +88,8 @@ public class EncodeUtils {
      * @param input 要编码的字符串
      * @return Base64编码后的字符串
      */
-    public static byte[] base64Encode(String input) {
-        return base64Encode(input.getBytes());
+    public static byte[] base64Encode(String input) throws IOException {
+        return base64Encode(ConvertUtils.string2Bytes(input));
     }
 
     /**
@@ -94,8 +98,8 @@ public class EncodeUtils {
      * @param input 要编码的字节数组
      * @return Base64编码后的字符串
      */
-    public static byte[] base64Encode(byte[] input) {
-        return Base64.encode(input, Base64.NO_WRAP);
+    public static byte[] base64Encode(byte[] input) throws IOException {
+        return ConvertUtils.string2Bytes(base64Encode2String(input));
     }
 
     /**
@@ -104,8 +108,56 @@ public class EncodeUtils {
      * @param input 要编码的字节数组
      * @return Base64编码后的字符串
      */
-    public static String base64Encode2String(byte[] input) {
-        return Base64.encodeToString(input, Base64.NO_WRAP);
+    public static String base64Encode2String(byte[] input) throws IOException {
+        return base64Encode2String(ConvertUtils.bytes2Bitmap(input));
+    }
+
+    /**
+     * Base64编码
+     *
+     * @param bitmap bitmap
+     * @return Base64编码后的字符串
+     * @throws OutOfMemoryError 文件太大
+     * @throws IOException io 异常
+     */
+    public static String base64Encode2String(Bitmap bitmap) throws OutOfMemoryError, IOException {
+        String result = null;
+        ByteArrayOutputStream bao = null;
+        try {
+            if(bitmap != null) {
+                int imageSize = getBitmapSize(bitmap);
+                if(imageSize > 2097152) {
+                    bao = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bao);
+                }
+                if(bao != null) {
+                    bao = null;
+                }
+                bao = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bao);
+                bao.flush();
+                bao.close();
+                byte[] bitmapBytes = bao.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, 0);
+            }
+        } catch (IOException var12) {
+            var12.printStackTrace();
+        } finally {
+            try {
+                if(bao != null) {
+                    bao.flush();
+                    bao.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    @SuppressLint({"NewApi"})
+    private static int getBitmapSize(Bitmap bitmap) {
+        return Build.VERSION.SDK_INT >= 19?bitmap.getAllocationByteCount():(Build.VERSION.SDK_INT >= 12?bitmap.getByteCount():bitmap.getRowBytes() * bitmap.getHeight());
     }
 
     /**
