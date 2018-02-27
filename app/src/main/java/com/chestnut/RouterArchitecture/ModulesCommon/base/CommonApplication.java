@@ -26,6 +26,7 @@ public class CommonApplication extends Application{
         XFontHelper.getInstance()
                 .init(this)
                 .loadWithSoftRef(ViewConfig.TypeFace_Zip_Min)
+                .loadWithSoftRef(ViewConfig.TypeFace_HK)
                 .loadWithStrongRef(ViewConfig.TypeFace_Cao_Ni_Ma)
                 .loadWithSoftRef(ViewConfig.TypeFace_TEST);
         LogUtils.i("TestBgService","CommonApplication:onCreate");

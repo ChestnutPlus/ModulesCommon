@@ -385,7 +385,7 @@ public class EncryptUtils {
      * @param key  8字节秘钥
      * @return Base64密文
      */
-    public static byte[] encryptDES2Base64(byte[] data, byte[] key) {
+    public static byte[] encryptDES2Base64(byte[] data, byte[] key) throws IOException {
         return EncodeUtils.base64Encode(encryptDES(data, key));
     }
 
@@ -462,7 +462,7 @@ public class EncryptUtils {
      * @param key  24字节秘钥
      * @return Base64密文
      */
-    public static byte[] encrypt3DES2Base64(byte[] data, byte[] key) {
+    public static byte[] encrypt3DES2Base64(byte[] data, byte[] key) throws IOException {
         return EncodeUtils.base64Encode(encrypt3DES(data, key));
     }
 
@@ -539,7 +539,7 @@ public class EncryptUtils {
      * @param key  16、24、32字节秘钥
      * @return Base64密文
      */
-    public static byte[] encryptAES2Base64(byte[] data, byte[] key) {
+    public static byte[] encryptAES2Base64(byte[] data, byte[] key) throws IOException {
         return EncodeUtils.base64Encode(encryptAES(data, key));
     }
 

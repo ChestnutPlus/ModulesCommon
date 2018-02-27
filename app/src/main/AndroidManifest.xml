@@ -43,7 +43,8 @@
 
         <activity android:name=".fun.oemHwl.OemHWLActivity" />
         <activity android:name=".fun.hyMarket.DemoInstallUninstallActivity" />
-        <activity android:name=".fun.rx2.Rx2Activity"></activity>
+        <activity android:name=".fun.rx2.Rx2Activity" />
+        <activity android:name=".fun.helperCamera.CameraHelperActivity" />
     </application>
 
 </manifest>

@@ -54,7 +54,6 @@ public class XUtilsHelper {
     }
 
     public static String getCachePath() {
-        LogUtils.i(true,"XUtilsHelper","cache_path:"+CACHE_PATH);
         return CACHE_PATH;
     }
 
