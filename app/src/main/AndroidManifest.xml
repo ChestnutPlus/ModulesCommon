@@ -45,6 +45,15 @@
         <activity android:name=".fun.hyMarket.DemoInstallUninstallActivity" />
         <activity android:name=".fun.rx2.Rx2Activity" />
         <activity android:name=".fun.helperCamera.CameraHelperActivity" />
+
+        <meta-data
+            android:name="design_width"
+            android:value="720" />
+        <meta-data
+            android:name="design_height"
+            android:value="1280" />
+
+        <activity android:name=".fun.autoLayout.AutoLayoutActivity"/>
     </application>
 
 </manifest>

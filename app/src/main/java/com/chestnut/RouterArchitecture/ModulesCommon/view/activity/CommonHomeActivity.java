@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.ViewConfig;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.autoLayout.ModelAutoLayout;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.diySurfaceView.ModelSurfaceView;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.helperCamera.ModelCameraHelper;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyBluetoothPlay.ModelBluetoothRecordPlay;
@@ -75,6 +76,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelRx2().onModelTest(simpleAdapter,toast, TAG,this);
         //CameraHelper测试
         new ModelCameraHelper().onModelTest(simpleAdapter,toast, TAG,this);
+        //Auto-Layout-Test
+        new ModelAutoLayout().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override

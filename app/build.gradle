@@ -30,6 +30,8 @@ dependencies {
     compile('com.alibaba.android:vlayout:1.2.0@aar') {
         transitive = true
     }
+    //Hy大神的AutoLayout
+    compile project(path: ':autolayout')
     //帧动画需要用的IO库
     compile files('libs/commons-io-2.5.jar')
     //ariBnb 动画插件

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/ModuleCommon.iml" filepath="$PROJECT_DIR$/ModuleCommon.iml" />
       <module fileurl="file://D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\ModulesCommon.iml" filepath="D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\ModulesCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/autolayout/autolayout.iml" filepath="$PROJECT_DIR$/autolayout/autolayout.iml" />
     </modules>
   </component>
 </project>
