@@ -39,9 +39,9 @@ public class CommonHomeActivity extends AppCompatActivity {
         XFontHelper.getInstance().setActivityFont(this,ViewConfig.TypeFace_HK);
         toast = new XToast(this, Toast.LENGTH_LONG);
         toast.setTextTypeface(XFontHelper.getInstance().get(ViewConfig.TypeFace_HK));
-        toast.setTextSize(18);
+        toast.setTextSize(15);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(ScreenUtils.getScreenHeight_Dip(this)/60-1,StaggeredGridLayoutManager.HORIZONTAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(ScreenUtils.getScreenHeight_Dip(this)/50,StaggeredGridLayoutManager.HORIZONTAL));
         simpleAdapter = new SimpleAdapter();
         initData();
         recyclerView.setAdapter(simpleAdapter);
