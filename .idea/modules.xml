@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Common/Common.iml" filepath="$PROJECT_DIR$/Common/Common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ModulesCommon.iml" filepath="$PROJECT_DIR$/ModulesCommon.iml" />
+      <module fileurl="file://D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\Common\Common.iml" filepath="D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\Common\Common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ModuleCommon.iml" filepath="$PROJECT_DIR$/ModuleCommon.iml" />
+      <module fileurl="file://D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\ModulesCommon.iml" filepath="D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\ModulesCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\app\app.iml" filepath="D:\C\IT\android_studio\RouterArchitecture\ModuleCommon\app\app.iml" />
     </modules>
   </component>
 </project>
