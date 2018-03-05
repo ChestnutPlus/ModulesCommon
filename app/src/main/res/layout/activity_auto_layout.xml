@@ -1,47 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.chestnut.RouterArchitecture.ModulesCommon.fun.autoLayout.AutoLayoutActivity">
 
-    <com.zhy.autolayout.AutoLinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        android:gravity="center"
+        android:layout_width="180px"
+        android:layout_height="100px" />
 
-        <TextView
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="10px"
-            android:layout_marginStart="30px"
-            android:layout_marginEnd="30px"
-            android:gravity="center"
-            android:text="Test-1"
-            android:layout_width="180px"
-            android:layout_height="100px" />
+    <ImageView
+        android:background="@android:color/holo_green_light"
+        android:textColor="@android:color/white"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        android:layout_marginTop="50px"
+        android:gravity="center"
+        android:layout_width="180px"
+        android:layout_height="100px" />
 
-        <TextView
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="10px"
-            android:layout_marginStart="30px"
-            android:layout_marginEnd="30px"
-            android:gravity="center"
-            android:text="Test-2"
-            android:layout_width="180px"
-            android:layout_height="100px" />
+    <ImageView
+        android:background="@android:color/holo_blue_bright"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px"
+        android:gravity="center"
+        android:layout_width="180px"
+        android:layout_height="100px" />
 
-        <TextView
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="30px"
-            android:layout_marginEnd="30px"
-            android:layout_marginTop="10px"
-            android:gravity="center"
-            android:text="Test-3"
-            android:layout_width="180px"
-            android:layout_height="100px" />
-
-    </com.zhy.autolayout.AutoLinearLayout>
-</com.zhy.autolayout.AutoRelativeLayout>
+</com.zhy.autolayout.AutoLinearLayout>
