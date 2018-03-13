@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.ViewConfig;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.activityLife.ModelActivityLife;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.autoLayout.ModelAutoLayout;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.diySurfaceView.ModelSurfaceView;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.helperCamera.ModelCameraHelper;
@@ -78,6 +79,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelCameraHelper().onModelTest(simpleAdapter,toast, TAG,this);
         //Auto-Layout-Test
         new ModelAutoLayout().onModelTest(simpleAdapter,toast, TAG,this);
+        //Activity-Life
+        new ModelActivityLife().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override
