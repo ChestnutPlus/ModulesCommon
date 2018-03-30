@@ -12,6 +12,8 @@ import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.RxUtils;
 import com.chestnut.common.utils.SimpleDownloadUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -26,6 +28,7 @@ public class Rx2Activity extends AppCompatActivity {
 
     private String TAG = "Rx2Activity";
     private CompositeDisposable compositeDisposable;
+    private Observable<Long> longObservable = Observable.interval(1, TimeUnit.SECONDS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +108,12 @@ public class Rx2Activity extends AppCompatActivity {
                 .subscribe(s -> LogUtils.i(TAG,"RxBus:"+s)));
 
         //click filter
-        compositeDisposable.add(RxUtils.filterClick(findViewById(R.id.txt_filter),2000)
+        compositeDisposable.add(RxUtils.filterClick(findViewById(R.id.txt_filter),1000)
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(o -> {
+                    LogUtils.i(TAG,"flatMap");
+                    return longObservable;
+                })
                 .subscribe(o -> {
                     LogUtils.i(TAG,"txt_filter");
                 }));
