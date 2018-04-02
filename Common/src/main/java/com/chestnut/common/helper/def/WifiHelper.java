@@ -11,7 +11,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 
-import com.chestnut.common.contract.helper.WifiHelperContract;
 import com.chestnut.common.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import io.reactivex.Observable;
  * </pre>
  */
 
-public class WifiHelper implements WifiHelperContract {
+public class WifiHelper implements WifiHelperContract{
 
     private final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
     private WifiManager wifiManager;
@@ -348,6 +347,7 @@ public class WifiHelper implements WifiHelperContract {
                 wifiManager.disableNetwork(wifiInfo.getNetworkId());
             }
             wifiManager.disconnect();
+            connectedBSSID = "";
         }
     }
 

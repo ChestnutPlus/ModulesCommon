@@ -1,4 +1,4 @@
-package com.chestnut.common.contract.helper;
+package com.chestnut.common.helper.def;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
