@@ -55,7 +55,8 @@
 
         <activity android:name=".fun.autoLayout.AutoLayoutActivity" />
         <activity android:name=".fun.activityLife.AActivity" />
-        <activity android:name=".fun.activityLife.BActivity"></activity>
+        <activity android:name=".fun.activityLife.BActivity" />
+        <activity android:name=".fun.testBRVAH.BRVAHActivity"/>
     </application>
 
 </manifest>

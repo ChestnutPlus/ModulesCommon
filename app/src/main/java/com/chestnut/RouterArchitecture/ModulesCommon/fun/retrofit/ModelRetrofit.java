@@ -1,6 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.base.CommonContract;
@@ -36,8 +37,12 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  * </pre>
  */
 public class ModelRetrofit implements CommonContract{
+
+    private Context applicationContext;
+
     @Override
     public void onModelTest(SimpleAdapter simpleAdapter, XToast toast, String TAG, Activity activity) {
+        applicationContext = activity.getApplicationContext();
         TxtItem t2 = new TxtItem("Op-Retrofit");
         t2.setCallback(s -> {
             toast.setText(s).show();

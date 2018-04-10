@@ -21,6 +21,7 @@ import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.ModelRetrofit;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2.ModelRx2;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.tSnackBar.ModelTSnackBar;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.testAssetsUtils.ModelAssetsUtils;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.testBRVAH.ModelBRVAH;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
 import com.chestnut.common.helper.si.RxBus;
 import com.chestnut.common.helper.si.XFontHelper;
@@ -84,6 +85,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelActivityLife().onModelTest(simpleAdapter,toast, TAG,this);
         //AssetsUtils
         new ModelAssetsUtils().onModelTest(simpleAdapter,toast, TAG,this);
+        //BaseRecyclerViewAdapterHelper
+        new ModelBRVAH().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override
