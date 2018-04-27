@@ -9,7 +9,7 @@
         android:id="@+id/animation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lottie_fileName="sparks.json"
+        app:lottie_fileName="car.json"
         app:lottie_loop="true"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

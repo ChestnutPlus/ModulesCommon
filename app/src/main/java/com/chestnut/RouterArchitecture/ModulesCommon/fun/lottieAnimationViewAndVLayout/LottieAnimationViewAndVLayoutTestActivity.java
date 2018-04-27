@@ -1,13 +1,10 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndVLayout;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
-import com.airbnb.lottie.ImageAssetDelegate;
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieImageAsset;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.FloatLayoutHelper;
@@ -15,7 +12,6 @@ import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndVLayout.vLayout.FloatAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndVLayout.vLayout.LinearAdapter;
-import com.chestnut.common.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,12 +26,6 @@ public class LottieAnimationViewAndVLayoutTestActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottie_animation_v_layout);
         LottieAnimationView lottieAnimationView = (LottieAnimationView) findViewById(R.id.animation_view);
-        lottieAnimationView.setImageAssetDelegate(new ImageAssetDelegate() {
-            @Override
-            public Bitmap fetchBitmap(LottieImageAsset asset) {
-                return ImageUtils.getBitmap(LottieAnimationViewAndVLayoutTestActivity.this.getResources(),R.drawable.img_0);
-            }
-        });
         lottieAnimationView.playAnimation();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);

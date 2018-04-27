@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -37,7 +38,7 @@ import io.reactivex.Observable;
  * </pre>
  */
 
-public class WifiHelper implements WifiHelperContract{
+public class WifiHelper implements WifiHelperContract {
 
     private final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
     private WifiManager wifiManager;
@@ -46,6 +47,7 @@ public class WifiHelper implements WifiHelperContract{
     private String connectingBSSID = "";
     private String connectedBSSID = "";
     private ConnectWifiCallback connectWifiCallback;
+    private boolean isReadyToCallback = false;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -65,7 +67,11 @@ public class WifiHelper implements WifiHelperContract{
                     }
                 } else if (action.equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
                     int error = intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, 0);
-                    if (error == WifiManager.ERROR_AUTHENTICATING) {
+                    SupplicantState netNewState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
+                    if (connectWifiCallback!=null && netNewState == SupplicantState.ASSOCIATING) {
+                        isReadyToCallback = true;
+                    }
+                    if (isReadyToCallback && netNewState == SupplicantState.DISCONNECTED && error == WifiManager.ERROR_AUTHENTICATING) {
                         if (connectWifiCallback!=null)
                             connectWifiCallback.onConnectPswFail();
                     }
@@ -170,6 +176,7 @@ public class WifiHelper implements WifiHelperContract{
     @Override
     public Observable<Integer> connectRx(ScanResult scanResult, String password) {
         return Observable.create(e -> {
+            isReadyToCallback = false;
             if (!StringUtils.isEmpty(connectingBSSID)) {
                 e.onNext(WifiHelperContract.Wifi_Another_Is_Connecting);
                 e.onComplete();
@@ -183,7 +190,6 @@ public class WifiHelper implements WifiHelperContract{
                     connectWifiCallback = null;
                 }
                 else {
-                    disConnectCurrent();
                     connectedBSSID = "";
                     connectWifiCallback = new ConnectWifiCallback() {
                         @Override
@@ -231,7 +237,7 @@ public class WifiHelper implements WifiHelperContract{
         return result;
     }
 
-    private WifiConfiguration createWifiInfo(String ssId, String password,@WifiPswType int type) {
+    private WifiConfiguration createWifiInfo(String ssId, String password, @WifiPswType int type) {
         final WifiConfiguration wifiConfiguration = new WifiConfiguration();
         wifiConfiguration.allowedAuthAlgorithms.clear();
         wifiConfiguration.allowedGroupCiphers.clear();
