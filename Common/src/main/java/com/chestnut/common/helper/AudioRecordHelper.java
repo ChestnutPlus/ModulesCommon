@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.helper;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -6,7 +6,7 @@ import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.chestnut.common.helper.manager.XUtilsManager;
+import com.chestnut.common.manager.UtilsManager;
 import com.chestnut.common.utils.ExceptionCatchUtils;
 
 import java.io.BufferedOutputStream;
@@ -59,9 +59,9 @@ public class AudioRecordHelper {
     //记录播放状态
     private boolean isRecording = false;
     //wav文件目录
-    private String outFile = XUtilsManager.getCachePath()+"/AudioRecordHelper-Temp.wav";
+    private String outFile = UtilsManager.getCachePath()+"/AudioRecordHelper-Temp.wav";
     //pcm文件目录
-    private String inFile = XUtilsManager.getCachePath()+"/AudioRecordHelper-Temp.pcm";
+    private String inFile = UtilsManager.getCachePath()+"/AudioRecordHelper-Temp.pcm";
 
     //定义准备时间的概念，如果，太快调用stop方法，会触发回调：onRecordTooShort
     private boolean isReady = false;

@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.manager;
+package com.chestnut.common.manager;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;

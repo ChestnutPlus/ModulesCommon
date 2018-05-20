@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
-import com.chestnut.common.helper.def.CameraHelper;
+import com.chestnut.common.helper.CameraHelper;
 
 public class CameraHelperActivity extends AppCompatActivity {
 

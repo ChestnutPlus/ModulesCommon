@@ -6,8 +6,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
-import com.chestnut.common.helper.manager.RxBusManager;
-import com.chestnut.common.helper.manager.XUtilsManager;
+import com.chestnut.common.manager.RxBusManager;
+import com.chestnut.common.manager.UtilsManager;
 import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.RxUtils;
 import com.chestnut.common.utils.SimpleDownloadUtils;
@@ -74,7 +74,7 @@ public class Rx2Activity extends AppCompatActivity {
         //示例原来RxJava1.x的方法直接改成RxJava2.x的方法
         findViewById(R.id.txt_downRx).setOnClickListener(view -> {
             SimpleDownloadUtils.downLoadRx("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1517919794691&di=a83628a6219f4fbe6470decc6b1a05b2&imgtype=0&src=http%3A%2F%2Fp3.gexing.com%2Fshaitu%2F20130405%2F1020%2F515e35039c8c4.jpg",
-                    XUtilsManager.getCachePath()+"/beauty.png")
+                    UtilsManager.getCachePath()+"/beauty.png")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DefaultObserver<Boolean>() {
@@ -83,7 +83,7 @@ public class Rx2Activity extends AppCompatActivity {
                             LogUtils.i(TAG,"onNext,"+aBoolean);
                             if (aBoolean)
                                 Glide.with(Rx2Activity.this)
-                                        .load(XUtilsManager.getCachePath()+"/beauty.png")
+                                        .load(UtilsManager.getCachePath()+"/beauty.png")
                                         .into((ImageView) findViewById(R.id.img));
                         }
 

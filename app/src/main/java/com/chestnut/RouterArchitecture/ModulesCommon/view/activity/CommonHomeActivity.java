@@ -23,8 +23,8 @@ import com.chestnut.RouterArchitecture.ModulesCommon.fun.tSnackBar.ModelTSnackBa
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.testAssetsUtils.ModelAssetsUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.testBRVAH.ModelBRVAH;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
-import com.chestnut.common.helper.manager.RxBusManager;
-import com.chestnut.common.helper.manager.XFontManager;
+import com.chestnut.common.manager.RxBusManager;
+import com.chestnut.common.manager.FontManager;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
@@ -40,9 +40,9 @@ public class CommonHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_home);
-        XFontManager.getInstance().setActivityFont(this,ViewConfig.TypeFace_HK);
+        FontManager.getInstance().setActivityFont(this,ViewConfig.TypeFace_HK);
         toast = new XToast(this, Toast.LENGTH_LONG);
-        toast.setTextTypeface(XFontManager.getInstance().get(ViewConfig.TypeFace_HK));
+        toast.setTextTypeface(FontManager.getInstance().get(ViewConfig.TypeFace_HK));
         toast.setTextSize(15);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(ScreenUtils.getScreenHeight_Dip(this)/50,StaggeredGridLayoutManager.HORIZONTAL));

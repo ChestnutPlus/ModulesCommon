@@ -38,7 +38,7 @@
 #---------------------Utils---------------------------
 -keep class com.chestnut.common.ui.XTextView{ *; }
 -keep class com.chestnut.common.utils.LogUtils{ *; }
--keep class com.chestnut.common.utils.CrashUtils{ *; }
+-keep class com.chestnut.common.manager.CrashManager{ *; }
 -keep class manager.XJsonHelper{ *; }
 
 #------------------Retrolambda---------------------

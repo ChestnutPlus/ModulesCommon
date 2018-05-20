@@ -9,14 +9,17 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 26
-        versionName "1.1.2"
+        versionCode 27
+        versionName "1.1.3"
         /**
          *    1.1.1-23. ~ LogUtils 重写部分方法，并加入删除日志。
          *    1.1.1-24. ~ EncryptUtils 重写获取MD5的算法，避免文件太大的时候，OOM
          *    1.1.2-24  替换RxJava2。
          *    1.1.2-25  1. 更新WifiHelper 2.新增基本接口
          *    1.1.2-26  修复Wifi连接时候的一个bug
+         *    1.1.3-27
+         *          1.  更改部分类命名
+         *          2.  给资源添加前缀
          */
     }
     buildTypes {
@@ -42,6 +45,8 @@ android {
     lintOptions {
         abortOnError false
     }
+    //在资源名称前加上前缀名，避免资源冲突
+    resourcePrefix 'chestnut_common_'
 }
 
 dependencies {

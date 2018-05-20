@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.manager;
 
 import com.chestnut.common.utils.LogUtils;
 
@@ -21,7 +21,7 @@ import io.reactivex.subjects.PublishSubject;
  *     author: 栗子酱
  *     blog  : http://www.jianshu.com/u/a0206b5f4526
  *     time  : 2017年1月30日17:00:21
- *     desc  :  RxSocket
+ *     desc  :  RxSocketManager
  *     thanks To:
  *     dependent on:
  *     update log:
@@ -31,11 +31,11 @@ import io.reactivex.subjects.PublishSubject;
  * </pre>
  */
 
-public class RxSocket {
+public class RxSocketManager {
 
     /*  常量
     * */
-    private String TAG = "RxSocket";
+    private String TAG = "RxSocketManager";
     private boolean OpenLog = false;
     private long WRITE_TIME_OUT = 3000;
     private long CONNECT_TIME_OUT = 3000;
@@ -44,23 +44,23 @@ public class RxSocket {
     * */
     private PublishSubject<byte[]> readSubject;
     private PublishSubject<SocketStatus> connectStatus;
-    private static volatile RxSocket defaultInstance;
-    private RxSocket() {
+    private static volatile RxSocketManager defaultInstance;
+    private RxSocketManager() {
         readSubject = PublishSubject.create();
         connectStatus = PublishSubject.create();
     }
-    public static RxSocket getInstance() {
-        RxSocket rxSocket = defaultInstance;
+    public static RxSocketManager getInstance() {
+        RxSocketManager rxSocketManager = defaultInstance;
         if (defaultInstance == null) {
-            synchronized (RxSocket.class) {
-                rxSocket = defaultInstance;
+            synchronized (RxSocketManager.class) {
+                rxSocketManager = defaultInstance;
                 if (defaultInstance == null) {
-                    rxSocket = new RxSocket();
-                    defaultInstance = rxSocket;
+                    rxSocketManager = new RxSocketManager();
+                    defaultInstance = rxSocketManager;
                 }
             }
         }
-        return rxSocket;
+        return rxSocketManager;
     }
 
     /*  变量

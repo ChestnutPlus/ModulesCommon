@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.CommonContract;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.item.TxtItem;
-import com.chestnut.common.helper.manager.RxBusManager;
+import com.chestnut.common.manager.RxBusManager;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.LogUtils;
 

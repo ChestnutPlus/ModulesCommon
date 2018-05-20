@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.manager;
+package com.chestnut.common.manager;
 
 import android.support.annotation.NonNull;
 
@@ -22,17 +22,17 @@ import java.util.List;
  * </pre>
  */
 
-public class XJsonManager implements JsonInterface<Gson> {
+public class JsonManager implements JsonInterface<Gson> {
 
     /*单例*/
-    private static volatile XJsonManager defaultInstance;
-    public static XJsonManager getInstance() {
-        XJsonManager jsonUtils = defaultInstance;
+    private static volatile JsonManager defaultInstance;
+    public static JsonManager getInstance() {
+        JsonManager jsonUtils = defaultInstance;
         if (defaultInstance == null) {
-            synchronized (XJsonManager.class) {
+            synchronized (JsonManager.class) {
                 jsonUtils = defaultInstance;
                 if (defaultInstance == null) {
-                    jsonUtils = new XJsonManager();
+                    jsonUtils = new JsonManager();
                     defaultInstance = jsonUtils;
                 }
             }
@@ -46,7 +46,7 @@ public class XJsonManager implements JsonInterface<Gson> {
         try {
             return gson.fromJson(json,beanClass);
         } catch (Exception e) {
-            ExceptionCatchUtils.catchE(e,"XJsonManager");
+            ExceptionCatchUtils.catchE(e,"JsonManager");
             return null;
         }
     }
@@ -57,7 +57,7 @@ public class XJsonManager implements JsonInterface<Gson> {
             //List<BannerBean> bannerBeanList = new Gson().fromJson(s,new TypeToken<List<BannerBean>>(){}.getType());
             return gson.fromJson(json, new TypeToken<List<Bean>>(){}.getType());
         } catch (Exception e) {
-            ExceptionCatchUtils.catchE(e,"XJsonManager");
+            ExceptionCatchUtils.catchE(e,"JsonManager");
             return null;
         }
     }

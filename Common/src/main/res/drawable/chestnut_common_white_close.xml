@@ -11,7 +11,7 @@
     <item android:bottom="18.5dp" android:top="18.5dp">
         <rotate android:fromDegrees="-45">
             <shape android:shape="rectangle">
-                <solid android:color="@color/white_down_icon"/>
+                <solid android:color="@color/chestnut_common_arrow_white"/>
                 <corners android:radius="2dp"/>
             </shape>
         </rotate>
@@ -19,7 +19,7 @@
     <item android:bottom="18.5dp" android:top="18.5dp">
         <rotate android:fromDegrees="45">
             <shape android:shape="rectangle">
-                <solid android:color="@color/white_down_icon"/>
+                <solid android:color="@color/chestnut_common_arrow_white"/>
                 <corners android:radius="2dp"/>
             </shape>
         </rotate>

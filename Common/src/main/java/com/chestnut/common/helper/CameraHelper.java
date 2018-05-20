@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.helper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

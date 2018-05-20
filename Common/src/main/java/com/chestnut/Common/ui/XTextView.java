@@ -55,9 +55,9 @@ public class XTextView extends AppCompatTextView {
         if (mapSoftReferenceTypeFaces==null)
             mapSoftReferenceTypeFaces = new HashMap<>();
         //设置Drawable 的宽高
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.XTextView_Drawable);
-        int drawableWidth = typedArray.getDimensionPixelSize(R.styleable.XTextView_Drawable_drawableWidth, -1);
-        int drawableHeight = typedArray.getDimensionPixelSize(R.styleable.XTextView_Drawable_drawableHeight, -1);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.chestnut_common_XTextView_Drawable);
+        int drawableWidth = typedArray.getDimensionPixelSize(R.styleable.chestnut_common_XTextView_Drawable_chestnut_common_drawableWidth, -1);
+        int drawableHeight = typedArray.getDimensionPixelSize(R.styleable.chestnut_common_XTextView_Drawable_chestnut_common_drawableHeight, -1);
         Drawable[] drawables = getCompoundDrawables();
         Drawable textDrawable = null;
         for (Drawable drawable : drawables) {
@@ -71,7 +71,7 @@ public class XTextView extends AppCompatTextView {
         //设置给TextView
         setCompoundDrawables(drawables[0], drawables[1], drawables[2], drawables[3]);
         //加载字体
-        String fontPath = typedArray.getString(R.styleable.XTextView_Drawable_fontPath);
+        String fontPath = typedArray.getString(R.styleable.chestnut_common_XTextView_Drawable_chestnut_common_fontPath);
         try {
             if (fontPath!=null && fontPath.length()!=0) {
                 Typeface typeFace;

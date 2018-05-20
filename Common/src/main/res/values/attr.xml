@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--XTextView-->
-    <declare-styleable name="XTextView_Drawable">
-        <attr name="drawableWidth" format="dimension"/>
-        <attr name="drawableHeight" format="dimension"/>
-        <attr name="fontPath" format="string"/>
+    <declare-styleable name="chestnut_common_XTextView_Drawable">
+        <attr name="chestnut_common_drawableWidth" format="dimension"/>
+        <attr name="chestnut_common_drawableHeight" format="dimension"/>
+        <attr name="chestnut_common_fontPath" format="string"/>
     </declare-styleable>
 </resources>

@@ -1,13 +1,13 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.helper;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 
 /**
  * <pre>
  *     author: Chestnut
  *     blog  : http://www.jianshu.com/u/a0206b5f4526
  *     time  : 2017/8/23 14:54
- *     desc  :  对软引用的一个封装
+ *     desc  :  对弱引用的一个封装
  *     thanks To:
  *            http://www.cnblogs.com/alias-blog/p/5793108.html
  *     dependent on:
@@ -15,28 +15,28 @@ import java.lang.ref.SoftReference;
  *          1.  完成了测试。
  * </pre>
  */
-public class SoftRefHelper<DataType> {
+public class WeakRefHelper<DataType> {
 
-    private SoftReference<DataType> dataTypeSoftReference;
+    private WeakReference<DataType> dataTypeWeakReference;
     private NullCallBack nullCallBack;
 
-    public SoftRefHelper(DataType dataType) {
-        dataTypeSoftReference = new SoftReference<>(dataType);
+    public WeakRefHelper(DataType dataType) {
+        dataTypeWeakReference = new WeakReference<>(dataType);
     }
 
     public DataType get(NullCallBack nullCallBack) {
-        if (dataTypeSoftReference.get()!=null)
-            return dataTypeSoftReference.get();
+        if (dataTypeWeakReference.get()!=null)
+            return dataTypeWeakReference.get();
         else {
             if (nullCallBack!=null) {
                 DataType dataType = nullCallBack.createNewObject();
-                dataTypeSoftReference = new SoftReference<>(dataType);
+                dataTypeWeakReference = new WeakReference<>(dataType);
             }
             if (this.nullCallBack!=null) {
                 DataType dataType = this.nullCallBack.createNewObject();
-                dataTypeSoftReference = new SoftReference<>(dataType);
+                dataTypeWeakReference = new WeakReference<>(dataType);
             }
-            return dataTypeSoftReference.get();
+            return dataTypeWeakReference.get();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.helper;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -106,12 +106,12 @@ public class SoundPoolHelper {
     public SoundPoolHelper loadDefault(Context context) {
         Uri uri = getSystemDefaultRingtoneUri(context);
         if (uri==null)
-            load(context,"default", R.raw.reminder);
+            load(context,"default", R.raw.chestnut_common_reminder);
         else
             try {
                 load(context,"default", ConvertUtils.uri2Path(context,uri));
             } catch (Exception e) {
-                load(context,"default", R.raw.reminder);
+                load(context,"default", R.raw.chestnut_common_reminder);
             }
         return this;
     }
