@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.chestnut.common.helper.si.XUtilsHelper;
+import com.chestnut.common.helper.manager.XUtilsManager;
 import com.chestnut.common.utils.ExceptionCatchUtils;
 
 import java.util.concurrent.ExecutorService;
@@ -37,7 +37,7 @@ public class RecorderHelper {
     private boolean isRecording = false;
     private String fileName = null;
     private CountDownTimer countDownTimer = null;
-    private String outFile = XUtilsHelper.getCachePath()+"/RecorderHelper-Temp.amr";
+    private String outFile = XUtilsManager.getCachePath()+"/RecorderHelper-Temp.amr";
     private ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
     private Handler handler;
 

@@ -19,6 +19,10 @@ public class CameraHelperActivity extends AppCompatActivity {
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surface_view);
         cameraHelper.init(surfaceView,90);
         cameraHelper.setAutoFocus(1000);
+
+        surfaceView.setOnClickListener(view -> {
+            cameraHelper.setAutoFocus();
+        });
     }
 
     @Override

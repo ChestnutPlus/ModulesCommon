@@ -28,6 +28,9 @@ import io.reactivex.schedulers.Schedulers;
  *              3.  http://blog.csdn.net/super_zq/article/details/52637064
  *     dependent on:
  *     update log:
+ *              2018年5月20日
+ *                  1. 对自动对焦crash进行处理
+ *                  2. 增加多线程锁
  * </pre>
  */
 public class CameraHelper {
@@ -47,47 +50,50 @@ public class CameraHelper {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map(integer -> {
-                    SurfaceHolder surfaceHolder = surfaceView.getHolder();
-                    surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-                        @Override
-                        public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                            try {
-                                if (cameraId!=-1) {
-                                    try {
-                                        camera = Camera.open(cameraId);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                    //锁住，避免并发初始化带来不可预知的错误
+                    synchronized (CameraHelper.this) {
+                        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+                        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
+                            @Override
+                            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+                                try {
+                                    if (cameraId!=-1) {
+                                        try {
+                                            camera = Camera.open(cameraId);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            camera = null;
+                                        }
+                                    }
+                                    if (camera==null)
+                                        camera = Camera.open(0);
+                                    if (camera == null)
+                                        camera = Camera.open(1);
+                                    camera.setPreviewDisplay(surfaceHolder);
+                                } catch (Exception e) {
+                                    if (null != camera) {
+                                        camera.release();
                                         camera = null;
                                     }
+                                    e.printStackTrace();
                                 }
-                                if (camera==null)
-                                    camera = Camera.open(0);
-                                if (camera == null)
-                                    camera = Camera.open(1);
-                                camera.setPreviewDisplay(surfaceHolder);
-                            } catch (Exception e) {
+                            }
+
+                            @Override
+                            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+                                initCamera(orientation,surfaceView);
+                            }
+
+                            @Override
+                            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                                 if (null != camera) {
+                                    camera.stopPreview();
                                     camera.release();
                                     camera = null;
                                 }
-                                e.printStackTrace();
                             }
-                        }
-
-                        @Override
-                        public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-                            initCamera(orientation,surfaceView);
-                        }
-
-                        @Override
-                        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                            if (null != camera) {
-                                camera.stopPreview();
-                                camera.release();
-                                camera = null;
-                            }
-                        }
-                    });
+                        });
+                    }
                     return integer;
                 }).subscribe();
     }
@@ -104,18 +110,22 @@ public class CameraHelper {
      * 开始预览
      */
     public void startPreview() {
-        isStartPreview = true;
-        if (camera!=null)
-            camera.startPreview();
+        synchronized (CameraHelper.this) {
+            isStartPreview = true;
+            if (camera!=null)
+                camera.startPreview();
+        }
     }
 
     /**
      * 停止预览
      */
     public void stopPreview() {
-        isStartPreview = false;
-        if (camera!=null)
-            camera.stopPreview();
+        synchronized (CameraHelper.this) {
+            isStartPreview = false;
+            if (camera != null)
+                camera.stopPreview();
+        }
     }
 
     /**
@@ -123,14 +133,16 @@ public class CameraHelper {
      * 只对焦一次
      */
     public void setAutoFocus() {
-        if (camera!=null) {
-            camera.setAutoFocusMoveCallback((b, camera) -> {
-                if (b) {
-                    Log.i("CameraHelper", "setAutoFocusMoveCallback: success...");
-                } else {
-                    Log.i("CameraHelper", "setAutoFocusMoveCallback: fail...");
-                }
-            });
+        synchronized (CameraHelper.this) {
+            if (camera != null && disposableTimer != null && !disposableTimer.isDisposed()) {
+                camera.autoFocus((b, camera) -> {
+                    if (b) {
+                        Log.i("CameraHelper", "setAutoFocusMoveCallback: success...");
+                    } else {
+                        Log.i("CameraHelper", "setAutoFocusMoveCallback: fail...");
+                    }
+                });
+            }
         }
     }
 
@@ -145,7 +157,9 @@ public class CameraHelper {
         disposableTimer = Observable.interval(timeMs, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(aLong -> setAutoFocus());
+                .subscribe(aLong -> setAutoFocus(), throwable -> {
+                    Log.i("CameraHelper", "setAutoFocus, err: "+throwable.getMessage());
+                });
     }
 
     /**
@@ -194,14 +208,23 @@ public class CameraHelper {
      * 释放资源
      */
     public void release() {
-        if (disposableTimer!=null && !disposableTimer.isDisposed())
-            disposableTimer.dispose();
-        if (null != camera) {
-            camera.stopPreview();
-            camera.release();
-            camera = null;
+        synchronized (CameraHelper.this) {
+            if (disposableTimer!=null && !disposableTimer.isDisposed())
+                disposableTimer.dispose();
+            disposableTimer = null;
+            if (null != camera) {
+                camera.setFaceDetectionListener(null);
+                camera.setZoomChangeListener(null);
+                camera.setAutoFocusMoveCallback(null);
+                camera.setErrorCallback(null);
+                camera.setPreviewCallbackWithBuffer(null);
+                camera.setOneShotPreviewCallback(null);
+                camera.setPreviewCallback(null);
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+            }
         }
-        disposableTimer = null;
     }
 
     /**
@@ -262,6 +285,7 @@ public class CameraHelper {
             parameters.setPreviewSize(optimalSize.width, optimalSize.height);//把camera.size赋值到parameters
             camera.setParameters(parameters);//把parameters设置给camera
         }
+
         return parameters;
     }
 }

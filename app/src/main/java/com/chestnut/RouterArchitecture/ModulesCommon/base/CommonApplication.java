@@ -2,8 +2,8 @@ package com.chestnut.RouterArchitecture.ModulesCommon.base;
 
 import android.app.Application;
 
-import com.chestnut.common.helper.si.XFontHelper;
-import com.chestnut.common.helper.si.XUtilsHelper;
+import com.chestnut.common.helper.manager.XFontManager;
+import com.chestnut.common.helper.manager.XUtilsManager;
 import com.chestnut.common.utils.LogUtils;
 
 /**
@@ -22,8 +22,8 @@ public class CommonApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        XUtilsHelper.init(this);
-        XFontHelper.getInstance()
+        XUtilsManager.init(this);
+        XFontManager.getInstance()
                 .init(this)
                 .loadWithSoftRef(ViewConfig.TypeFace_Zip_Min)
                 .loadWithSoftRef(ViewConfig.TypeFace_HK)

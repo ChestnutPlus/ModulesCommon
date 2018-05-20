@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.si;
+package com.chestnut.common.helper.manager;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -8,30 +8,30 @@ import io.reactivex.subjects.PublishSubject;
  *     author: Chestnut
  *     blog  : http://www.jianshu.com/u/a0206b5f4526
  *     time  : 2018/2/6 17:45
- *     desc  :  RxBus
+ *     desc  :  RxBusManager
  *     thanks To:
  *     dependent on:
  *     update log:
  * </pre>
  */
-public class RxBus {
+public class RxBusManager {
 
     /*单例*/
-    private static volatile RxBus defaultInstance;
-    public static RxBus getInstance() {
-        RxBus jsonUtils = defaultInstance;
+    private static volatile RxBusManager defaultInstance;
+    public static RxBusManager getInstance() {
+        RxBusManager jsonUtils = defaultInstance;
         if (defaultInstance == null) {
-            synchronized (RxBus.class) {
+            synchronized (RxBusManager.class) {
                 jsonUtils = defaultInstance;
                 if (defaultInstance == null) {
-                    jsonUtils = new RxBus();
+                    jsonUtils = new RxBusManager();
                     defaultInstance = jsonUtils;
                 }
             }
         }
         return jsonUtils;
     }
-    private RxBus(){
+    private RxBusManager(){
         publishSubject = PublishSubject.create();
     }
 

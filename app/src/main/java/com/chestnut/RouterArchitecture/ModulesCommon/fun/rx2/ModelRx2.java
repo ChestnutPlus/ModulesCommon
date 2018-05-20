@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.CommonContract;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.item.TxtItem;
-import com.chestnut.common.helper.si.RxBus;
+import com.chestnut.common.helper.manager.RxBusManager;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.LogUtils;
 
@@ -29,7 +29,7 @@ public class ModelRx2 implements CommonContract{
         t2.setCallback(s -> {
             toast.setText(s).show();
             LogUtils.i(TAG, s);
-            RxBus.getInstance().post(String.valueOf(System.currentTimeMillis()));
+            RxBusManager.getInstance().post(String.valueOf(System.currentTimeMillis()));
             activity.startActivity(new Intent(activity,Rx2Activity.class));
         });
         simpleAdapter.add(t2);

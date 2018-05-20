@@ -230,7 +230,7 @@ public class StringUtils {
             "se", "sen", "seng", "sha",
             "shai", "shan", "shang", "shao", "she", "shen", "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan",
             "shuang", "shui", "shun",
-            "shuo", "si", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te",
+            "shuo", "manager", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te",
             "teng", "ti", "tian", "tiao",
             "tie", "ting", "tong", "tou", "tu", "tuan", "tui", "tun", "tuo", "wa", "wai", "wan", "wang", "wei",
             "wen", "weng", "wo", "wu", "xi",

@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.ViewConfig;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
-import com.chestnut.common.helper.si.XFontHelper;
+import com.chestnut.common.helper.manager.XFontManager;
 import com.chestnut.common.ui.recyclerView.XHolder;
 import com.chestnut.common.ui.recyclerView.XItem;
 
@@ -37,7 +37,7 @@ public class TxtItem extends XItem<String>{
     @Override
     public void onBindViewHolder(XHolder holder, int position) {
         TextView textView = (TextView) holder.getViewById(R.id.txt);
-        XFontHelper.getInstance().setViewFont(textView, ViewConfig.TypeFace_HK);
+        XFontManager.getInstance().setViewFont(textView, ViewConfig.TypeFace_HK);
         textView.setText(data);
         if (callback!=null)
             textView.setOnClickListener(view -> {
