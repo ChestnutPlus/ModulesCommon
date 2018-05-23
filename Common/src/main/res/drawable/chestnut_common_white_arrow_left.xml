@@ -12,7 +12,7 @@
     <!--中间-->
     <item android:bottom="18.5dp" android:top="18.5dp" android:left="3dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/arrow_white"/>
+            <solid android:color="@color/chestnut_common_arrow_white"/>
             <corners android:radius="4dp"/>
         </shape>
     </item>
@@ -21,7 +21,7 @@
     <item android:bottom="27dp" android:top="10dp" android:right="19dp">
         <rotate android:fromDegrees="-45" android:toDegrees="-45" android:pivotX="50%" android:pivotY="50%">
             <shape android:shape="rectangle">
-                <solid android:color="@color/arrow_white"/>
+                <solid android:color="@color/chestnut_common_arrow_white"/>
                 <corners android:radius="4dp"/>
             </shape>
         </rotate>
@@ -31,7 +31,7 @@
     <item android:bottom="10dp" android:top="27dp" android:right="19dp">
         <rotate android:fromDegrees="45" android:toDegrees="45" android:pivotX="50%" android:pivotY="50%">
             <shape android:shape="rectangle">
-                <solid android:color="@color/arrow_white"/>
+                <solid android:color="@color/chestnut_common_arrow_white"/>
                 <corners android:radius="4dp"/>
             </shape>
         </rotate>

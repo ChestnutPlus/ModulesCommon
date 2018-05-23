@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.si;
+package com.chestnut.common.manager;
 
 import android.content.Context;
 import android.os.Environment;
@@ -6,7 +6,6 @@ import android.support.annotation.StringRes;
 
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
-import com.chestnut.common.utils.SPUtils;
 
 import java.io.File;
 
@@ -21,7 +20,7 @@ import java.io.File;
  *     update log:
  * </pre>
  */
-public class XUtilsHelper {
+public class UtilsManager {
 
     private static String CACHE_PATH = null;
     private static Context applicationContext;
@@ -37,7 +36,7 @@ public class XUtilsHelper {
             File file = new File(CACHE_PATH);
             if (!file.exists()) {
                 if (!file.mkdir()) {
-                    throw new RuntimeException("XUtilsHelper CACHE_PATH create fail...");
+                    throw new RuntimeException("UtilsManager CACHE_PATH create fail...");
                 }
             }
         }
@@ -45,8 +44,8 @@ public class XUtilsHelper {
             CACHE_PATH = context.getCacheDir().getAbsolutePath();
         }
         LogUtils.init();
-        LogUtils.i(true,"XUtilsHelper","cache_path:"+CACHE_PATH);
-        SPUtils.getInstance().init(context, SP_NAME);
+        LogUtils.i(true,"UtilsManager","cache_path:"+CACHE_PATH);
+        SPManager.getInstance().init(context, SP_NAME);
     }
 
     public static void init(Context context) {

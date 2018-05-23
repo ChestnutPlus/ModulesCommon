@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceView;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
-import com.chestnut.common.helper.def.CameraHelper;
+import com.chestnut.common.helper.CameraHelper;
 
 public class CameraHelperActivity extends AppCompatActivity {
 
@@ -19,6 +19,10 @@ public class CameraHelperActivity extends AppCompatActivity {
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surface_view);
         cameraHelper.init(surfaceView,90);
         cameraHelper.setAutoFocus(1000);
+
+        surfaceView.setOnClickListener(view -> {
+            cameraHelper.setAutoFocus();
+        });
     }
 
     @Override

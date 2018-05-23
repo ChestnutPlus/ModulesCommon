@@ -7,7 +7,7 @@
     <TextView
         android:focusable="true"
         android:clickable="true"
-        android:background="@drawable/touch_bg"
+        android:background="@drawable/chestnut_common_touch_bg"
         android:gravity="center"
         android:id="@+id/textView"
         android:layout_margin="10dp"

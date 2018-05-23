@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.si;
+package com.chestnut.common.manager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,30 +42,30 @@ import java.util.Map;
  *
  * </pre>
  */
-public class XFontHelper implements FontInterface<XFontHelper> {
+public class FontManager implements FontInterface<FontManager> {
 
     private Map<String,SoftReference<Typeface>> xSoftRefMap;
     private Map<String,Typeface> typefaceMap;
     private Context applicationContext;
 
     /*单例*/
-    private static volatile XFontHelper defaultInstance;
-    public static XFontHelper getInstance() {
-        XFontHelper XFontHelper = defaultInstance;
+    private static volatile FontManager defaultInstance;
+    public static FontManager getInstance() {
+        FontManager FontManager = defaultInstance;
         if (defaultInstance == null) {
-            synchronized (XFontHelper.class) {
-                XFontHelper = defaultInstance;
+            synchronized (FontManager.class) {
+                FontManager = defaultInstance;
                 if (defaultInstance == null) {
-                    XFontHelper = new XFontHelper();
-                    defaultInstance = XFontHelper;
+                    FontManager = new FontManager();
+                    defaultInstance = FontManager;
                 }
             }
         }
-        return XFontHelper;
+        return FontManager;
     }
 
     @Override
-    public XFontHelper init(Context context) {
+    public FontManager init(Context context) {
         xSoftRefMap = new HashMap<>();
         typefaceMap = new HashMap<>();
         applicationContext = context.getApplicationContext();
@@ -73,9 +73,9 @@ public class XFontHelper implements FontInterface<XFontHelper> {
     }
 
     @Override
-    public XFontHelper loadWithStrongRef(String fontPathInAssets) {
+    public FontManager loadWithStrongRef(String fontPathInAssets) {
         if (StringUtils.isEmpty(fontPathInAssets))
-            throw new RuntimeException("XFontHelper: the font path is null !");
+            throw new RuntimeException("FontManager: the font path is null !");
         else {
             if (!typefaceMap.containsKey(fontPathInAssets))
                 typefaceMap.put(fontPathInAssets,_load(fontPathInAssets));
@@ -84,9 +84,9 @@ public class XFontHelper implements FontInterface<XFontHelper> {
     }
 
     @Override
-    public XFontHelper loadWithSoftRef(String fontPathInAssets) {
+    public FontManager loadWithSoftRef(String fontPathInAssets) {
         if (StringUtils.isEmpty(fontPathInAssets))
-            throw new RuntimeException("XFontHelper: the font path is null !");
+            throw new RuntimeException("FontManager: the font path is null !");
         else {
             if (!xSoftRefMap.containsKey(fontPathInAssets)) {
                 SoftReference<Typeface> xSoftRef = new SoftReference<>(_load(fontPathInAssets));
@@ -108,7 +108,7 @@ public class XFontHelper implements FontInterface<XFontHelper> {
     public Typeface get(String fontPathInAssets) {
         Typeface typeface;
         if (StringUtils.isEmpty(fontPathInAssets))
-            throw new RuntimeException("XFontHelper: the font path is null !");
+            throw new RuntimeException("FontManager: the font path is null !");
         else {
             if (typefaceMap.containsKey(fontPathInAssets))
                 typeface = typefaceMap.get(fontPathInAssets);
@@ -177,7 +177,7 @@ public class XFontHelper implements FontInterface<XFontHelper> {
         try {
             long timeMsStart = System.currentTimeMillis();
             typeface = Typeface.createFromAsset(applicationContext.getAssets(), fontPathInAssets);
-            LogUtils.e(true,"XFontHelper","load Font (" + fontPathInAssets + ") Ms : " + (System.currentTimeMillis()-timeMsStart));
+            LogUtils.e(true,"FontManager","load Font (" + fontPathInAssets + ") Ms : " + (System.currentTimeMillis()-timeMsStart));
         } catch (Exception e) {
             ExceptionCatchUtils.catchE(e);
         }

@@ -1,4 +1,4 @@
-package com.chestnut.common.utils;
+package com.chestnut.common.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,26 +15,26 @@ import java.util.Map;
  *     dependent on:
  * </pre>
  */
-public class SPUtils {
+public class SPManager {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private static SPUtils spUtils = null;
+    private static SPManager spManager = null;
 
-    private SPUtils(){}
+    private SPManager(){}
 
     /**
      * 获取单例
      *
      * @return 单例
      */
-    public static SPUtils getInstance() {
-        synchronized (SPUtils.class) {
-            if (null == spUtils) {
-                spUtils = new SPUtils();
+    public static SPManager getInstance() {
+        synchronized (SPManager.class) {
+            if (null == spManager) {
+                spManager = new SPManager();
             }
         }
-        return spUtils;
+        return spManager;
     }
 
     /**

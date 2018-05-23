@@ -1,4 +1,4 @@
-package com.chestnut.common.helper.def;
+package com.chestnut.common.helper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

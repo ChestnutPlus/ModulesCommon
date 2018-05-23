@@ -1,4 +1,4 @@
-package com.chestnut.common.utils;
+package com.chestnut.common.manager;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -9,6 +9,10 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.chestnut.common.utils.AppUtils;
+import com.chestnut.common.utils.FileUtils;
+import com.chestnut.common.utils.TimeUtils;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -34,14 +38,14 @@ import java.lang.Thread.UncaughtExceptionHandler;
  *              1.  增加崩溃前的回调
  * </pre>
  */
-public class CrashUtils implements UncaughtExceptionHandler {
+public class CrashManager implements UncaughtExceptionHandler {
 
-    private volatile static CrashUtils mInstance;
+    private volatile static CrashManager mInstance;
     private Context mContext;
     private UncaughtExceptionHandler mHandler;
     private boolean mInitialized;
 
-    private CrashUtils() {
+    private CrashManager() {
 
     }
 
@@ -55,10 +59,10 @@ public class CrashUtils implements UncaughtExceptionHandler {
      *
      * @return 单例
      */
-    public static CrashUtils getInstance() {
-        synchronized (CrashUtils.class) {
+    public static CrashManager getInstance() {
+        synchronized (CrashManager.class) {
             if (null == mInstance) {
-                mInstance = new CrashUtils();
+                mInstance = new CrashManager();
             }
         }
         return mInstance;
@@ -126,7 +130,7 @@ public class CrashUtils implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(mContext, "很抱歉,程序出现异常...", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "程序遇到问题，需要重启...", Toast.LENGTH_LONG).show();
                 if (callBack != null)
                     callBack.catchCrash(sb.toString());
                 isTimeToExit[0] = true;

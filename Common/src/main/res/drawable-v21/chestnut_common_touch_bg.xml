@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/touch_round_bg">
+    android:color="@color/chestnut_common_touch_round_bg">
     <item android:id="@android:id/mask"
-        android:drawable="@drawable/common_ripple_round_bg"/>
+        android:drawable="@drawable/chestnut_common_ripple_bg"/>
 </ripple>
