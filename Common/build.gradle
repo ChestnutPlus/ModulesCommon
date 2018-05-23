@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 26
+        versionCode 27
         versionName "1.1.2"
         /**
          *    1.1.1-23. ~ LogUtils 重写部分方法，并加入删除日志。
@@ -17,6 +17,7 @@ android {
          *    1.1.2-24  替换RxJava2。
          *    1.1.2-25  1. 更新WifiHelper 2.新增基本接口
          *    1.1.2-26  修复Wifi连接时候的一个bug
+         *    1.1.2-27  修复RecorderHelper的一个bug
          */
     }
     buildTypes {

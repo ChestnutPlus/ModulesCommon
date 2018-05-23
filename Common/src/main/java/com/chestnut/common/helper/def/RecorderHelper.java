@@ -123,26 +123,33 @@ public class RecorderHelper {
     private void _startRecord() {
         theRecordDuration = 0;
         try {
-            if (recorder==null) {
-                //  1.  实例化
-                recorder = new MediaRecorder();
-                //  2.  设置录音音频的来源，MIC 是指 Microphone audio source
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                //  3.  设置录音音频的格式：
-                //      格式有：3Gp,AMR,AAC
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-                //  4.0 设置音频的 编码格式
-                //      编码格式：对应于录音的格式
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-                //  4.1  设置录音音频的存放地方
-                recorder.setOutputFile(fileName);
-                //  4.2  设置音频的 编码位率,?,比特率？ 采样率*声道*采样位数 = 比特率
-//                recorder.setAudioEncodingBitRate(256000);
-                //  4.3  设置音频的 采样率
-//                recorder.setAudioSamplingRate(16000);
-                //  4.4  设置声道，1：单声道，2：立体声道
-//                recorder.setAudioChannels(2);
+            if (recorder!=null) {
+                try {
+                    recorder.reset();
+                    recorder.release();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                recorder = null;
             }
+            //  1.  实例化
+            recorder = new MediaRecorder();
+            //  2.  设置录音音频的来源，MIC 是指 Microphone audio source
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            //  3.  设置录音音频的格式：
+            //      格式有：3Gp,AMR,AAC
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+            //  4.0 设置音频的 编码格式
+            //      编码格式：对应于录音的格式
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            //  4.1  设置录音音频的存放地方
+            recorder.setOutputFile(fileName);
+            //  4.2  设置音频的 编码位率,?,比特率？ 采样率*声道*采样位数 = 比特率
+//                recorder.setAudioEncodingBitRate(256000);
+            //  4.3  设置音频的 采样率
+//                recorder.setAudioSamplingRate(16000);
+            //  4.4  设置声道，1：单声道，2：立体声道
+//                recorder.setAudioChannels(2);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("RecorderHelper", e.getMessage()==null?"null":e.getMessage());
@@ -252,7 +259,12 @@ public class RecorderHelper {
         recordTimeSubscription = null;
         if (recorder!=null && isRecording) {
             isRecording = false;
-            recorder.stop();
+            try {
+                recorder.stop();
+            } catch (IllegalStateException e) {
+                recorder = null;
+                recorder = new MediaRecorder();
+            }
             if (callBack!=null) {
                 handler.post(()-> callBack.onRecordEnd(fileName,theRecordDuration));
             }

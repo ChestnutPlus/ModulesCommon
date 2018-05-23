@@ -34,4 +34,8 @@ public interface CommonContract {
     interface Function3<T,T1,T2> {
         void onAction(T t,T1 t1,T2 t2);
     }
+    interface ViewLife {
+        void onResume();
+        void onPause();
+    }
 }

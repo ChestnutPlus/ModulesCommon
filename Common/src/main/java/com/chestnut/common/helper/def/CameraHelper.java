@@ -52,7 +52,7 @@ public class CameraHelper {
                         @Override
                         public void surfaceCreated(SurfaceHolder surfaceHolder) {
                             try {
-                                if (cameraId!=-1) {
+                                if (cameraId != -1) {
                                     try {
                                         camera = Camera.open(cameraId);
                                     } catch (Exception e) {
@@ -60,7 +60,7 @@ public class CameraHelper {
                                         camera = null;
                                     }
                                 }
-                                if (camera==null)
+                                if (camera == null)
                                     camera = Camera.open(0);
                                 if (camera == null)
                                     camera = Camera.open(1);
@@ -76,7 +76,7 @@ public class CameraHelper {
 
                         @Override
                         public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-                            initCamera(orientation,surfaceView);
+                            initCamera(orientation, surfaceView);
                         }
 
                         @Override

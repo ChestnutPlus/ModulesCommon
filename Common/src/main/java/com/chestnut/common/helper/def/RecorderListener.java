@@ -12,10 +12,10 @@ package com.chestnut.common.helper.def;
  * </pre>
  */
 public abstract class RecorderListener {
-    public void onRecordTooShort(String file,int THE_READY_TIME){}
+    public void onRecordTooShort(String file, int THE_READY_TIME){}
     public void onRecordStart(String file){}
     public void onRecordDBChange(double dbValue){}
     public void onRecordFail(String file, String msg){}
     public void onRecordEnd(String file, int duration){}
-    public void onRecordTooLong(String file,int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft){}
+    public void onRecordTooLong(String file, int THE_MAX_RECORD_TIME_SECOND, int theTimeLeft){}
 }
