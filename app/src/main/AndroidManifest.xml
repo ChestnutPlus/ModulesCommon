@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".base.CommonApplication"
@@ -57,7 +57,8 @@
         <activity android:name=".fun.autoLayout.AutoLayoutActivity" />
         <activity android:name=".fun.activityLife.AActivity" />
         <activity android:name=".fun.activityLife.BActivity" />
-        <activity android:name=".fun.testBRVAH.BRVAHActivity"/>
+        <activity android:name=".fun.testBRVAH.BRVAHActivity" />
+        <activity android:name=".fun.aRouter.ARouterOneActivity"></activity>
     </application>
 
 </manifest>

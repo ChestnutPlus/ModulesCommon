@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.RouterArchitecture.ModulesCommon.base.ViewConfig;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.aRouter.ModelARouter;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.activityLife.ModelActivityLife;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.autoLayout.ModelAutoLayout;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.diySurfaceView.ModelSurfaceView;
@@ -87,6 +88,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelAssetsUtils().onModelTest(simpleAdapter,toast, TAG,this);
         //BaseRecyclerViewAdapterHelper
         new ModelBRVAH().onModelTest(simpleAdapter,toast, TAG,this);
+        //ModelARouter
+        new ModelARouter().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override

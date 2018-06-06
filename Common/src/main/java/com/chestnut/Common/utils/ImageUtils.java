@@ -742,7 +742,7 @@ public class ImageUtils {
         canvas.scale(scale, scale);
         canvas.drawBitmap(scaleBitmap, 0, 0, paint);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            scaleBitmap = renderScriptBlur(context, scaleBitmap, radius);
+            scaleBitmap = renderScriptBlur(context, scaleBitmap, scale, (int) radius);
         } else {
             scaleBitmap = stackBlur(scaleBitmap, (int) radius, recycle);
         }
@@ -758,38 +758,32 @@ public class ImageUtils {
      * <p>API大于17</p>
      *
      * @param context 上下文
-     * @param src     源图片
-     * @param radius  模糊度(1...25)
      * @return 模糊后的图片
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public static Bitmap renderScriptBlur(Context context, Bitmap src, float radius) {
-        if (isEmptyBitmap(src)) return null;
-        RenderScript rs = null;
-        try {
-            rs = RenderScript.create(context);
-            rs.setMessageHandler(new RenderScript.RSMessageHandler());
-            Allocation input = Allocation.createFromBitmap(rs, src, Allocation.MipmapControl.MIPMAP_NONE, Allocation
-                    .USAGE_SCRIPT);
-            Allocation output = Allocation.createTyped(rs, input.getType());
-            ScriptIntrinsicBlur blurScript = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-            if (radius > 25) {
-                radius = 25.0f;
-            } else if (radius <= 0) {
-                radius = 1.0f;
-            }
-            blurScript.setInput(input);
-            blurScript.setRadius(radius);
-            blurScript.forEach(output);
-            output.copyTo(src);
-        } catch (Exception e) {
-            ExceptionCatchUtils.catchE(e,"ImageUtils");
-        } finally {
-            if (rs != null) {
-                rs.destroy();
-            }
-        }
-        return src;
+    public static Bitmap renderScriptBlur(Context context, Bitmap bitmap, float bitmap_scale, int blur_radius) {
+        //先对图片进行压缩然后再blur
+        Bitmap inputBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(bitmap.getWidth() * bitmap_scale),
+                Math.round(bitmap.getHeight() * bitmap_scale), false);
+        //创建空的Bitmap用于输出
+        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap);
+        //①、初始化Renderscript
+        RenderScript rs = RenderScript.create(context);
+        //②、Create an Intrinsic Blur Script using the Renderscript
+        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        //③、native层分配内存空间
+        Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+        Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+        //④、设置blur的半径然后进行blur
+        theIntrinsic.setRadius(blur_radius);
+        theIntrinsic.setInput(tmpIn);
+        theIntrinsic.forEach(tmpOut);
+        //⑤、拷贝blur后的数据到java缓冲区中
+        tmpOut.copyTo(outputBitmap);
+        //⑥、销毁Renderscript
+        rs.destroy();
+        bitmap.recycle();
+        return outputBitmap;
     }
 
     /**
