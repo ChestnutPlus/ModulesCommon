@@ -16,6 +16,7 @@ import com.chestnut.common.utils.LogUtils;
  *     time  : 2018/2/6 12:52
  *     desc  :
  *     thanks To:
+ *          1.  https://blog.csdn.net/zhaoyanjun6/article/details/76165252
  *     dependent on:
  *     update log:
  * </pre>
@@ -32,7 +33,7 @@ public class ModelARouter implements CommonContract{
             ARouter.init(activity.getApplication()); // 尽可能早，推荐在Application中初始化
 
             //1. 无参数跳转
-            //ARouter.getInstance().build("/router/ARouterOneActivity").navigation();
+//            ARouter.getInstance().build("/router/ARouterOneActivity").navigation();
 
             //2. 监听跳转状态
 //            ARouter.getInstance().build("/router/abc").navigation(activity, new NavCallback() {
@@ -63,7 +64,7 @@ public class ModelARouter implements CommonContract{
                     .withString("name", "888")
                     .withInt("age", 11)
                     //复杂对象
-//                    .withSerializable("abc", new SomeBean())
+                    .withParcelable("abc", new SomeBean())
                     .navigation();
 
         });

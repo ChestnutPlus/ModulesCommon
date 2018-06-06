@@ -1,8 +1,7 @@
 package com.chestnut.RouterArchitecture.ModulesCommon.fun.aRouter;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
-
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * <pre>
@@ -16,8 +15,7 @@ import java.io.Serializable;
  * </pre>
  */
 
-@Route(path = "/service/json-SomeBean")
-public class SomeBean implements Serializable {
+public class SomeBean implements Parcelable {
 
     public String a = "fsldkjfl";
     public boolean b = false;
@@ -40,4 +38,34 @@ public class SomeBean implements Serializable {
                 ", c=" + c +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.a);
+        dest.writeByte(this.b ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.c);
+    }
+
+    protected SomeBean(Parcel in) {
+        this.a = in.readString();
+        this.b = in.readByte() != 0;
+        this.c = in.readInt();
+    }
+
+    public static final Creator<SomeBean> CREATOR = new Creator<SomeBean>() {
+        @Override
+        public SomeBean createFromParcel(Parcel source) {
+            return new SomeBean(source);
+        }
+
+        @Override
+        public SomeBean[] newArray(int size) {
+            return new SomeBean[size];
+        }
+    };
 }

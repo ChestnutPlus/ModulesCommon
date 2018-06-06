@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.common.utils.LogUtils;
 
@@ -17,14 +18,14 @@ public class ARouterOneActivity extends AppCompatActivity {
     @Autowired(name = "age")
     public int agedfsfd = -111;
 
-//    @Autowired(name = "abc")
-//    public SomeBean someBean;
+    @Autowired(name = "abc")
+    public SomeBean someBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arouter_one);
-
-        LogUtils.i("ARouterOneActivity", name+","+agedfsfd+",");
+        ARouter.getInstance().inject(this);
+        LogUtils.i("ARouterOneActivity", name+","+agedfsfd+","+someBean.toString());
     }
 }
