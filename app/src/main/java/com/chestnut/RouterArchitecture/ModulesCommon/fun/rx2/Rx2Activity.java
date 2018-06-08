@@ -2,12 +2,12 @@ package com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.common.manager.RxBusManager;
 import com.chestnut.common.manager.UtilsManager;
+import com.chestnut.common.manager.imgloader.ImgLoaderConfig;
+import com.chestnut.common.manager.imgloader.ImgLoaderManager;
 import com.chestnut.common.utils.LogUtils;
 import com.chestnut.common.utils.RxUtils;
 import com.chestnut.common.utils.SimpleDownloadUtils;
@@ -82,9 +82,11 @@ public class Rx2Activity extends AppCompatActivity {
                         public void onNext(Boolean aBoolean) {
                             LogUtils.i(TAG,"onNext,"+aBoolean);
                             if (aBoolean)
-                                Glide.with(Rx2Activity.this)
-                                        .load(UtilsManager.getCachePath()+"/beauty.png")
-                                        .into((ImageView) findViewById(R.id.img));
+                                ImgLoaderManager.getInstance().load(Rx2Activity.this,
+                                        ImgLoaderConfig.builder()
+                                                .from(UtilsManager.getCachePath()+"/beauty.png")
+                                                .to(findViewById(R.id.img))
+                                                .build());
                         }
 
                         @Override

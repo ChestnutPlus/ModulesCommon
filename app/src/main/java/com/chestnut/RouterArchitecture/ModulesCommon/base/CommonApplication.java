@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.chestnut.common.manager.FontManager;
 import com.chestnut.common.manager.UtilsManager;
+import com.chestnut.common.manager.imgloader.ImgLoaderManager;
 import com.chestnut.common.utils.LogUtils;
 
 /**
@@ -29,6 +30,7 @@ public class CommonApplication extends Application{
                 .loadWithSoftRef(ViewConfig.TypeFace_HK)
                 .loadWithStrongRef(ViewConfig.TypeFace_Cao_Ni_Ma)
                 .loadWithSoftRef(ViewConfig.TypeFace_TEST);
+        ImgLoaderManager.getInstance().init();
         LogUtils.i("TestBgService","CommonApplication:onCreate");
     }
 }

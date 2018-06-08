@@ -1,4 +1,4 @@
-package com.chestnut.common.os;
+package com.chestnut.common.manager.imgloader;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,7 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
  * </pre>
  */
 
-public class GlideUtils {
+class GlideUtils {
 
     /**
      * 圆形图片，

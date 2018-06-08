@@ -3,4 +3,9 @@
     package="com.chestnut.common">
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <application>
+        <meta-data
+            android:name="com.chestnut.common.manager.imgloader.listener.MyGlideModule"
+            android:value="GlideModule" />
+    </application>
 </manifest>

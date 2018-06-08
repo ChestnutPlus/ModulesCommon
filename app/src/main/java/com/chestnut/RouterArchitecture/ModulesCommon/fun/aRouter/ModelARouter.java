@@ -66,7 +66,6 @@ public class ModelARouter implements CommonContract{
                     //复杂对象
                     .withParcelable("abc", new SomeBean())
                     .navigation();
-
         });
         simpleAdapter.add(t1);
     }
