@@ -3,6 +3,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon.fun.aRouter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -50,7 +51,7 @@ public class ARouterOneActivity extends AppCompatActivity {
         ImgLoaderManager.getInstance().load(this, ImgLoaderConfig.builder()
                 .from("https://img.zcool.cn/community/019c4558d62ff0a801219c77b3cf16.jpg@1280w_1l_2o_100sh.webp")
                 .roundTransformDp(100)
-                .to(findViewById(R.id.img))
+                .to((ImageView) findViewById(R.id.img))
                 .size(200,200)
                 .listen(new ImgLoaderListener() {
                     @Override

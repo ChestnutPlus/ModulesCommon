@@ -2,6 +2,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.common.manager.RxBusManager;
@@ -85,7 +86,7 @@ public class Rx2Activity extends AppCompatActivity {
                                 ImgLoaderManager.getInstance().load(Rx2Activity.this,
                                         ImgLoaderConfig.builder()
                                                 .from(UtilsManager.getCachePath()+"/beauty.png")
-                                                .to(findViewById(R.id.img))
+                                                .to((ImageView) findViewById(R.id.img))
                                                 .build());
                         }
 

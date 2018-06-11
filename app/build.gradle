@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.chestnut.RouterArchitecture.ModulesCommon"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         javaCompileOptions {
@@ -28,25 +28,23 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     //common代码库
-    compile project(path: ':Common')
+    implementation project(path: ':Common')
     //阿里 v-Layout
-    compile('com.alibaba.android:vlayout:1.2.0@aar') {
+    implementation('com.alibaba.android:vlayout:1.2.0@aar') {
         transitive = true
     }
     //Hy大神的AutoLayout
-    compile project(path: ':autolayout')
+    implementation project(path: ':autolayout')
     //帧动画需要用的IO库
-    compile files('libs/commons-io-2.5.jar')
+    implementation files('libs/commons-io-2.5.jar')
     //ariBnb 动画插件
-    compile 'com.airbnb.android:lottie:2.2.0'
+    implementation 'com.airbnb.android:lottie:2.2.0'
     //TSnackBar
-    compile 'com.androidadvance:topsnackbar:1.1.1'
+    implementation 'com.androidadvance:topsnackbar:1.1.1'
     //其他
-    compile 'com.yarolegovich:discrete-scrollview:1.2.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.37'
+    implementation 'com.yarolegovich:discrete-scrollview:1.2.0'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.37'
     //阿里ARouter
     // 替换成最新版本, 需要注意的是api
     // 要与compiler匹配使用，均使用最新版可以保证兼容
