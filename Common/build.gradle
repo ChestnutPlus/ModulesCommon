@@ -24,6 +24,7 @@ android {
          *    1.1.4-28
          *          1.  封装了Glide，使用策略模式。
          *          2.  Glide封装添加 监听器。
+         *          3.  增加 SoundPoolManager。
          */
     }
     buildTypes {

@@ -20,12 +20,13 @@ import com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndV
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.oemHwl.ModelOemHwl;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.ModelRetrofit;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2.ModelRx2;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.soundMng.ModelSoundMng;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.tSnackBar.ModelTSnackBar;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.testAssetsUtils.ModelAssetsUtils;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.testBRVAH.ModelBRVAH;
 import com.chestnut.RouterArchitecture.ModulesCommon.view.recyclerView.SimpleAdapter;
-import com.chestnut.common.manager.RxBusManager;
 import com.chestnut.common.manager.FontManager;
+import com.chestnut.common.manager.RxBusManager;
 import com.chestnut.common.ui.XToast;
 import com.chestnut.common.utils.AppUtils;
 import com.chestnut.common.utils.LogUtils;
@@ -90,6 +91,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelBRVAH().onModelTest(simpleAdapter,toast, TAG,this);
         //ModelARouter
         new ModelARouter().onModelTest(simpleAdapter,toast, TAG,this);
+        //ModelSoundMng
+        new ModelSoundMng().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override
