@@ -18,8 +18,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://jitpack.io" }
+        mavenCentral()
         google()
+        maven { url "https://jitpack.io" }
+        maven { url "https://mvnrepository.com/artifact/com.google.api/api-common" }
         maven { url 'https://maven.google.com' }
     }
 }
