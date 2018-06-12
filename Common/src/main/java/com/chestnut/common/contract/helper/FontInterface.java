@@ -50,6 +50,7 @@ public interface FontInterface<This> {
      * @param fontPathInAssets 字体路径：fonts/Test.TTF"，字体应该放置于asset目录下
      */
     void setActivityFont(Activity activity, String fontPathInAssets);
+    void setActivityFont(Activity activity, Typeface typeface);
 
     /**
      * 对某个View设置字体
@@ -57,4 +58,5 @@ public interface FontInterface<This> {
      * @param fontPathInAssets 字体路径：fonts/Test.TTF"，字体应该放置于asset目录下
      */
     <V extends View> void setViewFont(V view, String fontPathInAssets);
+    <V extends View> void setViewFont(V view, Typeface typeface);
 }

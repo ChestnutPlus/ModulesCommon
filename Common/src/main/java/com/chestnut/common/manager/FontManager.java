@@ -142,11 +142,27 @@ public class FontManager implements FontInterface<FontManager> {
     }
 
     @Override
+    public void setActivityFont(Activity activity, Typeface typeface) {
+        if (activity==null || typeface==null) return;
+        ViewGroup mContainer = (ViewGroup) activity.findViewById(android.R.id.content).getRootView();
+        _setViewGroupFont(mContainer,typeface);
+    }
+
+    @Override
     public <V extends View> void setViewFont(V view, String fontPathInAssets) {
         if (view instanceof TextView) {
             ((TextView) view).setTypeface(get(fontPathInAssets));
         } else if (view instanceof ViewGroup) {
             _setViewGroupFont((ViewGroup) view, get(fontPathInAssets));
+        }
+    }
+
+    @Override
+    public <V extends View> void setViewFont(V view, Typeface typeface) {
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(typeface);
+        } else if (view instanceof ViewGroup) {
+            _setViewGroupFont((ViewGroup) view, typeface);
         }
     }
 
