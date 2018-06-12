@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.common.manager.imgloader.ImgLoaderConfig;
 import com.chestnut.common.manager.imgloader.ImgLoaderManager;
+import com.chestnut.common.manager.imgloader.contract.ImgDownloadListener;
 import com.chestnut.common.manager.imgloader.contract.ImgLoaderListener;
 import com.chestnut.common.utils.ConvertUtils;
 import com.chestnut.common.utils.LogUtils;
@@ -70,6 +71,20 @@ public class ARouterOneActivity extends AppCompatActivity {
                     }
                 })
                 .build());
+        findViewById(R.id.img).setOnClickListener(view -> {
+            ImgLoaderManager.getInstance()
+                    .download(this, "https://img.zcool.cn/community/019c4558d62ff0a801219c77b3cf16.jpg@1280w_1l_2o_100sh.webp", "/sdcard/luoli.png", new ImgDownloadListener() {
+                        @Override
+                        public void onSuccess(String url, String filePath) {
+                            LogUtils.i("onSuccess", filePath);
+                        }
+
+                        @Override
+                        public void onFail(String url, String filePath) {
+                            LogUtils.i("onFail", filePath);
+                        }
+                    });
+        });
         LogUtils.i("ImgLoaderManager", "cache, " + ImgLoaderManager.getInstance().getAllCacheSizeBytes(this));
         LogUtils.i("ImgLoaderManager", "cache, " + ConvertUtils.byte2FitSize(ImgLoaderManager.getInstance().getAllCacheSizeBytes(this)));
     }

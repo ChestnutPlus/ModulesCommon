@@ -1,25 +1,38 @@
 package com.chestnut.common.manager.imgloader;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.engine.cache.ExternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.chestnut.common.manager.imgloader.contract.BaseImageLoaderStrategy;
 import com.chestnut.common.manager.imgloader.contract.BaseImgConfig;
+import com.chestnut.common.manager.imgloader.contract.ImgDownloadListener;
 import com.chestnut.common.manager.imgloader.contract.ImgLoaderListener;
 import com.chestnut.common.manager.imgloader.listener.ProgressInterceptor;
 import com.chestnut.common.utils.FileUtils;
 import com.chestnut.common.utils.StringUtils;
 
 import java.io.File;
+
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * <pre>
@@ -90,9 +103,9 @@ public class ImageLoaderStrategy implements BaseImageLoaderStrategy<ImgLoaderCon
 
             //变换
             if (config.circleTransform)
-                drawableTypeRequest.transform(new GlideUtils.CircleTransform(context));
+                drawableTypeRequest.transform(new CircleTransform(context));
             if (config.roundTransformDp>0)
-                drawableTypeRequest.transform(new GlideUtils.RoundTransform(context, config.roundTransformDp));
+                drawableTypeRequest.transform(new RoundTransform(context, config.roundTransformDp));
 
             //大小
             if (config.width==BaseImgConfig.SIZE_ORIGINAL && config.length==BaseImgConfig.SIZE_ORIGINAL)
@@ -164,6 +177,126 @@ public class ImageLoaderStrategy implements BaseImageLoaderStrategy<ImgLoaderCon
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    @Override
+    public void download(Context context, String downloadUrl, String saveFilePath, ImgDownloadListener downloadListener) {
+        Context applicationContext = context.getApplicationContext();
+        Observable.just(true)
+                .observeOn(Schedulers.io())
+                .map(aBoolean -> {
+                    //参数校验
+                    if (applicationContext == null || StringUtils.isEmpty(downloadUrl) || StringUtils.isEmpty(saveFilePath)) {
+                        if (downloadListener!=null)
+                            downloadListener.onFail(downloadUrl, saveFilePath);
+                    }
+                    //下载
+                    else {
+                        FutureTarget<File> target = Glide.with(applicationContext)
+                                .load(downloadUrl)
+                                .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                        File file = target.get();
+                        File dest = new File(saveFilePath);
+                        if (FileUtils.copyFile(file, dest) && dest.exists() && dest.isFile()) {
+                            if (downloadListener != null)
+                                downloadListener.onSuccess(downloadUrl, saveFilePath);
+                        }
+                        else {
+                            if (downloadListener!=null)
+                                downloadListener.onFail(downloadUrl, saveFilePath);
+                        }
+                    }
+                    return aBoolean;
+                })
+                .subscribe(aBoolean -> {}, throwable -> {
+                    if (downloadListener!=null)
+                        downloadListener.onFail(downloadUrl, saveFilePath);
+                });
+    }
+
+    /**
+     * 圆形图片，
+     * 使用：
+     *  Glide.with(this)
+     *      .load(R.drawable.li_bao_en)
+     *      .transform(new GlideUtils.CircleTransform(this))
+     *      .into(circleView);
+     */
+    private class CircleTransform extends BitmapTransformation {
+        public CircleTransform(Context context) {
+            super(context);
+        }
+
+        @Override protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+            return circleCrop(pool, toTransform);
+        }
+
+        private Bitmap circleCrop(BitmapPool pool, Bitmap source) {
+            if (source == null) return null;
+            int size = Math.min(source.getWidth(), source.getHeight());
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+            // TODO this could be acquired from the pool too
+            Bitmap squared = Bitmap.createBitmap(source, x, y, size, size);
+
+            Bitmap result = pool.get(size, size, Bitmap.Config.ARGB_8888);
+            if (result == null) {
+                result = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            }
+            Canvas canvas = new Canvas(result);
+            Paint paint = new Paint();
+            paint.setShader(new BitmapShader(squared, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+            paint.setAntiAlias(true);
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+            return result;
+        }
+        @Override public String getId() {
+            return getClass().getName();
+        }
+    }
+
+    /**
+     * 圆角图片，
+     * 使用：
+     *  Glide.with(this)
+     *      .load(R.drawable.li_bao_en)
+     *      .transform(new GlideUtils.RoundTransform(this,10))
+     *      .into(roundView);
+     */
+    private class RoundTransform extends BitmapTransformation {
+
+        private float radius = 0f;
+
+        public RoundTransform(Context context, int dp) {
+            super(context);
+            this.radius = Resources.getSystem().getDisplayMetrics().density * dp;
+        }
+
+        @Override protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+            return roundCrop(pool, toTransform);
+        }
+
+        private Bitmap roundCrop(BitmapPool pool, Bitmap source) {
+            if (source == null) return null;
+
+            Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+            if (result == null) {
+                result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+            }
+
+            Canvas canvas = new Canvas(result);
+            Paint paint = new Paint();
+            paint.setShader(new BitmapShader(source, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+            paint.setAntiAlias(true);
+            RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
+            canvas.drawRoundRect(rectF, radius, radius, paint);
+            return result;
+        }
+
+        @Override public String getId() {
+            return getClass().getName() + Math.round(radius);
         }
     }
 }

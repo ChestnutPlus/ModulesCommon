@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -329,7 +330,21 @@ public class FileUtils {
      * @return {@code true}: 复制成功<br>{@code false}: 复制失败
      */
     public static boolean copyFile(File srcFile, File destFile) {
-        return copyOrMoveFile(srcFile, destFile, false);
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        boolean result;
+        try {
+            inputChannel = new FileInputStream(srcFile).getChannel();
+            outputChannel = new FileOutputStream(destFile).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        } finally {
+            FileUtils.closeIO(inputChannel, outputChannel);
+        }
+        return result;
     }
 
     /**

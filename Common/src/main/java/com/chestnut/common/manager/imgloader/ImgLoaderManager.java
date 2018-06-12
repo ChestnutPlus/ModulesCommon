@@ -5,6 +5,7 @@ import android.content.Context;
 import com.chestnut.common.manager.imgloader.contract.BaseImageLoaderStrategy;
 import com.chestnut.common.manager.imgloader.contract.BaseImgConfig;
 import com.chestnut.common.manager.imgloader.contract.BaseImgLoaderManager;
+import com.chestnut.common.manager.imgloader.contract.ImgDownloadListener;
 
 /**
  * <pre>
@@ -87,5 +88,10 @@ public class ImgLoaderManager implements BaseImgLoaderManager<ImgLoaderManager> 
     @Override
     public long getAllCacheSizeBytes(Context context) {
         return strategy.getAllCacheSizeBytes(context);
+    }
+
+    @Override
+    public void download(Context context, String downloadUrl, String saveFilePath, ImgDownloadListener downloadListener) {
+        strategy.download(context, downloadUrl, saveFilePath, downloadListener);
     }
 }

@@ -57,4 +57,6 @@ public interface BaseImgLoaderManager<T> {
      * @return T
      */
     long getAllCacheSizeBytes(Context context);
+
+    void download(Context context, String downloadUrl, String saveFilePath, ImgDownloadListener downloadListener);
 }

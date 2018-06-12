@@ -38,4 +38,6 @@ public interface BaseImageLoaderStrategy<T extends BaseImgConfig> {
      * 获取所有的缓存
      */
     long getAllCacheSizeBytes(Context context);
+
+    void download(Context context, String downloadUrl, String saveFilePath, ImgDownloadListener downloadListener);
 }
