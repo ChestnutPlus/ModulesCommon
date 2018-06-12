@@ -11,6 +11,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.chestnut.RouterArchitecture.ModulesCommon.R;
 import com.chestnut.common.manager.imgloader.ImgLoaderConfig;
 import com.chestnut.common.manager.imgloader.ImgLoaderManager;
+import com.chestnut.common.manager.imgloader.contract.BaseImgConfig;
 import com.chestnut.common.manager.imgloader.contract.ImgDownloadListener;
 import com.chestnut.common.manager.imgloader.contract.ImgLoaderListener;
 import com.chestnut.common.utils.ConvertUtils;
@@ -50,10 +51,11 @@ public class ARouterOneActivity extends AppCompatActivity {
             }
         });
         ImgLoaderManager.getInstance().load(this, ImgLoaderConfig.builder()
-                .from("https://img.zcool.cn/community/019c4558d62ff0a801219c77b3cf16.jpg@1280w_1l_2o_100sh.webp")
+                .from("http://img.kumi.cn/photo/f6/d9/bf/f6d9bfef5cbe21b1.jpg")
                 .roundTransformDp(100)
                 .to((ImageView) findViewById(R.id.img))
-                .size(200,200)
+                .cacheStrategy(BaseImgConfig.CACHE_NO_MEMORY_DISK)
+                .size(BaseImgConfig.SIZE_ORIGINAL,BaseImgConfig.SIZE_ORIGINAL)
                 .listen(new ImgLoaderListener() {
                     @Override
                     public void onProgress(int progress) {
