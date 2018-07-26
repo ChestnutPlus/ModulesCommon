@@ -10,6 +10,8 @@ import android.util.SparseIntArray;
 
 import com.chestnut.common.contract.common.CommonContract;
 
+import io.reactivex.Observable;
+
 /**
  * <pre>
  *     author: Chestnut
@@ -103,6 +105,19 @@ public class SoundManager {
         }
     }
 
+    public Observable<Boolean> playRx(@RawRes int id, boolean loop, float curVolume, float rate, int stream) {
+        return Observable.create(emitter -> {
+            play(id, loop, curVolume, rate, stream, () -> {
+                emitter.onNext(true);
+                emitter.onComplete();
+            });
+        });
+    }
+
+    public Observable<Boolean> playRx(@RawRes int id) {
+        return playRx(id, false, -1, 1.0f, currentStream);
+    }
+
     public void stop(@RawRes int id) {
         int temp = mResourceMap.get(id,-1);
         if (temp>0) {
@@ -110,10 +125,11 @@ public class SoundManager {
         }
     }
 
-    public void unload(@RawRes int id) {
+    public synchronized void unload(@RawRes int id) {
         int temp = mResourceMap.get(id,-1);
         if (temp>0) {
             mSoundPool.unload(temp);
+            mResourceMap.removeAt(temp);
         }
     }
 

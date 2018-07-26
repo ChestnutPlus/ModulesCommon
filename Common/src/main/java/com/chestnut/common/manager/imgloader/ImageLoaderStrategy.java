@@ -66,6 +66,10 @@ public class ImageLoaderStrategy implements BaseImageLoaderStrategy<ImgLoaderCon
             drawableTypeRequest = requestManager.load(config.urlRes);
             downloadFlag = String.valueOf(config.urlRes);
         }
+        else {
+            drawableTypeRequest = requestManager.load("null");
+            downloadFlag = config.url;
+        }
         //加载其他配置
         if (drawableTypeRequest!=null) {
             //cache setting

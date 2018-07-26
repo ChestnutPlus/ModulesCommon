@@ -2,6 +2,7 @@ package com.chestnut.RouterArchitecture.ModulesCommon.fun.aRouter;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
@@ -38,7 +39,15 @@ public class ARouterOneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_arouter_one);
         ARouter.getInstance().inject(this);
         LogUtils.i("ARouterOneActivity", name+","+agedfsfd+","+someBean.toString());
+
+        LogUtils.i("ARouterOneActivity", this.getCacheDir().getAbsolutePath());
+        LogUtils.i("ARouterOneActivity", this.getFilesDir().getAbsolutePath());
+        LogUtils.i("ARouterOneActivity", this.getObbDir().getAbsolutePath());
+        LogUtils.i("ARouterOneActivity", this.getExternalCacheDir().getAbsolutePath());
+        LogUtils.i("ARouterOneActivity", this.getExternalFilesDir(Environment.DIRECTORY_DCIM).getAbsolutePath());
+
         remoteService.sayHello();
+        LogUtils.i("ARouterOneActivity", "remoteService: "+remoteService);
         remoteService.setCallback(new RemoteService.Callback() {
             @Override
             public void onStart() {
@@ -56,6 +65,7 @@ public class ARouterOneActivity extends AppCompatActivity {
                 .to((ImageView) findViewById(R.id.img))
                 .cacheStrategy(BaseImgConfig.CACHE_NO_MEMORY_DISK)
                 .size(BaseImgConfig.SIZE_ORIGINAL,BaseImgConfig.SIZE_ORIGINAL)
+                .err(R.drawable.li_bao_en)
                 .listen(new ImgLoaderListener() {
                     @Override
                     public void onProgress(int progress) {

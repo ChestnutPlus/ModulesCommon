@@ -11,6 +11,7 @@ import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -693,5 +694,20 @@ public class AppUtils {
             com.chestnut.common.utils.ExceptionCatchUtils.catchE(e,"AppUtils");
             return "null";
         }
+    }
+
+    /**
+     * 判断当前应用是否是debug状态
+     */
+    public static boolean isInDebug(Context context) {
+        boolean result = false;
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            result = (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.e("AppUtils", "isInDebug, " + result);
+        return result;
     }
 }

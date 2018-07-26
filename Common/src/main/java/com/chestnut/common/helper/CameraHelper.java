@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.chestnut.common.contract.common.CommonContract;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -45,7 +47,7 @@ public class CameraHelper {
      * @param orientation 方向
      * @param cameraId 摄像头Id
      */
-    public void init(SurfaceView surfaceView, int orientation, int cameraId) {
+    public void init(SurfaceView surfaceView, int orientation, int cameraId, CommonContract.Function1<Camera> cameraFunction1) {
         Observable.just(orientation)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -66,10 +68,12 @@ public class CameraHelper {
                                         }
                                     }
                                     if (camera == null)
-                                        camera = Camera.open(0);
+                                        camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
                                     if (camera == null)
-                                        camera = Camera.open(1);
+                                        camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
                                     camera.setPreviewDisplay(surfaceHolder);
+                                    if (cameraFunction1!=null)
+                                        cameraFunction1.onAction(camera);
                                 } catch (Exception e) {
                                     if (null != camera) {
                                         camera.release();
@@ -99,11 +103,11 @@ public class CameraHelper {
     }
 
     public void init(SurfaceView surfaceView) {
-        init(surfaceView,-1,-1);
+        init(surfaceView,-1,-1,null);
     }
 
     public void init(SurfaceView surfaceView, int orientation) {
-        init(surfaceView,orientation,-1);
+        init(surfaceView,orientation,-1,null);
     }
 
     /**
