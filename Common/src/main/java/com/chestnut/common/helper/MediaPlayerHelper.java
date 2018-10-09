@@ -81,49 +81,46 @@ public class MediaPlayerHelper {
      *  异步。
      */
     private void initAsync() {
-        MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
-            isStop = false;
-            isPause = false;
-            singleThreadExecutor.execute(() -> {
-                singleThreadExecutor.execute(()-> {
-                    if (mediaPlayer!=null) {
-                        mediaPlayer.start();
-                        startTimer();
-                    }
-                });
-            });
-            if (callBack != null && mediaPlayer!=null)
-                callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000);
-        };
-        MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
-            stopTimer();
-            if (callBack != null && mediaPlayer!=null)
-                callBack.onComplete(mediaPlayer);
-            isStop = true;
-            isPause = true;
-            singleThreadExecutor.execute(()->{
-                if (mediaPlayer!=null)
-                    mediaPlayer.reset();
-            });
-        };
-        MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
-            stopTimer();
-            if (callBack != null && mediaPlayer!=null)
-                callBack.onError(mediaPlayer);
-            isPause = true;
-            isPause = true;
-            url = null;
-            return false;
-        };
-        MediaPlayer.OnBufferingUpdateListener onBufferingUpdateListener = (mp, percent) -> {
-            if (callBack!=null && mediaPlayer!=null) {
-                int currentSecond = mediaPlayer.getCurrentPosition() / 1000;
-                int totalSecond = mediaPlayer.getDuration() / 1000;
-                totalSecond = totalSecond < 0 ? 0 : totalSecond;
-                callBack.onBufferUpdate(mp, percent, currentSecond, totalSecond, (int) (currentSecond*1.0/totalSecond *100));
-            }
-        };
         if (mediaPlayer!=null) {
+            MediaPlayer.OnPreparedListener onPreparedListener = mp -> {
+                isStop = false;
+                isPause = false;
+                singleThreadExecutor.execute(() -> {
+                    singleThreadExecutor.execute(()-> {
+                        if (mediaPlayer!=null) {
+                            mediaPlayer.start();
+                            startTimer();
+                        }
+                    });
+                });
+                if (callBack != null && mediaPlayer!=null)
+                    callBack.onStart(mediaPlayer,mediaPlayer.getDuration()/1000);
+            };
+            MediaPlayer.OnCompletionListener onCompletionListener = mp -> {
+                stopTimer();
+                if (callBack != null && mediaPlayer!=null)
+                    callBack.onComplete(mediaPlayer);
+                isStop = true;
+                isPause = true;
+                singleThreadExecutor.execute(()->{
+                    if (mediaPlayer!=null)
+                        mediaPlayer.reset();
+                });
+            };
+            MediaPlayer.OnErrorListener onErrorListener = (mediaPlayer1, i, i1) -> {
+                stopTimer();
+                if (callBack != null && mediaPlayer!=null)
+                    callBack.onError(mediaPlayer);
+                isStop = true;
+                isPause = true;
+                url = null;
+                return false;
+            };
+            MediaPlayer.OnBufferingUpdateListener onBufferingUpdateListener = (mp, percent) -> {
+                if (callBack!=null && mediaPlayer!=null) {
+                    callBack.onBufferUpdate(mp, percent);
+                }
+            };
             mediaPlayer.setOnErrorListener(onErrorListener);
             mediaPlayer.setOnPreparedListener(onPreparedListener);
             mediaPlayer.setOnCompletionListener(onCompletionListener);
@@ -357,7 +354,7 @@ public class MediaPlayerHelper {
     /*接口，类*/
     public static abstract class MediaPlayerHelperListener {
         public void onStart(MediaPlayer mediaPlayer, int allSecond){}           //开始播放的时候回调
-        public void onBufferUpdate(MediaPlayer mediaPlayer, int bufferUpdatePercent, int currentSecond, int totalSecond, int currentPlayPercent){}      //当播放为网络资源时候，会回调这个方法
+        public void onBufferUpdate(MediaPlayer mediaPlayer, int bufferUpdatePercent){}      //当播放为网络资源时候，会回调这个方法
         public void onStop(MediaPlayer mediaPlayer){}                           //播放为完成时，强制结束
         public void onReStart(MediaPlayer mediaPlayer){}                        //暂停后，开始播放
         public void onComplete(MediaPlayer mediaPlayer){}                      //播放完成时候回调

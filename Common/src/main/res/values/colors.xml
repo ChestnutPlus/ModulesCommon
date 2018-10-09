@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
     <color name="chestnut_common_arrow_white">#ffffff</color>
-
-    <!--DIY Toolbar-->
     <color name="chestnut_common_toolbar_bg">#E8F1F6</color>
-
     <color name="chestnut_common_touch_round_bg">#7dcfcdcd</color>
     <color name="chestnut_common_touch_bg">#7dcfcdcd</color>
 </resources>
