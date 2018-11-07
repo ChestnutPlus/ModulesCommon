@@ -18,6 +18,7 @@ import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyMarket.ModelHyMarket;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.hyXinYiHe.ModelXYH;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.lottieAnimationViewAndVLayout.ModelLottieAnimationViewAndVLayout;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.oemHwl.ModelOemHwl;
+import com.chestnut.RouterArchitecture.ModulesCommon.fun.recordTest.ModelRecordTest;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.retrofit.ModelRetrofit;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.rx2.ModelRx2;
 import com.chestnut.RouterArchitecture.ModulesCommon.fun.soundMng.ModelSoundMng;
@@ -93,6 +94,8 @@ public class CommonHomeActivity extends AppCompatActivity {
         new ModelARouter().onModelTest(simpleAdapter,toast, TAG,this);
         //ModelSoundMng
         new ModelSoundMng().onModelTest(simpleAdapter,toast, TAG,this);
+        //ModelRecordTest
+        new ModelRecordTest().onModelTest(simpleAdapter,toast, TAG,this);
     }
 
     @Override
