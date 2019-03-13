@@ -8,9 +8,13 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.io.File;
@@ -709,5 +713,77 @@ public class AppUtils {
         }
         Log.e("AppUtils", "isInDebug, " + result);
         return result;
+    }
+
+    /**
+     * 获取application中指定的meta-data。
+     *  使用getAppMetaData（context,"getAppMetaData"）
+     * @return 如果没有获取成功(没有对应值，或者异常)，则返回值为空
+     */
+    public static String getAppMetaData(Context ctx, String key) {
+        if (ctx == null || TextUtils.isEmpty(key)) {
+            return null;
+        }
+        String resultData = null;
+        try {
+            PackageManager packageManager = ctx.getPackageManager();
+            if (packageManager != null) {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
+                if (applicationInfo != null) {
+                    if (applicationInfo.metaData != null) {
+                        resultData = applicationInfo.metaData.getString(key);
+                    }
+                }
+
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return resultData;
+    }
+
+    /**
+     * 获取高清的图标
+     * @param packageName 包命
+     * @param context 上下文
+     * @param density density 不大于指定分辨率的最大高清图标
+     * @return drawable
+     */
+    public synchronized static Drawable getIconFromPackageName(String packageName, Context context, int density) {
+        PackageManager pm = context.getPackageManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            try {
+                PackageInfo pi = pm.getPackageInfo(packageName, 0);
+                Context otherAppCtx = context.createPackageContext(packageName, Context.CONTEXT_IGNORE_SECURITY);
+                int[] displayMetrics;
+                if (density>=DisplayMetrics.DENSITY_XXHIGH)
+                    displayMetrics = new int[] {DisplayMetrics.DENSITY_XXHIGH, DisplayMetrics.DENSITY_XHIGH, DisplayMetrics.DENSITY_HIGH, DisplayMetrics.DENSITY_TV};
+                else if (density>=DisplayMetrics.DENSITY_XHIGH)
+                    displayMetrics = new int[] {DisplayMetrics.DENSITY_XHIGH, DisplayMetrics.DENSITY_HIGH, DisplayMetrics.DENSITY_TV};
+                else if (density>=DisplayMetrics.DENSITY_HIGH)
+                    displayMetrics = new int[] {DisplayMetrics.DENSITY_HIGH, DisplayMetrics.DENSITY_TV};
+                else
+                    displayMetrics = new int[] {DisplayMetrics.DENSITY_TV};
+                for (int displayMetric : displayMetrics) {
+                    try {
+                         Drawable d = otherAppCtx.getResources().getDrawableForDensity(pi.applicationInfo.icon, displayMetric);
+                        if (d != null) {
+                            return d;
+                        }
+                    } catch (Resources.NotFoundException ignored) {}
+                }
+            } catch (Exception ignored) {}
+        }
+        ApplicationInfo appInfo;
+        try {
+            appInfo = pm.getApplicationInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+        return appInfo.loadIcon(pm);
+    }
+
+    public synchronized static Drawable getIconFromPackageName(String packageName, Context context) {
+        return getIconFromPackageName(packageName, context, DisplayMetrics.DENSITY_XXHIGH);
     }
 }

@@ -33,6 +33,17 @@ public class IntentUtils {
     }
 
     /**
+     * 得到Intent的匹配列表
+     * @param context 上下文
+     * @param intent 意图
+     * @return 匹配的结果
+     */
+    public static List<ResolveInfo> getIntentMatchList(Context context, Intent intent) {
+        final PackageManager packageManager = context.getPackageManager();
+        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+    }
+
+    /**
      * 由一个隐式的Intent得到一个显式的Intent
      *
      * @param context   上下文

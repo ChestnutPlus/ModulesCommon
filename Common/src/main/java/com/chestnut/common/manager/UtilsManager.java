@@ -32,7 +32,7 @@ public class UtilsManager {
             CACHE_PATH = context.getExternalCacheDir().getAbsolutePath();
         }
         else if (Environment.getExternalStorageDirectory()!=null){
-            CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+ AppUtils.getAppPackageName(context);
+            CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator + AppUtils.getAppPackageName(context);
             File file = new File(CACHE_PATH);
             if (!file.exists()) {
                 if (!file.mkdir()) {
