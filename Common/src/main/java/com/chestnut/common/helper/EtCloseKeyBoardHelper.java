@@ -20,16 +20,16 @@ import android.widget.EditText;
  */
 public class EtCloseKeyBoardHelper {
 
-    private View[] filterViews;
     private View[] etViews;
+    private View[] filterViews;
 
     public EtCloseKeyBoardHelper(View[] etViews) {
         this.etViews = etViews;
     }
 
-    public EtCloseKeyBoardHelper(View[] filterViews, View[] etViews) {
-        this.filterViews = filterViews;
+    public EtCloseKeyBoardHelper(View[] etViews, View[] filterViews) {
         this.etViews = etViews;
+        this.filterViews = filterViews;
     }
 
     /**
